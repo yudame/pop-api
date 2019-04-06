@@ -21,6 +21,6 @@ class Permalinkable(models.Model):
 
 
 @receiver(pre_save, sender=Permalinkable)
-def pre_save(self, instance, *args, **kwargs):
+def pre_save(instance, *args, **kwargs):
     if not instance.slug:
-        instance.slug = slugify(self.slug_source)
+        instance.slug = slugify(instance.slug_source)

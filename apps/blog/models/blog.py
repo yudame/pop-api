@@ -3,7 +3,7 @@ from django.db import models
 from apps.common.behaviors import Timestampable, Authorable, Permalinkable, Publishable
 
 
-class BlogObject(Timestampable, Permalinkable, models.Model):
+class BlogObject(Timestampable, Publishable, Permalinkable, models.Model):
 
     class Meta:
         abstract = True
@@ -17,6 +17,10 @@ class Blog(BlogObject):
 
     # MODEL PROPERTIES
     @property
+    def slug_source(self):
+        return self.trello_board.name
+
+    @property
     def title(self):
         return self.trello_board.name
 
@@ -24,18 +28,22 @@ class Blog(BlogObject):
 
 
 class Topic(BlogObject):
-    # trello_label = models.OneToOneField("trello.Label", related_name="topic", on_delete=models.CASCADE)
+    trello_label = models.OneToOneField("trello.Label", related_name="topic", on_delete=models.CASCADE)
     blog = models.ForeignKey("blog.Blog", related_name="topics", on_delete=models.CASCADE)
     description = models.TextField(default="", blank=True)
 
     # MODEL PROPERTIES
+    @property
+    def slug_source(self):
+        return self.trello_label.name
+
     # @property
     # def title(self):
     #     return self.trello_label.name
 
 
 
-class Article(Authorable, Publishable, BlogObject):
+class Article(BlogObject):
     trello_card = models.OneToOneField("trello.Card", related_name="article", on_delete=models.CASCADE)
     blog = models.ForeignKey("blog.Blog", related_name="articles", on_delete=models.CASCADE)
 
@@ -44,6 +52,10 @@ class Article(Authorable, Publishable, BlogObject):
 
 
     # MODEL PROPERTIES
+    @property
+    def slug_source(self):
+        return self.trello_card.name
+
     @property
     def title(self):
         return self.trello_card.name

@@ -1,16 +1,10 @@
 import uuid
+from datetime import datetime
+
 from django.db import models
-from apps.common.behaviors import Timestampable, Authorable
-
-
-class TrelloObject(Timestampable, models.Model):
-
-    trello_id = models.CharField(max_length=24, null=False)
-    trello_shortlink = models.CharField(max_length=8, null=False)
-
-    class Meta:
-        abstract = True
-
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
+from apps.trello.models.abstract import TrelloObject
 
 
 class Board(TrelloObject):
@@ -28,36 +22,56 @@ class Board(TrelloObject):
     # MODEL FUNCTIONS
 
 
-
-class List(TrelloObject):
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    board = models.ForeignKey("Board", null=False, on_delete=models.CASCADE, related_name="lists")
-    name = models.CharField(max_length=120, null=False)
-    position = models.SmallIntegerField(null=False)
-    is_closed = models.BooleanField(default=False)
-
-    # MODEL PROPERTIES
-
-    # MODEL FUNCTIONS
+# reset all board details
+@receiver(pre_save, sender=Board)
+def pre_save(instance, *args, **kwargs):
+    from apps.trello.trello import client
+    t_board = client.get_board(instance.trello_id)
+    instance.trello_id = t_board.id
+    instance.trello_url = t_board.url
+    instance.name = t_board.name
+    instance.is_closed = t_board.closed
 
 
+# load board and make blog, populate lists, and labels (in that order_
+@receiver(post_save, sender=Board)
+def post_save(instance, *args, **kwargs):
+    if instance.is_closed:
+        try:
+            instance.blog.unpublished_at = datetime.now()
+            instance.blog.save()
+        except:
+            pass
+    else:
+        from apps.trello.models.list import List
+        from apps.trello.models.label import Label
+        from apps.blog.models import Blog
+        from apps.trello.trello import client
+        t_board = client.get_board(instance.trello_id)
+        t_board.trello_id = t_board.id
 
-class Card(TrelloObject):
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    # board = models.ForeignKey("Board", null=False)  # use self.list.board
-    list = models.ForeignKey("List", null=False, on_delete=models.CASCADE, related_name="cards")
-    name = models.CharField(max_length=120, null=False)
-    markdown = models.TextField(default="", blank=True)
-    labels = models.TextField(default="", blank=True)
+        blog, created = Blog.objects.get_or_create(
+            trello_board = instance
+        )
 
+        t_labels = t_board.get_labels()
+        for t_label in t_labels:
+            if t_label.name:
+                label, created = Label.objects.get_or_create(
+                    trello_id=t_label.id,
+                    board=instance,
+                    name=t_label.name,
+                    color=t_label.color,
+                )
 
-    # MODEL PROPERTIES
-
-    @property
-    def short_url(self):
-        return f"https://trello.com/c/{self.trello_shortlink}"
-
-    # MODEL FUNCTIONS
-
+        t_lists = t_board.open_lists()
+        for t_list in t_lists:
+            if 'PUBLISH' in t_list.name.upper() or 'DRAFT' in t_list.name.upper():
+                list, created = List.objects.get_or_create(
+                    trello_id=t_list.id,
+                    board=instance,
+                    name=t_list.name,
+                    position=t_list.pos,
+                    is_closed=t_list.closed
+                )
