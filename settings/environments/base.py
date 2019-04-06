@@ -38,12 +38,16 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS = [
+    'django_markup',
+]
 
 LOCAL_APPS = [
     'common',
     'communication',
     'user'
+    'trello',
+    'blog',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
