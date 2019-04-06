@@ -15,9 +15,6 @@ class Board(TrelloObject):
 
     # MODEL PROPERTIES
 
-    @property
-    def short_url(self):
-        return f"https://trello.com/b/{self.trello_shortlink}"
 
     # MODEL FUNCTIONS
 

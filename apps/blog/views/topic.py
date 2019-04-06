@@ -5,8 +5,9 @@ from apps.blog.models import Topic
 
 
 class TopicView(View):
-    def dispatch(self, request, topic_id, *args, **kwargs):
-        self.topic = get_object_or_404(Topic, id=topic_id)
+    def dispatch(self, request, blog_slug, topic_slug, *args, **kwargs):
+        self.topic = get_object_or_404(Topic, blog__slug=blog_slug, slug=topic_slug)
+        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
         context = {

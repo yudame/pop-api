@@ -22,7 +22,6 @@ class Label(TrelloObject):
     # MODEL FUNCTIONS
 
 
-
 # load label and make topic
 @receiver(post_save, sender=Label)
 def post_save(instance, *args, **kwargs):

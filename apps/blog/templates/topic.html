@@ -3,6 +3,14 @@
 
 {% block content %}
 
+  <h1>
+    {{ topic.title }} on
+    <a href="{{ topic.blog.get_absolute_url }}">
+      {{ topic.blog.title }}
+    </a>
+  </h1>
+
+
   <table class="table">
     <thead>
       <td><strong>Title</strong></td>
@@ -10,7 +18,7 @@
       <td><strong>Published At</strong></td>
     </thead>
 
-    {% for article in topic.articles %}
+    {% for article in topic.articles.all %}
 
       <tr>
         <td>
@@ -20,7 +28,7 @@
         </td>
 
         <td>
-          <a href="{{ article.trello_card.short_url }}" class="">
+          <a href="{{ article.trello_card.trello_url }}" class="" target="_blank">
             View On Trello
           </a>
         </td>

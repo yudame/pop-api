@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+
+from apps.blog.models import Topic
 from apps.blog.models.abstract import BlogObject
 
 
@@ -23,6 +25,10 @@ class Article(BlogObject):
     @property
     def markdown(self):
         return self.trello_card.markdown
+
+    @property
+    def topics(self):
+        return Topic.objects.filter(trello_label_id__in=[label.id for label in self.trello_card.labels.all()])
 
 
     # MODEL FUNCTIONS

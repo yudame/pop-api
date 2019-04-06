@@ -8,11 +8,25 @@
     {{ article.title }}
   </h1>
 
+  <ul class="list-inline">
+    {% for topic in article.topics.all %}
+      <li>
+        <a href="{{ topic.get_absolute_url }}" class="btn-pill">
+          {{ topic.title }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+
   <p>
-    published on
-    {{ article.published_at|date }}
-    by
-    {{ article.author.name }}
+    {% if article.published_at %}
+      published on
+      {{ article.published_at|date }}
+    {% endif %}
+    On
+    <a href="{{ article.blog.get_absolute_url }}">
+      {{ article.blog.title }}
+    </a>
   </p>
 
 
