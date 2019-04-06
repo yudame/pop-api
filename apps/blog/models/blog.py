@@ -1,14 +1,8 @@
-import uuid
 from django.db import models
 from django.urls import reverse
-
-from apps.common.behaviors import Timestampable, Authorable, Permalinkable, Publishable
-
-
-class BlogObject(Timestampable, Publishable, Permalinkable, models.Model):
-
-    class Meta:
-        abstract = True
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
+from apps.blog.models.abstract import BlogObject
 
 
 class Blog(BlogObject):
@@ -33,47 +27,9 @@ class Blog(BlogObject):
 
 
 
-
-class Topic(BlogObject):
-    trello_label = models.OneToOneField("trello.Label", related_name="topic", on_delete=models.CASCADE)
-    blog = models.ForeignKey("blog.Blog", related_name="topics", on_delete=models.CASCADE)
-    description = models.TextField(default="", blank=True)
-
-    # MODEL PROPERTIES
-    @property
-    def slug_source(self):
-        return self.trello_label.name
-
-    # @property
-    # def title(self):
-    #     return self.trello_label.name
-
-
-
-class Article(BlogObject):
-    trello_card = models.OneToOneField("trello.Card", related_name="article", on_delete=models.CASCADE)
-    blog = models.ForeignKey("blog.Blog", related_name="articles", on_delete=models.CASCADE)
-
-    # topics = models.ManyToManyField("Topic", related_name='articles')
-    # keywords = models.CharField(max_length=200, null=False)
-
-
-    # MODEL PROPERTIES
-    @property
-    def slug_source(self):
-        return self.trello_card.name
-
-    @property
-    def title(self):
-        return self.trello_card.name
-
-    @property
-    def markdown(self):
-        return self.trello_card.markdown
-
-
-    # MODEL FUNCTIONS
-
-    def get_absolute_url(self):
-        return reverse('blog:article', kwargs={'blog_slug': self.blog.slug, 'article_slug': self.slug})
-
+#
+# @receiver(pre_save, sender=Blog)
+# def pre_save_slug(sender, instance, *args, **kwargs):
+#
+#     if not instance.slug:
+#         instance.slug = slugify(instance.slug_source)
