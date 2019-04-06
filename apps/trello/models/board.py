@@ -32,7 +32,7 @@ class Board(TrelloObject):
 class List(TrelloObject):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    board = models.ForeignKey("Board", null=False, related_name="lists")
+    board = models.ForeignKey("Board", null=False, on_delete=models.CASCADE, related_name="lists")
     name = models.CharField(max_length=120, null=False)
     position = models.SmallIntegerField(null=False)
     is_closed = models.BooleanField(default=False)
@@ -47,7 +47,8 @@ class Card(TrelloObject):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # board = models.ForeignKey("Board", null=False)  # use self.list.board
-    list = models.ForeignKey("List", null=False, related_name="cards")
+    list = models.ForeignKey("List", null=False, on_delete=models.CASCADE, related_name="cards")
+    name = models.CharField(max_length=120, null=False)
     markdown = models.TextField(default="", blank=True)
     labels = models.TextField(default="", blank=True)
 

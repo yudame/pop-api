@@ -10,30 +10,43 @@ class BlogObject(Timestampable, Permalinkable, models.Model):
 
 
 class Blog(BlogObject):
-    title = models.CharField(max_length=120, null=False)
-    parent_blog = models.ForeignKey("self")
-    trello_board = models.ForeignKey("trello.Board")
-
-
-
-class Topic(BlogObject):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=120, null=False)
-    description = models.TextField(default="", blank=True)
+    trello_board = models.ForeignKey("trello.Board", on_delete=models.CASCADE)
+    parent_blog = models.ForeignKey("self", null=True, on_delete=models.SET_NULL)
 
     # MODEL PROPERTIES
+    @property
+    def title(self):
+        return self.trello_board.name
 
     # MODEL FUNCTIONS
 
 
-class Article(Authorable, Publishable, BlogObject):
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=120, null=False)
-    markdown = models.TextField(default="", blank=True)
-    topics = models.ManyToManyField("Topic", related_name='articles')
-    keywords = models.CharField(max_length=200, null=False)
+class Topic(BlogObject):
+    # trello_label = models.ForeignKey("trello.Label", on_delete=models.CASCADE)
+    description = models.TextField(default="", blank=True)
 
     # MODEL PROPERTIES
+    # @property
+    # def title(self):
+    #     return self.trello_label.name
+
+
+
+class Article(Authorable, Publishable, BlogObject):
+    trello_card = models.ForeignKey("trello.Card", on_delete=models.CASCADE)
+
+    # topics = models.ManyToManyField("Topic", related_name='articles')
+    # keywords = models.CharField(max_length=200, null=False)
+
+
+    # MODEL PROPERTIES
+    @property
+    def title(self):
+        return self.trello_card.name
+
+    @property
+    def markdown(self):
+        return self.trello_card.markdown
+
 
     # MODEL FUNCTIONS
