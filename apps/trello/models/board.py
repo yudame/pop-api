@@ -3,7 +3,7 @@ from django.db import models
 from apps.common.behaviors import Timestampable, Authorable
 
 
-class TrelloObject(Timestampable, Authorable, models.Model):
+class TrelloObject(Timestampable, models.Model):
 
     trello_id = models.CharField(max_length=24, null=False)
     trello_shortlink = models.CharField(max_length=8, null=False)

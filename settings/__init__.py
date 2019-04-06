@@ -61,11 +61,11 @@ THIRD_PARTY_APPS = [
 ]
 
 APPS = [
-    'common',
-    'communication',
-    'user'
-    'trello',
-    'blog',
+    'apps.common',
+    'apps.communication',
+    'apps.user',
+    'apps.trello',
+    'apps.blog',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + APPS
@@ -122,7 +122,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 
 # Internationalization
