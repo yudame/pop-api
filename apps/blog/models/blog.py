@@ -10,8 +10,10 @@ class BlogObject(Timestampable, Permalinkable, models.Model):
 
 
 class Blog(BlogObject):
-    trello_board = models.ForeignKey("trello.Board", on_delete=models.CASCADE)
-    parent_blog = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL)
+    trello_board = models.OneToOneField("trello.Board",
+                                        related_name="blog", on_delete=models.CASCADE)
+    parent_blog = models.ForeignKey("self", null=True, blank=True,
+                                    related_name="child_blogs", on_delete=models.SET_NULL)
 
     # MODEL PROPERTIES
     @property
@@ -22,7 +24,8 @@ class Blog(BlogObject):
 
 
 class Topic(BlogObject):
-    # trello_label = models.ForeignKey("trello.Label", on_delete=models.CASCADE)
+    # trello_label = models.OneToOneField("trello.Label", related_name="topic", on_delete=models.CASCADE)
+    blog = models.ForeignKey("blog.Blog", related_name="topics", on_delete=models.CASCADE)
     description = models.TextField(default="", blank=True)
 
     # MODEL PROPERTIES
@@ -33,7 +36,8 @@ class Topic(BlogObject):
 
 
 class Article(Authorable, Publishable, BlogObject):
-    trello_card = models.ForeignKey("trello.Card", on_delete=models.CASCADE)
+    trello_card = models.OneToOneField("trello.Card", related_name="article", on_delete=models.CASCADE)
+    blog = models.ForeignKey("blog.Blog", related_name="articles", on_delete=models.CASCADE)
 
     # topics = models.ManyToManyField("Topic", related_name='articles')
     # keywords = models.CharField(max_length=200, null=False)
