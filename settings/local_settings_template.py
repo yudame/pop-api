@@ -30,3 +30,8 @@ CACHES = {
         'LOCATION': '127.0.0.1:11211',
     }
 }
+
+TRELLO_API_KEY = ""
+TRELLO_API_SECRET = ""
+TRELLO_EXPIRATION = "never"
+TRELLO_TOKEN = ""
