@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+{% load markup_tags %}
+
+{% block content %}
+
+  <h1>
+    {{ article.title }}
+  </h1>
+
+  <p>
+    published on
+    {{ article.published_at|date }}
+    by
+    {{ article.author.name }}
+  </p>
+
+
+  {{ article.markdown|apply_markup:"markdown" }}
+
+
+
+{% endblock content %}
