@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+  <h1>
+    {{ blog.title }}
+  </h1>
+
+  <table class="table">
+    <thead>
+      <td><strong>Title</strong></td>
+      <td><strong>Trello Card</strong></td>
+      <td><strong>Published At</strong></td>
+    </thead>
+
+    {% for article in blog.articles.objects.all %}
+
+      <tr>
+        <td>
+          <a href="{{ article.get_absolute_url }}" class="">
+            {{ article.title }}
+          </a>
+        </td>
+
+        <td>
+          <a href="{{ article.trello_card.short_url }}" class="">
+            View On Trello
+          </a>
+        </td>
+
+        <td>
+          {{ article.published_at|date }}
+        </td>
+      </tr>
+
+    {% endfor %}
+
+  </table>
+
+{% endblock content %}
