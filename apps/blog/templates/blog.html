@@ -14,7 +14,7 @@
       <td><strong>Published At</strong></td>
     </thead>
 
-    {% for article in blog.articles.objects.all %}
+    {% for article in blog.articles.all %}
 
       <tr>
         <td>
@@ -24,7 +24,7 @@
         </td>
 
         <td>
-          <a href="{{ article.trello_card.short_url }}" class="">
+          <a href="{{ article.trello_card.trello_url }}" class="" target="_blank">
             View On Trello
           </a>
         </td>

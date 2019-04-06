@@ -1,5 +1,7 @@
 import uuid
 from django.db import models
+from django.urls import reverse
+
 from apps.common.behaviors import Timestampable, Authorable, Permalinkable, Publishable
 
 
@@ -25,6 +27,11 @@ class Blog(BlogObject):
         return self.trello_board.name
 
     # MODEL FUNCTIONS
+
+    def get_absolute_url(self):
+        return reverse('blog:blog', kwargs={'blog_slug': self.slug})
+
+
 
 
 class Topic(BlogObject):
@@ -66,3 +73,7 @@ class Article(BlogObject):
 
 
     # MODEL FUNCTIONS
+
+    def get_absolute_url(self):
+        return reverse('blog:article', kwargs={'blog_slug': self.blog.slug, 'article_slug': self.slug})
+

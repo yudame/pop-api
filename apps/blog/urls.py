@@ -9,11 +9,11 @@ app_name = 'blog'
 urlpatterns = [
 
     url(r'^(?P<blog_slug>[-\w\.]+)$',
-        BlogView.as_view(), name='topic'),
+        BlogView.as_view(), name='blog'),
 
-    url(r'^topic/(?P<topic_id>[-\w\.]+)$',
+    url(r'^(?P<blog_slug>[-\w\.]+)/topic/(?P<topic_slug>[-\w\.]+)$',
         TopicView.as_view(), name='topic'),
 
-    url(r'^article/(?P<article_id>[-\w\.]+)$',
+    url(r'^(?P<blog_slug>[-\w\.]+)/article/(?P<article_slug>[-\w\.]+)$',
         ArticleView.as_view(), name='article'),
 ]
