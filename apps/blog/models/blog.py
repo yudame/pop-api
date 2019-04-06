@@ -11,7 +11,7 @@ class BlogObject(Timestampable, Permalinkable, models.Model):
 
 class Blog(BlogObject):
     trello_board = models.ForeignKey("trello.Board", on_delete=models.CASCADE)
-    parent_blog = models.ForeignKey("self", null=True, on_delete=models.SET_NULL)
+    parent_blog = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL)
 
     # MODEL PROPERTIES
     @property
