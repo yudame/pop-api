@@ -5,7 +5,7 @@ celery-redbeat==0.11.1
 decorator==4.0.10
 dj-database-url==0.4.1
 dj-static==0.0.6
-Django==2.1.2
+Django==2.1.7
 django-bmemcached==0.2.3
 django-cache-memoize==0.1.1
 django-cors-headers==2.3.0
@@ -22,10 +22,10 @@ jsonfield==1.0.3
 psycopg2==2.7.5
 py-trello==0.14.0
 pytz==2016.10
-PyYAML==3.12
+PyYAML==4.2b4
 redis==2.10.6
 requests-oauthlib==0.8.0
-requests==2.18.4
+requests==2.20.0
 schedule==0.4.3
 simplejson==3.11.1
 six==1.11.0
