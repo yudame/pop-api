@@ -4,20 +4,40 @@
 {% block content %}
 
 
+  {% for topic in blog.topics.all %}
 
-<div class="card" style="width: 18rem;">
-  <ul class="list-group list-group-flush">
-    {% for topic in blog.topics.all %}
+    <div id="topic-{{ topic.id }}"
+         class="topic card my-3 border-0">
 
-      <li class="list-group-item">
-        <a href="{{ topic.get_absolute_url }}" class="">
-          {{ topic.title|title }}
-          ({{ topic.articles.count }} post{{ topic.articles.count|pluralize }})
-        </a>
-      </li>
 
-    {% endfor %}
-  </ul>
-</div>
+      <div class="card" style="">
+
+      {#  <img src="..." #}
+      {#       class="card-img-top" alt="...">#}
+
+        <div class="card-body">
+
+          <h5 class="card-title">
+            <a href="{{ topic.get_absolute_url }}">
+              {{ topic.title|title }}
+            </a>
+          </h5>
+
+          <p class="card-text">
+
+            {{ topic.articles.count }}
+            Article{{ topic.articles.count|pluralize }}
+
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+  {% endfor %}
+
 
 {% endblock content %}

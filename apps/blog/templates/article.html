@@ -9,24 +9,39 @@
   </h1>
 
   <ul class="list-inline">
+
     {% for topic in article.topics.all %}
-      <li>
-        <a href="{{ topic.get_absolute_url }}" class="btn-pill">
-          {{ topic.title }}
+      <li class="list-inline-item">
+        <a href="{{ topic.get_absolute_url }}"
+           class="badge badge-secondary">
+          #{{ topic.title }}
         </a>
       </li>
     {% endfor %}
+
+    {% if article.published_at %}
+      <li class="list-inline-item">
+        Published {{ article.published_at|date }}
+      </li>
+    {% endif %}
+
+    {% if article.modified_at %}
+      <li class="list-inline-item">
+        Updated {{ article.modified_at|date }}
+      </li>
+    {% endif %}
+
+    </li>
+
   </ul>
 
   <p>
     {% if article.published_at %}
-      published on
-      {{ article.published_at|date }}
+      Published {{ article.published_at|date }}
     {% endif %}
-    On
-    <a href="{{ article.blog.get_absolute_url }}">
-      {{ article.blog.title }}
-    </a>
+    {% if article.modified_at %}
+      Updated {{ article.modified_at|date }}
+    {% endif %}
   </p>
 
 
