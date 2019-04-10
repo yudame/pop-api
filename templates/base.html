@@ -5,12 +5,14 @@
   <meta charset="utf-8">
   {% spaceless %}
     <title>
-      {% block tab_title %}Service{% endblock tab_title %} | Sample Django Heroku App
+      {% block tab_title %}Home{% endblock tab_title %} | {{ blog.title }}
     </title>
   {% endspaceless %}
 
   {% block viewport %}
-    <meta name="viewport" content="width=480, maximum-scale=1.0, user-scalable=no" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, width=500, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
   {% endblock viewport %}
 
   <!---META TAGS--->
@@ -28,80 +30,65 @@
     <script src="{{ STATIC_URL }}vendor/tether/js/bootstrap.min.js"></script>
 
   {% else %}
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
-          integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!--bootstrap css-->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+          crossorigin="anonymous">
+    <!--font-awesome css-->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
+          rel="stylesheet"
+          integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1"
+          crossorigin="anonymous">
 
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4" crossorigin="anonymous"></script>
+    <!--jquery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4"
+            crossorigin="anonymous"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+            crossorigin="anonymous"></script>
 
   {% endif %}
 
-  <link href="{{ STATIC_URL }}vendor/bootstrap-theme/compiled/toolkit-inverse.min.css" rel="stylesheet">
-  <link href="{{ STATIC_URL }}css/base.css?v=2" rel="stylesheet">
+  <link href="{{ STATIC_URL }}vendor/theme-application/dist/toolkit.min.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}css/base.css?v=0" rel="stylesheet">
   {% block css %}
   {% endblock css %}
 </head>
 
-<body>
+<body style="width: 100%;">
 
-  <div class="container-fluid mb-5">
-    <div class="row">
+  <header class="header mt-2 mb-5" style="padding: 0 25% 0 25%;">
+    {% include 'header.html' %}
+  </header>
 
-{#      <div class="col-md-3 sidebar">#}
-{#        {% block navigation %}#}
-{#          {% include 'navigation.html' %}#}
-{#        {% endblock navigation %}#}
-{#      </div>#}
+  <main class="" style="">
 
-      <div class="col-md-12 content" style="padding-top: 2.1rem;">
+    {% block messages %}
+      {% include 'messages.html' %}
+    {% endblock messages %}
 
-        {% block messages %}
-          {% include 'messages.html' %}
-        {% endblock messages %}
+    {% block content %}
+      <p>Hello Trello Blog</p>
+    {% endblock content %}
 
-        <div class="dashhead">
+  </main>
 
-          <div class="dashhead-titles">
-            <h6 class="dashhead-subtitle">
-              {% block content_subtitle %}Sample Django Heroku App{% endblock %}
-            </h6>
-            <h3 class="dashhead-title">
-              {% block content_title %}&nbsp;{% endblock %}
-            </h3>
-          </div>
 
-          <div class="dashhead-toolbar">
-            {% block content_toolbar %}
-              <div class="btn-group dashhead-toolbar-item">
-                {% block content_toolbar_items %}{% endblock %}
-              </div>
-            {% endblock content_toolbar %}
-          </div>
-        </div>
-        <hr class="visible-xs mt-3">
-
-        {% block content %}
-          <p>Hello World</p>
-        {% endblock content %}
-
-      </div>
-    </div>
-  </div>
-
-  <nav class="navbar fixed-bottom navbar bg-faded">
+  <footer class="footer mt-5" style="padding: 0 25% 0 25%;">
     {% block footer %}
       {% include 'footer.html' %}
     {% endblock footer %}
-  </nav>
+  </footer>
 
   <!--Javascript Placed at the end of the document. Pages load faster. -->
-  <script src="{{ STATIC_URL }}javascript/base.js"></script>
+  <!--bootstrap application theme js-->
+  <script src="{{ STATIC_URL }}vendor/theme-application/dist/toolkit.min.js"></script>
+  <!--custom global js-->
+  <script src="{{ STATIC_URL }}javascript/base.js?v=0"></script>
+  <!--allow templates to load some js-->
   {% block javascript %}
   {% endblock javascript %}
 
