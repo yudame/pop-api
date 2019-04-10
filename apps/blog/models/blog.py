@@ -25,6 +25,12 @@ class Blog(BlogObject):
     def get_absolute_url(self):
         return reverse('blog:blog', kwargs={'blog_slug': self.slug})
 
+    def get_about_absolute_url(self):
+        return reverse('blog:about', kwargs={'blog_slug': self.slug})
+
+    def get_topics_absolute_url(self):
+        return reverse('blog:topics', kwargs={'blog_slug': self.slug})
+
 
 
 #
