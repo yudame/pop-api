@@ -1,8 +1,67 @@
 
-<div class="card card-link-list text-center">
-  <div class="card-body">
-    Andrello is in TEST Mode.
-    Please submit bugs to
-    <a href="http://github.com/Prakti/TPub">TPub Repository</a>
+{% block css %}
+<style>
+
+  #profile-img{
+    -webkit-filter: grayscale(100%); filter: grayscale(100%);
+    box-shadow: 1px 1px 6px slategray;
+  }
+
+  .profile-header-user{
+    text-shadow: 1px 1px 6px slategray;
+  }
+
+  .profile-header-nav .nav-link{
+    text-shadow: 1px 1px 6px slategray;
+  }
+
+</style>
+{% endblock %}
+
+
+<div class="profile-header text-center" style="background-image: url({{ STATIC_URL }}/assets/mountain-fog.jpg); ">
+  <div class="container-fluid">
+    <div class="container-inner">
+
+      <img id="profile-img"
+           class="rounded-circle media-object"
+           src="{{ STATIC_URL }}/assets/tom-dunes.jpg">
+
+      <h3 class="profile-header-user">
+        {{ blog.title }}
+      </h3>
+
+      <p class="profile-header-bio">
+        {{ blog.description }}
+      </p>
+
+    </div>
   </div>
+  <nav class="profile-header-nav">
+    <ul class="nav nav-tabs justify-content-center">
+
+      <li class="nav-item">
+        <a style=""
+           class="nav-link {% if request.get_full_path == blog.get_absolute_url %}active{% endif %}"
+           href="{{ blog.get_absolute_url }}">
+          Home
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a style=""
+           class="nav-link {% if request.get_full_path == blog.get_topics_absolute_url %}active{% endif %}"
+           href="{{ blog.get_topics_absolute_url }}">
+          Topics
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a style=""
+           class="nav-link {% if request.get_full_path == blog.get_about_absolute_url %}active{% endif %}"
+           href="#">About</a>
+      </li>
+
+    </ul>
+  </nav>
 </div>

@@ -60,7 +60,20 @@
 
 <body style="width: 100%;">
 
-  <header class="header mt-2 mb-5" style="padding: 0 25% 0 25%;">
+  <header class="header">
+
+    {% if DEBUG %}
+      <div class="mt-2 mb-5" style="padding: 0 25% 0 25%;">
+        <div class="card card-link-list text-center">
+          <div class="card-body">
+            Andrello is in TEST Mode.
+            Please submit bugs to
+            <a href="http://github.com/Prakti/TPub">TPub Repository</a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
     {% include 'header.html' %}
   </header>
 
