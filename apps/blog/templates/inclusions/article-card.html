@@ -1,0 +1,41 @@
+{% load static %}
+{% load markup_tags %}
+
+
+<div id="article-{{ article.id }}"
+     class="article {% if template %}template{% endif %} card my-5 border-0">
+
+</div>
+
+<div class="card" style="">
+
+{#  <img src="..." #}
+{#       class="card-img-top" alt="...">#}
+
+  <div class="card-body">
+
+    <h5 class="card-title">
+      <a href="{{ article.get_absolute_url }}">
+        {{ article.title|title }}
+      </a>
+    </h5>
+
+    <p class="card-text">
+      {% if article.published_at %}
+        Published {{ article.published_at|date }}
+      {% endif %}
+      {% if article.modified_at %}
+        Updated {{ article.modified_at|date }}
+      {% endif %}
+    </p>
+    <p class="card-text">
+      {{ article.markdown|apply_markup:"markdown"|truncatewords:15 }}
+    </p>
+
+    <a href="{{ article.trello_card.trello_url }}"
+       class="card-link">
+      View On Trello
+    </a>
+  </div>
+
+</div>
