@@ -111,3 +111,6 @@ intelligenttrading-datastore.json
 *credentials.json
 .DS_Store
 Pipfile
+
+settings/local_environment_settings.py
+static/vendor/**/docs/
