@@ -4,6 +4,13 @@
 {% block css %}
 {% endblock css %}
 
+{% block tab_title %}
+  {% block tab_title_prefix %}
+    Home
+  {% endblock tab_title_prefix %}
+  | {{ blog.title }}
+{% endblock tab_title %}
+
 {% block header %}
 
   <header class="header">
