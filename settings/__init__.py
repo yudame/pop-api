@@ -148,6 +148,7 @@ STATICFILES_DIRS = (
     os.path.join(SITE_ROOT, 'static'),
     ('user', os.path.join(SITE_ROOT, 'apps/user/static')),
     ('blog', os.path.join(SITE_ROOT, 'apps/blog/static')),
+    ('trello', os.path.join(SITE_ROOT, 'apps/trello/static')),
 )
 
 if LOCAL:
