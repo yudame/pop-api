@@ -55,8 +55,17 @@ class SetupView(View):
             try:
                 board = Board.register_new_board(trello_board_short_code)
                 messages.success(request, "Setup Successful.")
-
                 return redirect('blog:blog', blog_slug = board.blog.slug)
-            except Exception as e:
-                return HttpResponse(status=500, content=str(e))
 
+            except Exception as e:
+                messages.warning(request, str(e))
+                context = {
+                    "setup_form": setup_form
+                }
+                return render(request, "setup.html", context=context)
+        else:
+            messages.warning(request, "Setup is missing information.")
+            context = {
+                "setup_form": setup_form
+            }
+            return render(request, "setup.html", context=context)

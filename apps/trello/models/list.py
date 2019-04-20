@@ -39,6 +39,8 @@ def pre_save(instance, *args, **kwargs):
     from apps.trello.trello import client
     t_list = client.get_list(instance.trello_id)
     t_cards = t_list.list_cards()
+    if not t_cards:
+        return
     for t_card in t_cards:
         if t_card.name:
             card, created = Card.objects.get_or_create(
@@ -48,5 +50,7 @@ def pre_save(instance, *args, **kwargs):
                 name=t_card.name,
                 markdown=t_card.description,
             )
+            if not t_card.labels:
+                continue
             for t_label in t_card.labels:
                 card.labels.add(Label.objects.get(trello_id=t_label.id))

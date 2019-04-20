@@ -72,22 +72,24 @@ def post_save(instance, *args, **kwargs):
         )
 
         t_labels = t_board.get_labels()
-        for t_label in t_labels:
-            if t_label.name:
-                label, created = Label.objects.get_or_create(
-                    trello_id=t_label.id,
-                    board=instance,
-                    name=t_label.name,
-                    color=t_label.color,
-                )
+        if t_labels:
+            for t_label in t_labels:
+                if t_label.name:
+                    label, created = Label.objects.get_or_create(
+                        trello_id=t_label.id,
+                        board=instance,
+                        name=t_label.name,
+                        color=t_label.color,
+                    )
 
         t_lists = t_board.open_lists()
-        for t_list in t_lists:
-            if 'PUBLISH' in t_list.name.upper() or 'DRAFT' in t_list.name.upper():
-                list, created = List.objects.get_or_create(
-                    trello_id=t_list.id,
-                    board=instance,
-                    name=t_list.name,
-                    position=t_list.pos,
-                    is_closed=t_list.closed
-                )
+        if t_lists:
+            for t_list in t_lists:
+                if 'PUBLISH' in t_list.name.upper() or 'DRAFT' in t_list.name.upper():
+                    list, created = List.objects.get_or_create(
+                        trello_id=t_list.id,
+                        board=instance,
+                        name=t_list.name,
+                        position=t_list.pos,
+                        is_closed=t_list.closed
+                    )
