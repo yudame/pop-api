@@ -1,5 +1,6 @@
 import logging
 import os
+import socket
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import dj_database_url
@@ -41,10 +42,14 @@ DEBUG = LOCAL or STAGE
 WSGI_APPLICATION = 'settings.wsgi.application'
 
 ALLOWED_HOSTS = [
+    '.andrello.me',
     '.herokuapp.com',
     'localhost',
 ]
-
+try:
+    HOSTNAME = socket.gethostname()
+except:
+    HOSTNAME = 'localhost'
 
 # Application definition
 DJANGO_APPS = [

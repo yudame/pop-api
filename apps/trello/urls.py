@@ -1,13 +1,15 @@
 from django.conf.urls import url
 
-from apps.blog.views.article import ArticleView
-from apps.blog.views.topic import TopicView
+from apps.trello.views.setup import SetupView
+from apps.trello.views.callback import CallbackView
 
 
 app_name = 'trello'
 
 urlpatterns = [
 
-    # url(r'^$', home.Home.as_view(), name='home'),
+    url(r'^trello-setup', SetupView.as_view(), name='setup'),
+
+    url(r'^trello-callback', CallbackView.as_view(), name='callback'),
 
 ]
