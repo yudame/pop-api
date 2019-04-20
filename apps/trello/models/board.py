@@ -18,6 +18,25 @@ class Board(TrelloObject):
 
     # MODEL FUNCTIONS
 
+    @classmethod
+    def register_new_board(cls, trello_board_id):
+        if not trello_board_id:
+            raise Exception("no ID provided")
+
+        board, created = cls.objects.get_or_create(trello_id=trello_board_id)
+
+        from settings import HOSTNAME
+        from django.urls import reverse
+        callback_url = HOSTNAME + reverse('trello:callback', kwargs={})
+
+        from apps.trello.trello import client
+        client.create_hook(
+            callback_url,
+            board.trello_id,
+            desc="publish board changes"
+        )
+
+        return board
 
 # reset all board details
 @receiver(pre_save, sender=Board)

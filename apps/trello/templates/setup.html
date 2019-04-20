@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="row justify-content-center my-5">
+
+  <div class="col-md-8 col-sm-12">
+
+    <div class="card">
+
+      <h5 class="card-header">
+        Connect Trello Board
+      </h5>
+
+      <div class="card-body">
+
+
+        <form action="" method="post">{% with form=setup_form %}{% csrf_token %}
+
+          {% for hidden_field in form.hidden_fields %}
+            {{ hidden_field }}
+          {% endfor %}
+
+          <div class="form-group">
+
+            <label for="{{ form.trello_board_url.id_for_label }}">
+              Trello Board URL
+            </label>
+
+            <input type="text" class="form-control" autocomplete="on"
+                   id="{{ form.trello_board_url.id }}"
+                   name="{{ form.trello_board_url.html_name }}"
+                   placeholder="eg. http://trello.com/b/1A2B3C4D/my-board">
+
+            <small id="{{ form.trello_board_url.id_for_label }}-help" class="form-text text-muted">
+            </small>
+
+          </div>
+
+          <button type="submit" class="btn btn-primary">Save</button>
+
+        {% endwith %}</form>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
