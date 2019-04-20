@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 
+
+{% block tab_title %}{{ topic.title|title }}{% endblock tab_title %}
+
 {% block content %}
 
   <h1 class="mt-3">

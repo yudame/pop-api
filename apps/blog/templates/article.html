@@ -2,51 +2,46 @@
 {% load static %}
 {% load markup_tags %}
 
+
+{% block tab_title %}{{ article.title|title }}{% endblock tab_title %}
+
 {% block content %}
 
-  <h1>
-    {{ article.title }}
+  <h1 id="article-title" class="my-5">
+    {{ article.title|title }}
   </h1>
 
-  <ul class="list-inline">
+  <div id="article-meta" class="my-5">
+    <ul class="list-inline">
 
-    {% for topic in article.topics.all %}
-      <li class="list-inline-item">
-        <a href="{{ topic.get_absolute_url }}"
-           class="badge badge-secondary">
-          #{{ topic.title }}
-        </a>
+      {% for topic in article.topics.all %}
+        <li class="list-inline-item">
+          <a href="{{ topic.get_absolute_url }}"
+             class="badge badge-secondary">
+            #{{ topic.title }}
+          </a>
+        </li>
+      {% endfor %}
+
+      {% if article.published_at %}
+        <li class="list-inline-item">
+          Published {{ article.published_at|date }}
+        </li>
+      {% endif %}
+
+      {% if article.modified_at %}
+        <li class="list-inline-item">
+          Updated {{ article.modified_at|date }}
+        </li>
+      {% endif %}
+
       </li>
-    {% endfor %}
 
-    {% if article.published_at %}
-      <li class="list-inline-item">
-        Published {{ article.published_at|date }}
-      </li>
-    {% endif %}
+    </ul>
+  </div>
 
-    {% if article.modified_at %}
-      <li class="list-inline-item">
-        Updated {{ article.modified_at|date }}
-      </li>
-    {% endif %}
-
-    </li>
-
-  </ul>
-
-  <p>
-    {% if article.published_at %}
-      Published {{ article.published_at|date }}
-    {% endif %}
-    {% if article.modified_at %}
-      Updated {{ article.modified_at|date }}
-    {% endif %}
-  </p>
-
-
-  {{ article.markdown|apply_markup:"markdown" }}
-
-
+  <div id="article-body" class="my-3">
+    {{ article.markdown|apply_markup:"markdown" }}
+  </div>
 
 {% endblock content %}

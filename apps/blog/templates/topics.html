@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block content %}
 
+{% block tab_title %}Topics{% endblock tab_title %}
+
+
+{% block content %}
 
   {% for topic in blog.topics.all %}
 
@@ -17,17 +20,34 @@
 
         <div class="card-body">
 
-          <h5 class="card-title">
-            <a href="{{ topic.get_absolute_url }}">
-              {{ topic.title|title }}
-            </a>
-          </h5>
+
+          <ul class="list-inline">
+            <li class="list-inline-item">
+              <a href="{{ topic.get_absolute_url }}"
+               class="badge badge-secondary">
+                <h5>#{{ topic.title }}</h5>
+              </a>
+            </li>
+
+            <li class="list-inline-item">
+              {{ topic.articles.count }}
+              Article{{ topic.articles.count|pluralize }}
+            </li>
+
+          </ul>
 
           <p class="card-text">
+            <ul class="list-unstyled">
+              {% for article in topic.articles.all %}
 
-            {{ topic.articles.count }}
-            Article{{ topic.articles.count|pluralize }}
+                <li class="">
+                  <a href="{{ article.get_absolute_url }}">
+                    {{ article.title|title }}
+                  </a>
+                </li>
 
+              {% endfor %}
+            </ul>
           </p>
 
         </div>
@@ -36,8 +56,6 @@
 
     </div>
 
-
   {% endfor %}
-
 
 {% endblock content %}
