@@ -21,6 +21,9 @@ elif dt_key == 'STAGE':
 else:
     LOCAL = True
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 # Set up logger
 if LOCAL:
@@ -62,6 +65,7 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'debug_toolbar',
     'django_markup',
 ]
 
@@ -77,6 +81,8 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + APPS
 
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+] + [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -146,9 +152,9 @@ STATIC_ROOT = STATIC_URL = '/static/'
 # Additional locations of static files
 STATICFILES_DIRS = (
     os.path.join(SITE_ROOT, 'static'),
-    ('user', os.path.join(SITE_ROOT, 'apps/user/static')),
-    ('blog', os.path.join(SITE_ROOT, 'apps/blog/static')),
-    ('trello', os.path.join(SITE_ROOT, 'apps/trello/static')),
+    # ('user', os.path.join(SITE_ROOT, 'apps/user/static')),
+    # ('blog', os.path.join(SITE_ROOT, 'apps/blog/static')),
+    # ('trello', os.path.join(SITE_ROOT, 'apps/trello/static')),
 )
 
 if LOCAL:
