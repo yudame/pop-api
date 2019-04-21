@@ -3,8 +3,6 @@ import os
 import socket
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import dj_database_url
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -62,6 +60,8 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'django.contrib.sites',
 ]
 
 THIRD_PARTY_APPS = [
@@ -92,7 +92,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-LOGIN_REDIRECT_URL = '/'
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = (
+    'herokuapp.com',
+    'andrello.me'
+)
+
+LOGIN_REDIRECT_URL = '/trello/setup'
 
 ROOT_URLCONF = 'settings.urls'
 
@@ -112,15 +119,7 @@ TEMPLATES = [{
     },
 }, ]
 
-
-if PRODUCTION or STAGE:
-    DATABASES = {'default': dj_database_url.config()}
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-
 # Password validation
-# https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -149,6 +148,7 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+# STATIC_ROOT = STATIC_URL = '/static/'
 
 
 # Additional locations of static files
@@ -158,6 +158,27 @@ STATICFILES_DIRS = (
     # ('blog', os.path.join(SITE_ROOT, 'apps/blog/static')),
     # ('trello', os.path.join(SITE_ROOT, 'apps/trello/static')),
 )
+
+if LOCAL:
+    logger.info("LOCAL environment detected. Importing local_settings.py")
+    try:
+        from settings.local_settings import *
+    except:
+        logger.error("Could not successfully import local_settings.py. This is necessary if you are running locally. This file should be in version control.")
+        raise
+
+
+# General apps settings
+
+if PRODUCTION or STAGE:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+logger.info("Importing vendor_services_settings")
+try:
+    from settings.vendor_services_settings import *
+except:
+    logger.warning("Failed to import vendor_services_settings.")
+    pass
 
 if LOCAL:
     logger.info("LOCAL environment detected. Importing local_settings.py")
