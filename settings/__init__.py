@@ -145,9 +145,11 @@ USE_I18N = False
 USE_L10N = False
 USE_TZ = False
 
+
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.10/howto/static-files/
-STATIC_ROOT = STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+
 
 # Additional locations of static files
 STATICFILES_DIRS = (
