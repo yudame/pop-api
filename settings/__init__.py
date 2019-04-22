@@ -96,7 +96,8 @@ MIDDLEWARE = [
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
     'herokuapp.com',
-    'skibi.me'
+    'skibi.me',
+    'skibiapp.com',
 )
 
 LOGIN_REDIRECT_URL = '/trello/setup'
