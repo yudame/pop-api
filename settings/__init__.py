@@ -43,7 +43,7 @@ DEBUG = LOCAL or STAGE
 WSGI_APPLICATION = 'settings.wsgi.application'
 
 ALLOWED_HOSTS = [
-    '.andrello.me',
+    '.skibi.me',
     '.herokuapp.com',
     'localhost',
 ]
@@ -96,7 +96,7 @@ MIDDLEWARE = [
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
     'herokuapp.com',
-    'andrello.me'
+    'skibi.me'
 )
 
 LOGIN_REDIRECT_URL = '/trello/setup'
