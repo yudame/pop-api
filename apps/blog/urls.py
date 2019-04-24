@@ -2,11 +2,14 @@ from django.conf.urls import url
 
 from apps.blog.views.article import ArticleView
 from apps.blog.views.topic import TopicsView, TopicView
-from apps.blog.views.blog import BlogView
+from apps.blog.views.blog import BlogView, BlogSetupView
 
 app_name = 'blog'
 
 urlpatterns = [
+
+    url(r'^setup$',
+        BlogSetupView.as_view(), name='setup'),
 
     url(r'^(?P<blog_slug>[-\w\.]+)$',
         BlogView.as_view(), name='blog'),
