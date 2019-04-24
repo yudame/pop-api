@@ -1,15 +1,19 @@
+import socket
+
 from django.db import models
 from django.urls import reverse
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from apps.blog.models.abstract import BlogObject
+from django.contrib.sites.models import Site
 
 
 class Blog(BlogObject):
     trello_board = models.OneToOneField("trello.Board",
                                         related_name="blog", on_delete=models.CASCADE)
-    parent_blog = models.ForeignKey("self", null=True, blank=True,
-                                    related_name="child_blogs", on_delete=models.SET_NULL)
+    sites = models.OneToOneField(Site)
+    # parent_blog = models.ForeignKey("self", null=True, blank=True,
+    #                                 related_name="child_blogs", on_delete=models.SET_NULL)
 
     # MODEL PROPERTIES
     @property
@@ -33,9 +37,14 @@ class Blog(BlogObject):
 
 
 
-#
-# @receiver(pre_save, sender=Blog)
-# def pre_save_slug(sender, instance, *args, **kwargs):
-#
-#     if not instance.slug:
-#         instance.slug = slugify(instance.slug_source)
+
+@receiver(pre_save, sender=Blog)
+def pre_save_create_site(sender, instance, *args, **kwargs):
+    if not instance.site:
+
+        try:
+            domain = f"{instance.slug}.{socket.gethostname()}"
+        except:
+            domain = 'localhost:8000'
+
+        instance.site, created = Site.objects.get_or_create(domain=domain, name=instance.title)
