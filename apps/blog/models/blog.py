@@ -9,9 +9,9 @@ from django.contrib.sites.models import Site
 
 
 class Blog(BlogObject):
-    trello_board = models.OneToOneField("trello.Board",
-                                        related_name="blog", on_delete=models.CASCADE)
-    sites = models.OneToOneField(Site)
+    trello_board = models.OneToOneField("trello.Board", related_name="blog", on_delete=models.CASCADE)
+    site = models.OneToOneField(Site, null=True, related_name="blog", on_delete=models.SET_NULL)
+
     # parent_blog = models.ForeignKey("self", null=True, blank=True,
     #                                 related_name="child_blogs", on_delete=models.SET_NULL)
 
@@ -41,7 +41,6 @@ class Blog(BlogObject):
 @receiver(pre_save, sender=Blog)
 def pre_save_create_site(sender, instance, *args, **kwargs):
     if not instance.site:
-
         try:
             domain = f"{instance.slug}.{socket.gethostname()}"
         except:
