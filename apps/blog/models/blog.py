@@ -11,7 +11,7 @@ from django.contrib.sites.models import Site
 class Blog(BlogObject):
     trello_board = models.OneToOneField("trello.Board",
                                         related_name="blog", on_delete=models.CASCADE)
-    sites = models.OneToOneField(Site)
+    sites = models.OneToOneField(Site, on_delete=models.PROTECT)
     # parent_blog = models.ForeignKey("self", null=True, blank=True,
     #                                 related_name="child_blogs", on_delete=models.SET_NULL)
 
