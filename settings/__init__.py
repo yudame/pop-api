@@ -101,6 +101,7 @@ CORS_ORIGIN_WHITELIST = (
     'skibiapp.com',
 )
 
+SITE_ID = 1
 LOGIN_REDIRECT_URL = '/trello/setup'
 
 ROOT_URLCONF = 'settings.urls'

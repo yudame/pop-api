@@ -9,6 +9,7 @@ from django.contrib.sites.models import Site
 
 
 class Blog(BlogObject):
+
     trello_board = models.OneToOneField("trello.Board", related_name="blog", on_delete=models.CASCADE)
     site = models.OneToOneField(Site, null=True, related_name="blog", on_delete=models.SET_NULL)
 
