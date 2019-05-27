@@ -65,6 +65,7 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'storages',
     'debug_toolbar',
     'django_markup',
 ]
@@ -148,9 +149,9 @@ USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
-# STATIC_ROOT = STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_URL = '/static/'
+STATIC_ROOT = STATIC_URL = '/static/'
 
 
 # Additional locations of static files
