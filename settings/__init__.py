@@ -44,9 +44,12 @@ WSGI_APPLICATION = 'settings.wsgi.application'
 
 ALLOWED_HOSTS = [
     '.skibi.me',
+    '.skibiapp.com',
     '.herokuapp.com',
     'localhost',
 ]
+ROOT_HOSTCONF = 'settings.hosts'
+# DEFAULT_HOST = 'skibiapp.com' if not LOCAL else 'localhost'
 try:
     HOSTNAME = socket.gethostname()
 except:
