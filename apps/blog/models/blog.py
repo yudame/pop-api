@@ -10,6 +10,11 @@ from django.contrib.sites.models import Site
 
 class Blog(BlogObject):
 
+    # parent_blog = models.ForeignKey("self", null=True, blank=True,
+    #                                 related_name="child_blogs", on_delete=models.SET_NULL)
+    trello_board = models.OneToOneField("trello.Board", related_name="blog", on_delete=models.CASCADE)
+    site = models.OneToOneField(Site, null=True, related_name="blog", on_delete=models.PROTECT)
+
     trello_board = models.OneToOneField("trello.Board", related_name="blog", on_delete=models.CASCADE)
     site = models.OneToOneField(Site, null=True, related_name="blog", on_delete=models.SET_NULL)
 
@@ -22,6 +27,9 @@ class Blog(BlogObject):
     _description = models.TextField(default="", blank=True)
     show_skibi_credits = models.BooleanField(default=True)
     footer_text = models.TextField(default="", blank=True)
+
+    theme = models.ForeignKey("blog.Theme", related_name='blogs', on_delete=models.PROTECT,
+                              null=True, blank=True)
 
     # MODEL PROPERTIES
     @property
