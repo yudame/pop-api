@@ -16,6 +16,13 @@ class Blog(BlogObject):
     # parent_blog = models.ForeignKey("self", null=True, blank=True,
     #                                 related_name="child_blogs", on_delete=models.SET_NULL)
 
+    background_src = models.URLField(null=True, blank=True)
+    logo_src = models.URLField(null=True, blank=True)
+    _title = models.CharField(max_length=128, null=True, blank=True)
+    _description = models.TextField(default="")
+    show_skibi_credits = models.BooleanField(default=True)
+    footer_text = models.TextField(default="")
+
     # MODEL PROPERTIES
     @property
     def slug_source(self):
@@ -23,7 +30,11 @@ class Blog(BlogObject):
 
     @property
     def title(self):
-        return self.trello_board.name
+        return self._title or self.trello_board.name or ""
+
+    @property
+    def description(self):
+        return self._description or self.trello_board.description or ""
 
     # MODEL FUNCTIONS
 
@@ -36,7 +47,8 @@ class Blog(BlogObject):
     def get_topics_absolute_url(self):
         return reverse('blog:topics', kwargs={'blog_slug': self.slug})
 
-
+    def __str__(self):
+        return self.title or f"Blog {self.id}"
 
 
 @receiver(pre_save, sender=Blog)
