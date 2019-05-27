@@ -3,6 +3,20 @@
 
   <div class="row justify-content-center">
 
+    <div class="col-md-8 col-sm-12 text-center">
+
+      <p class="font-italic">
+        {{ blog.footer_text }}
+        © {% now "Y" %}
+      </p>
+
+    </div>
+
+  </div>
+
+  {% if blog.show_skibi_credits %}
+  <div class="row justify-content-center">
+
     <div class="col-md-8 col-sm-12">
 
       <div class="card card-link-list text-center">
@@ -26,5 +40,6 @@
     </div>
 
   </div>
+  {% endif %}
 
 </div>

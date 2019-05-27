@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.blog.models import Blog, Topic, Article
+from apps.blog.models import Blog, Topic, Article, Link
 
 
 @admin.register(Blog)
@@ -12,4 +12,8 @@ class TopicAdmin(admin.ModelAdmin):
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Link)
+class LinkAdmin(admin.ModelAdmin):
     pass

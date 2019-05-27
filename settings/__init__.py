@@ -44,9 +44,12 @@ WSGI_APPLICATION = 'settings.wsgi.application'
 
 ALLOWED_HOSTS = [
     '.skibi.me',
+    '.skibiapp.com',
     '.herokuapp.com',
     'localhost',
 ]
+ROOT_HOSTCONF = 'settings.hosts'
+# DEFAULT_HOST = 'skibiapp.com' if not LOCAL else 'localhost'
 try:
     HOSTNAME = socket.gethostname()
 except:
@@ -101,6 +104,7 @@ CORS_ORIGIN_WHITELIST = (
     'skibiapp.com',
 )
 
+SITE_ID = 1
 LOGIN_REDIRECT_URL = '/trello/setup'
 
 ROOT_URLCONF = 'settings.urls'

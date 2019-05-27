@@ -11,6 +11,7 @@ class Board(TrelloObject):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=120, null=False)
+    description = models.TextField(default="")
     is_closed = models.BooleanField(default=False)
 
     # MODEL PROPERTIES
@@ -37,6 +38,10 @@ class Board(TrelloObject):
         )
 
         return board
+
+    def __str__(self):
+        return self.name or f"Board {self.id}"
+
 
 # reset all board details
 @receiver(pre_save, sender=Board)

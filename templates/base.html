@@ -67,12 +67,14 @@
     <link href="{{ STATIC_URL }}vendor/theme-application/dist/toolkit.min.css" rel="stylesheet">
   {% endblock theme_css %}
 
-  <link href="{{ STATIC_URL }}css/base.css?v=0" rel="stylesheet">
+  <link href="{{ STATIC_URL }}vendor/theme-application/dist/toolkit.min.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}css/base.css?v=1" rel="stylesheet">
+
   {% block css %}
   {% endblock css %}
 </head>
 
-<body style="width: 100%;">
+<body class="" style="">
 
   {% block header %}
 
@@ -94,7 +96,7 @@
 
   {% endblock header %}
 
-  <main class="container" style="">
+  <main role="main" class="container" style="">
 
     {% block messages %}
       {% include 'messages.html' %}
@@ -106,8 +108,7 @@
 
   </main>
 
-
-  <footer class="footer mt-5">
+  <footer class="footer">
     {% block footer %}
       {% include 'footer.html' %}
     {% endblock footer %}
