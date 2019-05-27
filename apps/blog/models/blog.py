@@ -19,9 +19,9 @@ class Blog(BlogObject):
     background_src = models.URLField(null=True, blank=True)
     logo_src = models.URLField(null=True, blank=True)
     _title = models.CharField(max_length=128, null=True, blank=True)
-    _description = models.TextField(default="")
+    _description = models.TextField(default="", blank=True)
     show_skibi_credits = models.BooleanField(default=True)
-    footer_text = models.TextField(default="")
+    footer_text = models.TextField(default="", blank=True)
 
     # MODEL PROPERTIES
     @property
