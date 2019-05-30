@@ -106,6 +106,7 @@ CORS_ORIGIN_WHITELIST = (
 
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/trello/setup'
+LOGIN_URL = 'admin/login'
 
 ROOT_URLCONF = 'settings.urls'
 
