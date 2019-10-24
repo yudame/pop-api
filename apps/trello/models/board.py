@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime
 
+import emoji
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
@@ -83,7 +84,7 @@ def post_save(instance, *args, **kwargs):
                     label, created = Label.objects.get_or_create(
                         trello_id=t_label.id,
                         board=instance,
-                        name=t_label.name,
+                        name=emoji.demojize(t_label.name).replace(" ", "-"),
                         color=t_label.color,
                     )
 

@@ -3,6 +3,7 @@ boto3==1.6.23
 celery==4.1.1
 celery-redbeat==0.11.1
 decorator==4.0.10
+emoji==0.5.2
 dj-database-url==0.4.1
 dj-static==0.0.6
 Django==2.1.7
@@ -31,6 +32,7 @@ schedule==0.4.3
 simplejson==3.11.1
 six==1.11.0
 toolz==0.9.0
+unidecode==1.0.23
 waitress==1.0.2
 
 #filters for django-markup
