@@ -60,11 +60,13 @@ class BlogSetupView(View):
             trello_board_id = found_ids[0]
 
             board, created = Board.objects.get_or_create(trello_id=trello_board_id, slug=subdomain)
-            site, created = Site.objects.get_or_create(name=instance.title)
-
+            site, created = Site.objects.get_or_create(name=board.title)
+            blog = board.blog
+            blog.site = site
+            blog.save()
             board.save()
 
-            return redirect('blog:blog')
+            return redirect('blog:blog', blog_slug=blog.slug)
         else:
             context = {
                 "blog_setup_form": blog_setup_form
