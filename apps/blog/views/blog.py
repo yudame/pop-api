@@ -32,7 +32,7 @@ class BlogSetupForm(forms.Form):
 
 
 class BlogSetupView(View):
-    def dispatch(self, request, blog_slug, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
