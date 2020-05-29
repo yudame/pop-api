@@ -26,7 +26,7 @@ class Board(TrelloObject):
 
         board, created = cls.objects.get_or_create(trello_id=trello_board_id)
 
-        from settings import HOSTNAME
+        from static.image.qr import HOSTNAME
         from django.urls import reverse
         callback_url = HOSTNAME + reverse('trello:callback', kwargs={})
 
