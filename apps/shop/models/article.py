@@ -1,8 +1,8 @@
 from django.db import models
 from django.urls import reverse
 
-from apps.blog.models import Topic
-from apps.blog.models.abstract import BlogObject
+from apps.shop.models import Topic
+from apps.shop.models.abstract import BlogObject
 
 
 class Article(BlogObject):

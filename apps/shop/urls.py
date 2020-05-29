@@ -1,8 +1,8 @@
 from django.conf.urls import url
 
-from apps.blog.views.article import ArticleView
-from apps.blog.views.topic import TopicsView, TopicView
-from apps.blog.views.blog import BlogView, BlogSetupView
+from apps.shop.views.article import ArticleView
+from apps.shop.views.topic import TopicsView, TopicView
+from apps.shop.views.blog import BlogView, BlogSetupView
 
 app_name = 'blog'
 

@@ -26,7 +26,7 @@ class Board(TrelloObject):
 
         board, created = cls.objects.get_or_create(trello_id=trello_board_id)
 
-        from static.image.qr import HOSTNAME
+        from settings import HOSTNAME
         from django.urls import reverse
         callback_url = HOSTNAME + reverse('trello:callback', kwargs={})
 
@@ -66,7 +66,7 @@ def post_save(instance, *args, **kwargs):
     else:
         from apps.trello.models.list import List
         from apps.trello.models.label import Label
-        from apps.blog.models import Blog
+        from apps.shop.models import Blog
         from apps.trello.trello import client
         t_board = client.get_board(instance.trello_id)
         t_board.trello_id = t_board.id

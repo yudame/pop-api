@@ -7,7 +7,7 @@ from django.core.validators import validate_slug
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import View
 
-from apps.blog.models import Blog
+from apps.shop.models import Blog
 from apps.trello.models import Board
 
 

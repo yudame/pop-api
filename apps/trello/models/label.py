@@ -25,7 +25,7 @@ class Label(TrelloObject):
 # load label and make topic
 @receiver(post_save, sender=Label)
 def post_save(instance, *args, **kwargs):
-    from apps.blog.models import Topic
+    from apps.shop.models import Topic
     # from apps.trello.trello import client
     # t_card = client.get_card(instance.trello_id)
 

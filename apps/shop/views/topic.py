@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import View
 
-from apps.blog.models import Topic, Blog
+from apps.shop.models import Topic, Blog
 
 
 class TopicsView(View):

@@ -1,5 +1,0 @@
-from apps.blog.models.theme import Theme
-from apps.blog.models.blog import Blog
-from apps.blog.models.topic import Topic
-from apps.blog.models.article import Article
-from apps.blog.models.link import Link

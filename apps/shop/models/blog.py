@@ -4,7 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
-from apps.blog.models.abstract import BlogObject
+from apps.shop.models.abstract import BlogObject
 from django.contrib.sites.models import Site
 
 

@@ -38,7 +38,7 @@ def post_save(instance, *args, **kwargs):
         except:
             pass
     else:
-        from apps.blog.models import Article
+        from apps.shop.models import Article
         # from apps.trello.trello import client
         # t_card = client.get_card(instance.trello_id)
 

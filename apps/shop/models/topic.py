@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
-from apps.blog.models.abstract import BlogObject
+from apps.shop.models.abstract import BlogObject
 
 
 
@@ -21,7 +21,7 @@ class Topic(BlogObject):
 
     @property
     def articles(self):
-        from apps.blog.models import Article
+        from apps.shop.models import Article
         return Article.objects.filter(trello_card_id__in=[card.id for card in self.trello_label.cards.all()])
 
     # MODEL FUNCTIONS

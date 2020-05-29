@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.blog.models import Blog, Topic, Article, Link
+from apps.shop.models import Blog, Topic, Article, Link
 
 
 @admin.register(Blog)
