@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block tab_title %}Home{% endblock tab_title %}
+
+{% block javascript %}
+  <script>
+
+  </script>
+{% endblock javascript %}
+
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-md-8">
+      <h1>
+        Pop by Yudame
+      </h1>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-auto">
+      <div class="card">
+        <div class="card-body">
+
+          <div class="login-box auth0-box before">
+              <img src="https://i.cloudup.com/StzWWrY34s.png" />
+              <h3>Social Login</h3>
+              <a class="btn btn-secondary btn-lg btn-login btn-block" href="/social_django/login/auth0">Log In</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--<div class="row mt-3">-->
+    <!--<div class="col-md-auto">-->
+      <!--<div class="card">-->
+        <!--<div class="card-body">-->
+          <!--<div class="row">-->
+            <!--<div class="col-auto">-->
+              <!--<a href="{% url 'user:account' %}" class="btn btn-secondary btn-lg">Create Account</a>-->
+            <!--</div>-->
+            <!--<div class="col-auto">-->
+              <!--<p class="nowrap pull-right mx-3 mt-3">-->
+                <!--<span class="mx-1">-->
+                  <!--Already a member?-->
+                <!--</span>-->
+                <!--<a href="{% url 'user:login' %}" class="text-dark">Login</a>-->
+              <!--</p>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+
+{% endblock content %}

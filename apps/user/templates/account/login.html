@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block tab_title %}Login{% endblock tab_title %}
+
+{% block javascript %}
+  <script>
+
+  </script>
+{% endblock javascript %}
+
+
+{% block content %}
+
+<div class="col-lg-4 col-md-6 ml-auto mr-auto">
+  <form class="form" action="{% url 'login' %}" method="post">
+    {% load widget_tweaks %}{% csrf_token %}
+
+    <div class="card card-login card-white">
+      <div class="card-header">
+
+        <h1 class="card-title">Log in</h1>
+      </div>
+      <div class="card-body">
+
+        <!--{% if form.errors %}-->
+          <!--{% for error in form.non_field_errors %}-->
+            <!--<p class="text-warning">{{ error|escape }}</p>-->
+          <!--{% endfor %}-->
+        <!--{% endif %}-->
+
+        <div class="input-group {% if form.username.errors %}has-error{% endif %}">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <i class="fas fa-envelope"></i>
+            </div>
+          </div>
+          {{ form.username.errors }}
+          <!--{{ form.username.label_tag }}-->
+          {{ form.username|add_class:'form-control' }}
+        </div>
+
+        <div class="input-group {% if form.password.errors %}has-error{% endif %}">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <i class="fas fa-lock"></i>
+            </div>
+          </div>
+          {{ form.password.errors }}
+          <!--{{ form.password.label_tag }}-->
+          {{ form.password|add_class:'form-control' }}
+        </div>
+
+      </div>
+      <div class="card-footer">
+
+        <button type="submit" class="btn btn-secondary btn-lg btn-block mb-3">
+          Get Started
+        </button>
+
+        <div class="pull-left">
+          <h6>
+            <a href="{% url 'user:account' %}" class="link footer-link text-dark">
+              Create Account
+            </a>
+          </h6>
+        </div>
+
+        <div class="pull-right">
+          <h6>
+            <a href="javascript:void(0)" class="link footer-link text-dark">
+              Need Help?
+            </a>
+          </h6>
+        </div>
+
+      </div>
+    </div>
+  </form>
+</div>
+
+
+{% endblock content %}

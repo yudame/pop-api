@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block tab_title %}Logout{% endblock tab_title %}
+
+{% block javascript %}
+  <script>
+  </script>
+{% endblock javascript %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <h3>You have been logged out.</h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <p>
+        <a href="{% url 'user:login' %}">
+          Login again
+        </a>
+      </p>
+    </div>
+  </div>
+
+{% endblock content %}

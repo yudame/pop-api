@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block tab_title %}Create Account{% endblock tab_title %}
+
+{% block javascript %}
+  <script>
+
+  </script>
+{% endblock javascript %}
+
+
+{% block content %}
+
+  <h1>
+    Account Created
+  </h1>
+
+  <p>
+    An activation link has been sent to {{ new_account_email }}
+  </p>
+
+  <p>
+    Please check your email for a link to activate your account.
+  </p>
+
+{% endblock content %}
