@@ -1,7 +1,12 @@
-# TPub
+# Pop API
 
-### todo
+Open-Source backend 
+for connecting small business back office logistics
 
-- [ ] build the app
-- [ ] change the name
+Integrations
+---
 
+- Trello - CRM
+- Telegram - CRM helper
+- Slack - teamwork, analytics feed
+- Line - customer interface
