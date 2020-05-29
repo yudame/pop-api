@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.communication.views.email.email import SIBEmail
 from apps.user.models import User
-from static.image.qr import HOSTNAME
+from settings import HOSTNAME
 
 
 class CustomAuthenticationForm(AuthenticationForm):

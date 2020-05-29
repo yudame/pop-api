@@ -1,6 +1,6 @@
 import os
 
-from static.image.qr import LOCAL, STAGE, DEMO, PRODUCTION
+from settings import LOCAL
 
 # STATIC FILES
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

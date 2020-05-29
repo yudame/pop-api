@@ -6,7 +6,7 @@ from datetime import timedelta
 
 from django.contrib import messages
 
-from static.image.qr import TRANSLOADIT_OPTIONS
+from settings import TRANSLOADIT_OPTIONS
 
 # 'Constants'
 DEFAULT_SIGNATURE_EXPIRATION_MINUTES = 70

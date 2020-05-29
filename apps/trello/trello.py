@@ -1,5 +1,5 @@
 from trello import TrelloClient
-from static.image.qr import TRELLO_API_KEY, TRELLO_API_SECRET, TRELLO_TOKEN
+from settings import TRELLO_API_KEY, TRELLO_API_SECRET, TRELLO_TOKEN
 
 client = TrelloClient(
     api_key=TRELLO_API_KEY,

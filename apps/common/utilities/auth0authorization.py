@@ -1,7 +1,6 @@
 import json
-import jwt
 import requests
-from static.image.qr import HOSTNAME, APP_NAME
+from settings import HOSTNAME, APP_NAME
 from django.contrib.auth import authenticate
 
 
@@ -36,7 +35,6 @@ def jwt_decode_token(token):
 from functools import wraps
 import jwt
 
-from django.http import JsonResponse
 
 def get_token_auth_header(request):
     """Obtains the Access Token from the Authorization Header

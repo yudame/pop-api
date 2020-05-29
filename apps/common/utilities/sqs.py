@@ -1,7 +1,7 @@
 import boto
 from boto.sqs.message import Message
 import json
-from static.image.qr import QUEUE_NAME, AWS_OPTIONS, BETA_QUEUE_NAME, TEST_QUEUE_NAME
+from settings import QUEUE_NAME, AWS_OPTIONS, BETA_QUEUE_NAME, TEST_QUEUE_NAME
 
 import logging
 logger = logging.getLogger(__name__)

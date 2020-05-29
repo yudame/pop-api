@@ -7,8 +7,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
-from apps.common.utilities.multithreading import start_new_thread
-from static.image.qr import DEFAULT_FROM_EMAIL, LOCAL, PRODUCTION
+from settings import DEFAULT_FROM_EMAIL, LOCAL
 
 SIB_TEMPLATES = {
     'account-activate': {'id': 17, 'subject': "Verify and Activate Account"},

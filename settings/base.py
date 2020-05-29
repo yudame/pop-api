@@ -92,6 +92,7 @@ APPS = [
     'apps.common',
     'apps.communication',
     'apps.user',
+    'apps.trello',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + APPS

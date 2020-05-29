@@ -1,5 +1,5 @@
 from django.db import models
-from static.image.qr import AUTH_USER_MODEL
+from settings import AUTH_USER_MODEL
 
 
 class Authorable(models.Model):

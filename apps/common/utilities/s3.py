@@ -1,5 +1,5 @@
 import boto
-from static.image.qr import AWS_OPTIONS, DEFAULT_FILE_STORAGE
+from settings import AWS_OPTIONS
 import logging
 logger = logging.getLogger(__name__)
 
