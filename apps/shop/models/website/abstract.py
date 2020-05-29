@@ -6,4 +6,3 @@ class BlogObject(Timestampable, Publishable, Permalinkable, models.Model):
 
     class Meta:
         abstract = True
-

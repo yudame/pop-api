@@ -2,24 +2,16 @@ import socket
 
 from django.db import models
 from django.urls import reverse
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from apps.shop.models.abstract import BlogObject
+from apps.shop.models.website.abstract import BlogObject
 from django.contrib.sites.models import Site
 
 
-class Blog(BlogObject):
-
-    # parent_blog = models.ForeignKey("self", null=True, blank=True,
-    #                                 related_name="child_blogs", on_delete=models.SET_NULL)
-    trello_board = models.OneToOneField("trello.Board", related_name="blog", on_delete=models.CASCADE)
-    site = models.OneToOneField(Site, null=True, related_name="blog", on_delete=models.PROTECT)
+class Website(BlogObject):
 
     trello_board = models.OneToOneField("trello.Board", related_name="blog", on_delete=models.CASCADE)
     site = models.OneToOneField(Site, null=True, related_name="blog", on_delete=models.SET_NULL)
-
-    # parent_blog = models.ForeignKey("self", null=True, blank=True,
-    #                                 related_name="child_blogs", on_delete=models.SET_NULL)
 
     background_src = models.URLField(null=True, blank=True)
     logo_src = models.URLField(null=True, blank=True)

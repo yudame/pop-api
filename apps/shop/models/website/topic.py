@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
-from apps.shop.models.abstract import BlogObject
+from apps.shop.models.website.abstract import BlogObject
 
 
 
