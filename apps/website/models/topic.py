@@ -1,13 +1,13 @@
 from django.db import models
 from django.urls import reverse
 
-from apps.shop.models.website.abstract import BlogObject
+from apps.website.models.abstract import BlogObject
 
 
 
 class Topic(BlogObject):
     trello_label = models.OneToOneField("trello.Label", related_name="topic", on_delete=models.CASCADE)
-    blog = models.ForeignKey("blog.Blog", related_name="topics", on_delete=models.CASCADE)
+    website = models.ForeignKey("shop.Website", related_name="topics", on_delete=models.CASCADE)
     description = models.TextField(default="", blank=True)
 
     # MODEL PROPERTIES
@@ -27,4 +27,4 @@ class Topic(BlogObject):
     # MODEL FUNCTIONS
 
     def get_absolute_url(self):
-        return reverse('blog:topic', kwargs={'blog_slug': self.blog.slug, 'topic_slug': self.slug})
+        return reverse('website:topic', kwargs={'website_slug': self.website.slug, 'topic_slug': self.slug})

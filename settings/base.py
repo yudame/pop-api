@@ -92,6 +92,7 @@ APPS = [
     'apps.common',
     'apps.communication',
     'apps.user',
+    'apps.shop',
     'apps.trello',
 ]
 

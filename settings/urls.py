@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
 from settings import DEBUG
@@ -14,20 +14,19 @@ urlpatterns = [
 
     path('', include('apps.user.urls', namespace='user')),
 
-    path('source/', include('apps.source.urls', namespace='source')),
     path('auth0/', include('apps.user.auth0_urls', namespace='auth0')),
 
     path('trello/', include('apps.trello.urls', namespace='trello')),
-    # url(r'^blog/', include('apps.blog.urls', namespace='blog')),
+    path('shop/', include('apps.shop.urls', namespace='shop')),
 
 ]
 
 # Django Rest Framework API Docs
-from rest_framework.documentation import include_docs_urls
-API_TITLE, API_DESCRIPTION = "Pop API", ""
-urlpatterns += [
-    url(r'^docs/', include_docs_urls(title=API_TITLE, description=API_DESCRIPTION))
-]
+# from rest_framework.documentation import include_docs_urls
+# API_TITLE, API_DESCRIPTION = "Pop API", ""
+# urlpatterns += [
+#     path('docs/', include_docs_urls(title=API_TITLE, description=API_DESCRIPTION))
+# ]
 
 
 # Built-In AUTH and ADMIN
@@ -38,7 +37,7 @@ admin.site.site_url = None
 admin.site.index_title = "Content Database"
 
 urlpatterns += [
-    url(r'^admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
 ]
 
 

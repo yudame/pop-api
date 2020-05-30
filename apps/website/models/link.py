@@ -6,7 +6,7 @@ from apps.common.behaviors import Timestampable
 
 class Link(Timestampable, models.Model):
 
-    blog = models.ForeignKey("blog.Blog", related_name="links", on_delete=models.CASCADE)
+    website = models.ForeignKey("shop.Website", related_name="links", on_delete=models.CASCADE)
     title = models.CharField(max_length=128)
     href = models.URLField()
 
@@ -15,4 +15,4 @@ class Link(Timestampable, models.Model):
     # MODEL FUNCTIONS
 
     def __str__(self):
-        return f"{self.title} - {self.blog.title}"
+        return f"{self.title} - {self.website.title}"

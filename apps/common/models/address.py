@@ -11,7 +11,7 @@ class Address(Timestampable, models.Model):
     line_3 = models.CharField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=35, null=True, blank=True)
     region = models.CharField(max_length=35, null=True, blank=True)
-    postal_code = models.CharField(max_length=10, null=True, blank=True)
+    postal_code = models.CharField(max_length=10, null=True, blank=True, help_text="State, Province, etc")
     country = models.ForeignKey('common.Country', related_name='addresses',
                                 null=True, on_delete=models.SET_NULL)
 
@@ -25,8 +25,7 @@ class Address(Timestampable, models.Model):
 
     @property
     def google_map_url(self):
-        return "http://maps.google.com/?q=%s" % self.inline_string.replace(
-            " ", "%20")
+        return f"http://maps.google.com/?q={self.inline_string.replace(' ', '%20')}"
 
     # MODEL FUNCTIONS
     def __str__(self):
