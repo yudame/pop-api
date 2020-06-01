@@ -5,6 +5,7 @@ from .locatable import Locatable
 from .permalinkable import Permalinkable
 from .timestampable import Timestampable
 from .publishable import Publishable
+from .contactable import Contactable
 
 
 __all__ = [
@@ -14,5 +15,6 @@ __all__ = [
     'Locatable',
     'Permalinkable',
     'Timestampable',
-    'Publishable'
+    'Publishable',
+    'Contactable',
 ]
