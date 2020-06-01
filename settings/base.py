@@ -71,6 +71,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'corsheaders',
     'storages',
+    'djmoney',
     'request',
     'social_django',
     # 'analytical',
@@ -227,6 +228,7 @@ TIME_ZONE = 'UTC'
 USE_I18N = False
 USE_L10N = False
 USE_TZ = True
+CURRENCIES = ('THB',)
 
 AUTH_USER_MODEL = 'user.User'
 
