@@ -44,17 +44,10 @@ SERVER_EMAIL = "info@example.com"  # ditto (default from-email for Django errors
 
 # HEROKU DATABASE
 import dj_database_url
-DATABASES = {
-    'default': dj_database_url.config(),
-    'aws_rds': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('AWS_RDS_DB_NAME', ''),
-        'USER': os.environ.get('AWS_RDS_USERNAME', ''),
-        'PASSWORD': os.environ.get('AWS_RDS_PASSWORD', ''),
-        'HOST': os.environ.get('AWS_RDS_HOSTNAME', ''),
-        'PORT': os.environ.get('AWS_RDS_PORT', ''),
-    }
-}
+DATABASES = {'default': dj_database_url.config(), }
+# Set DATABASE_URL in config if using other host
+# DATABASE_URL = f"postgresql://{username}:{password}@{host}:5432/{dbname}"
+
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
