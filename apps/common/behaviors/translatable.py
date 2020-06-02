@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
+
 class LanguageField(models.CharField):
     """
     A language field for Django models.
