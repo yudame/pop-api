@@ -6,7 +6,7 @@ ACCEPTED_FILE_TYPES = ['jpg', 'gif', 'png']
 
 class Image(Uploadable, Timestampable):
 
-    thumbnail_url = models.URLField(default="", null=True, blank=True)
+    thumbnail_url = models.URLField(default="", blank=True)
 
     # MODEL PROPERTIES
     @property
