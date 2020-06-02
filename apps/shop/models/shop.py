@@ -1,16 +1,17 @@
 from django.db import models
 from django.utils.text import slugify
+from djmoney.models.fields import CurrencyField
+from djmoney.settings import CURRENCY_CHOICES
 from simple_history.models import HistoricalRecords
 
-from apps.common.behaviors import Timestampable, Locatable
+from apps.common.behaviors import Timestampable, Locatable, Contactable, Translatable
 from settings import AUTH_USER_MODEL
 
 
-class Shop(Timestampable, Locatable, models.Model):
+class Shop(Timestampable, Locatable, Contactable, Translatable, models.Model):
 
     owner = models.OneToOneField(AUTH_USER_MODEL, related_name="artist", on_delete=models.PROTECT, null=True, blank=True)
-    name = models.CharField(max_length=50, null=False)
-
+    name = models.CharField(max_length=50)
     description = models.TextField(default="")
     square_logo_src = models.URLField(default="", blank=True)
 
@@ -21,6 +22,13 @@ class Shop(Timestampable, Locatable, models.Model):
 
     # SETTINGS
     is_ghost_location = models.BooleanField(default=False)
+    currency = CurrencyField(default='THB')
+
+    # inherited fields:
+    # address, latitude, longitude
+    # contact_name, contact_phone, contact_email
+    # base_language, language
+
 
     # HISTORY MANAGER
     history = HistoricalRecords()
@@ -37,3 +45,4 @@ class Shop(Timestampable, Locatable, models.Model):
     # META
     class Meta:
         ordering = ('name',)
+        unique_together = ('owner', 'name')
