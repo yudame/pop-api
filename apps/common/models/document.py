@@ -15,19 +15,20 @@ class Document(Uploadable, Timestampable):
         pass
 
 
-class PDF(Document):
-    @property
-    def display(self):
-        return "PDF Document"
-
-
-def create(ext):
-    """
-    Factory function. Creates a database object, saves.
-    :param ext: file extension
-    :return: Depends on extension
-    """
-    ext = ext.lower()
-    if ext == accepted_file_types[0]:
-        pdf = PDF.objects.create()
-        return pdf
+# # Example Inheritence
+# class PDF(Document):
+#     @property
+#     def display(self):
+#         return "PDF Document"
+#
+#
+#     def create(ext):
+#         """
+#         Factory function. Creates a database object, saves.
+#         :param ext: file extension
+#         :return: Depends on extension
+#         """
+#         ext = ext.lower()
+#         if ext == accepted_file_types[0]:
+#             pdf = PDF.objects.create()
+#             return pdf

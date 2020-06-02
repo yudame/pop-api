@@ -16,7 +16,7 @@ urlpatterns = [
 
     path('auth0/', include('apps.user.auth0_urls', namespace='auth0')),
 
-    path('trello/', include('apps.trello.urls', namespace='trello')),
+    # path('trello/', include('apps.trello.urls', namespace='trello')),
     path('shop/', include('apps.shop.urls', namespace='shop')),
 
 ]

@@ -91,10 +91,13 @@ THIRD_PARTY_APPS = [
 
 APPS = [
     'apps.common',
-    'apps.communication',
     'apps.user',
+    'apps.communication',
     'apps.shop',
-    'apps.trello',
+    # 'apps.website',
+    'apps.production',
+    # 'apps.event',
+    # 'apps.trello',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + APPS

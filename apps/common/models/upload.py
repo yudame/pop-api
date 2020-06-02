@@ -6,7 +6,7 @@ from ..behaviors import Timestampable
 
 class Upload(Timestampable, models.Model):
     original = models.URLField(default="")
-    name = models.CharField(max_length=50, blank=True)
+    name = models.CharField(max_length=50, default="", blank=True)
     thumbnail = models.URLField(default="", blank=True)
     meta_data = JSONField(blank=True, null=True)
 

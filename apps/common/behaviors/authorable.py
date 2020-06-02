@@ -3,7 +3,7 @@ from settings import AUTH_USER_MODEL
 
 
 class Authorable(models.Model):
-    author = models.ForeignKey(AUTH_USER_MODEL, related_name="%(class)ss", on_delete=models.CASCADE)
+    author = models.ForeignKey(AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="%(class)ss")
     author_anonymous = models.BooleanField(default=False)
     authored_at = models.DateTimeField(null=True, blank=True)
 
