@@ -11,7 +11,7 @@ class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
     name = models.CharField(max_length=140, blank=False)
     description = models.TextField(default='', blank=True)
     image = models.OneToOneField('common.Image', null=True, on_delete=models.SET_NULL, related_name='item')
-    alt_images = models.ManyToManyField('common.Image')
+    alt_images = models.ManyToManyField('common.Image', related_name='items_as_alt_image')
 
     menu = models.ForeignKey('shop.Menu', null=False,
                              on_delete=models.PROTECT, related_name="items")

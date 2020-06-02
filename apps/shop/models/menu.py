@@ -43,7 +43,8 @@ class Menu(Timestampable, models.Model):
 class MenuSection(models.Model):
 
     name = models.CharField(max_length=50)
-    parent = models.ForeignKey('shop.MenuSection', null=True, blank=True, related_name='children')
+    parent = models.ForeignKey('shop.MenuSection', null=True, blank=True,
+                               on_delete=models.PROTECT, related_name='children')
 
     def __str__(self):
         return f"{self.name}"
@@ -53,7 +54,8 @@ class CustomMenuSection(models.Model):
 
     shop = models.ForeignKey('shop.Shop', on_delete=models.CASCADE, related_name='custom_menu_sections')
     name = models.CharField(max_length=50)
-    equivalent_menu_section = models.ForeignKey('shop.MenuSection')
+    equivalent_menu_section = models.ForeignKey('shop.MenuSection',
+                                                on_delete=models.PROTECT, related_name='custom_menu_sections')
 
     def __str__(self):
         return f"{self.name} ({self.equivalent_menu_section.name})"
