@@ -46,6 +46,7 @@ class MenuSection(models.Model):
     name = models.CharField(max_length=50)
     parent = models.ForeignKey('shop.MenuSection', null=True, blank=True,
                                on_delete=models.PROTECT, related_name='children')
+    show_on_menu_position = models.PositiveIntegerField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.name}"
