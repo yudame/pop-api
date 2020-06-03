@@ -27,8 +27,8 @@ class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
     is_addon = models.BooleanField(default=False, help_text="can be topping or extra for addon another item")
     items_for_addon = models.ManyToManyField('shop.Item', blank=True, related_name='addon_items',
                                              help_text="other items this can be added onto")
-    show_on_menu = models.BooleanField(default=True)
-    show_on_menu_position = models.PositiveIntegerField(null=True, blank=True,
+    is_display_on_menu = models.BooleanField(default=True)
+    display_on_menu_position = models.PositiveIntegerField(null=True, blank=True,
                                                         help_text="position within menu section when menu sections have positions")
 
     price = MoneyField(max_digits=8, decimal_places=2, null=True, default_currency='THB')
@@ -45,4 +45,4 @@ class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
 
     # MODEL FUNCTIONS
     def __str__(self):
-        return f"{self.name} - {self.menu_section.name+' ' if self.menu_section else ''} at {self.menu.shop.name}"
+        return f"{self.name} | {self.menu_section.name+' |' if self.menu_section else ''} {self.menu.shop.name}"

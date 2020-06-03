@@ -41,23 +41,30 @@ class Menu(Timestampable, models.Model):
         return f"{self.shop.name} Menu"
 
 
-class MenuSection(models.Model):
+class MenuCategory(models.Model):
 
     name = models.CharField(max_length=50)
-    parent = models.ForeignKey('shop.MenuSection', null=True, blank=True,
+    parent = models.ForeignKey('shop.MenuCategory', null=True, blank=True,
                                on_delete=models.PROTECT, related_name='children')
-    show_on_menu_position = models.PositiveIntegerField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.name}"
 
+    class Meta:
+        verbose_name_plural = "Menu Categories"
 
-class CustomMenuSection(models.Model):
 
-    shop = models.ForeignKey('shop.Shop', on_delete=models.CASCADE, related_name='custom_menu_sections')
+class MenuSection(models.Model):
+
     name = models.CharField(max_length=50)
-    equivalent_menu_section = models.ForeignKey('shop.MenuSection',
-                                                on_delete=models.PROTECT, related_name='custom_menu_sections')
+    menu = models.ForeignKey('shop.Menu', on_delete=models.CASCADE, related_name='menu_sections')
+    menu_category = models.ForeignKey('shop.MenuCategory',
+                                      on_delete=models.PROTECT, related_name='menu_sections')
+    is_display_on_menu = models.BooleanField(default=True)
+    display_on_menu_position = models.PositiveIntegerField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.name} ({self.equivalent_menu_section.name})"
+        return f"{self.name} ({self.menu_category.name})"
+
+    class Meta:
+        verbose_name_plural = "Menu Sections"
