@@ -10,24 +10,29 @@ class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
 
     name = models.CharField(max_length=140, blank=False)
     description = models.TextField(default='', blank=True)
-    image = models.OneToOneField('common.Image', null=True, on_delete=models.SET_NULL, related_name='item')
-    alt_images = models.ManyToManyField('common.Image', related_name='items_as_alt_image')
+    image = models.OneToOneField('common.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='item')
+    alt_images = models.ManyToManyField('common.Image', blank=True, related_name='items_as_alt_image')
 
     menu = models.ForeignKey('shop.Menu', null=False,
                              on_delete=models.PROTECT, related_name="items")
     menu_section = models.ForeignKey('shop.MenuSection', null=True, blank=True,
                                      on_delete=models.SET_NULL, related_name='items')
-    # alt_menu_sections = models.ManyToManyField('shop.MenuSection', related_name='alt_items')
+    # alt_menu_sections = models.ManyToManyField('shop.MenuSection', blank=True, related_name='alt_items')
 
-    # allergies = models.ManyToManyField('common.FoodAllergy')
-    # feature_ingredients = models.ManyToManyField('common.FoodIngredient')
-    # kitchen_goods = models.ManyToManyField('production.Good')
+    # calories_count = models.PositiveIntegerField(null=True, blank=True, help_text="amount of calories in this menu item")
+    # allergies = ArrayField(models.CharField(max_length=4, choices=FOOD_ALLERGY_CHOICES), default=list, blank=True)
+    # feature_ingredients = models.ManyToManyField('production.FoodIngredient', blank=True)
+    # kitchen_goods = models.ManyToManyField('production.Good', blank=True)
+
+    is_addon = models.BooleanField(default=True, help_text="can be topping or extra for addon another item")
+    items_for_addon = models.ManyToManyField('shop.Item', blank=True, related_name='addon_items')
+    show_on_menu = models.BooleanField(default=True)
 
     price = MoneyField(max_digits=8, decimal_places=2, null=True, default_currency='THB')
-    # promotion_price - Promotion model has item, promo_price, Publishable, Expirable
+    # promotion - Promotion model has item, promo_price, Publishable, Expirable
 
     unavailable_periods = ArrayField(
-        models.CharField(choices=PERIOD_CHOICES, max_length=4), default=list
+        models.CharField(choices=PERIOD_CHOICES, max_length=4), default=list, blank=True
     )
 
     # HISTORY MANAGER
@@ -37,4 +42,4 @@ class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
 
     # MODEL FUNCTIONS
     def __str__(self):
-        return f"{self.shop.name} Menu"
+        return f"{self.name} at {self.menu.shop.name}"
