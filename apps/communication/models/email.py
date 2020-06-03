@@ -15,7 +15,7 @@ class Email(Timestampable, models.Model):
     )
     subject = models.TextField(max_length=140)
     body = models.TextField(default="")
-    attachments = models.ManyToManyField(Upload)
+    attachments = models.ManyToManyField(Upload, blank=True)
 
     (NOTIFICATION, CONFIRMATION, PASSWORD, ) = range(3)
     ''' text values here are used as subject line in email notifications,

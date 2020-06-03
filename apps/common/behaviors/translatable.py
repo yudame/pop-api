@@ -18,7 +18,7 @@ class LanguageField(models.CharField):
 class Translatable(models.Model):
 
     base_language = LanguageField()
-    languages = ArrayField(LanguageField(), default=list)
+    languages = ArrayField(LanguageField(), default=list, blank=True)
 
     class Meta:
         abstract = True

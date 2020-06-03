@@ -10,15 +10,16 @@ from settings import AUTH_USER_MODEL
 
 class Shop(Timestampable, Locatable, Contactable, Translatable, models.Model):
 
-    owner = models.OneToOneField(AUTH_USER_MODEL, related_name="artist", on_delete=models.PROTECT, null=True, blank=True)
+    owner = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="shop")
     name = models.CharField(max_length=50)
-    description = models.TextField(default="")
+    description = models.TextField(default="", blank=True)
     square_logo_src = models.URLField(default="", blank=True)
 
     # SOCIAL ACCOUNTS
     facebook_href = models.URLField(default="", blank=True)
     instagram_href = models.URLField(default="", blank=True)
     google_maps_href = models.URLField(default="", blank=True)
+    trip_advisor_href = models.URLField(default="", blank=True)
 
     # SETTINGS
     is_ghost_location = models.BooleanField(default=False)

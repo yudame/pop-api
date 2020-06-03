@@ -14,10 +14,11 @@ class Menu(Timestampable, models.Model):
 
     shop = models.OneToOneField('shop.Shop', on_delete=models.PROTECT, related_name="menu")
 
-    header_text = models.TextField(default="")
-    footer_text = models.TextField(default="")
+    header_text = models.TextField(default="", blank=True)
+    footer_text = models.TextField(default="", blank=True)
 
-    # categories - ('thai', 'western', 'italian', 'indian', 'international', 'mediterranean', 'burgers', 'pizza', )
+    # cuisines - ('thai', 'western', 'italian', 'indian', 'international', 'mediterranean', 'burgers', 'pizza', )
+    # https: // en.wikipedia.org / wiki / List_of_cuisines
 
     # SETTINGS
     breakfast_open_time = models.TimeField(null=True, blank=True)
