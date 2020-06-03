@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.shop.models import Shop, Menu, Item
+from apps.shop.models import Shop, Menu, MenuSection, CustomMenuSection, Item
 
 
 @admin.register(Shop)
@@ -8,6 +8,14 @@ class ShopAdmin(admin.ModelAdmin):
 
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(MenuSection)
+class MenuSectionAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(CustomMenuSection)
+class CustomMenuSectionAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Item)
