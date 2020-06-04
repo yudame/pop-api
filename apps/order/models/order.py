@@ -57,6 +57,7 @@ class Order(Timestampable, Annotatable, models.Model):
 
     promotions = models.ManyToManyField('Promotion', through='OrderPromotion', blank=True, related_name='orders')
 
+    fees = models.ManyToManyField('Fee', through='OrderFee', blank=True, related_name='orders')
 
     # HISTORY MANAGER
     history = HistoricalRecords()
