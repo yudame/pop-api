@@ -24,14 +24,28 @@ class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
     # feature_ingredients = models.ManyToManyField('production.FoodIngredient', blank=True)
     # kitchen_goods = models.ManyToManyField('production.Good', blank=True)
 
-    is_addon = models.BooleanField(default=False, help_text="can be topping or extra for addon another item")
+    options_required_count = models.SmallIntegerField(null=True, blank=True, help_text='number of options that must be selected (eg. 2 on half/half pizza)')
+
+    is_option = models.BooleanField(default=False, help_text="can be a required option for another item (eg. meat choice in a wrap)")
+    items_for_option = models.ManyToManyField('shop.Item', blank=True, related_name='option_items',
+                                             help_text="item(s) this can be an option on")
+    option_price = MoneyField(max_digits=8, decimal_places=2, null=True, blank=True, default_currency='THB',
+                        help_text='price when option on another item')
+
+    is_addon = models.BooleanField(default=False, help_text="can be a topping or extra for addon another item (eg. ice cream sprinkles)")
     items_for_addon = models.ManyToManyField('shop.Item', blank=True, related_name='addon_items',
-                                             help_text="other items this can be added onto")
-    is_display_on_menu = models.BooleanField(default=True)
+                                             help_text="item(s) this can be added onto")
+
+    addon_types = models.ManyToManyField('shop.AddonType', blank=True, help_text='types of addons (eg. salad dressings, toppings)')
+
+
+    is_display_on_menu = models.BooleanField(default=True, help_text='can be ordered as standalone item')
     display_on_menu_position = models.PositiveIntegerField(null=True, blank=True,
                                                         help_text="position within menu section when menu sections have positions")
 
-    price = MoneyField(max_digits=8, decimal_places=2, null=True, default_currency='THB')
+
+
+    price = MoneyField(max_digits=8, decimal_places=2, null=True, blank=True, default_currency='THB', help_text='standalone order price')
     # promotion - Promotion model has item, promo_price, Publishable, Expirable
 
     unavailable_periods = ArrayField(
@@ -46,3 +60,4 @@ class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
     # MODEL FUNCTIONS
     def __str__(self):
         return f"{self.name} | {self.menu_section.name+' |' if self.menu_section else ''} {self.menu.shop.name}"
+
