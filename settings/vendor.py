@@ -3,8 +3,9 @@ import os
 from settings import LOCAL
 
 # STATIC FILES
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = DEFAULT_FILE_STORAGE
+if not LOCAL:
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATICFILES_STORAGE = DEFAULT_FILE_STORAGE
 
 
 # AWS
