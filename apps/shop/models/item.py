@@ -19,7 +19,8 @@ class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
                                      on_delete=models.SET_NULL, related_name='items')
     # alt_menu_sections = models.ManyToManyField('shop.MenuSection', blank=True, related_name='alt_items')
 
-    # calories_count = models.PositiveIntegerField(null=True, blank=True, help_text="amount of calories in this menu item")
+    calories_count = models.PositiveIntegerField(null=True, blank=True,
+        help_text="amount of calories in this menu item")
     # allergies = ArrayField(models.CharField(max_length=4, choices=FOOD_ALLERGY_CHOICES), default=list, blank=True)
     # feature_ingredients = models.ManyToManyField('production.FoodIngredient', blank=True)
     # kitchen_goods = models.ManyToManyField('production.Good', blank=True)
@@ -34,17 +35,17 @@ class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
     option_price = MoneyField(max_digits=8, decimal_places=2, null=True, blank=True, default_currency='THB',
         help_text='price when option on another item')
 
-    # # to be deleted
-    # is_addon = models.BooleanField(default=False,
-    #     help_text="")
+
     # items_for_addon = models.ManyToManyField('shop.Item', blank=True, related_name='addon_items',
     #     help_text="item(s) this can be added onto")
     # # to be deleted
 
 
-    # addon_groups = models.ManyToManyField('shop.AddonGroup', blank=True, through='shop.ItemAddonGroup',
-    #     help_text='types of addons (eg. salad dressings, toppings)')
+    groups_of_addons = models.ManyToManyField('shop.AddonGroup', blank=True, through='shop.ItemAddonGroups', related_name='items_as_addon_group',
+        help_text='types of addons that can be added (eg. salad dressings, toppings)')
 
+    groups_as_addon = models.ManyToManyField('shop.AddonGroup', blank=True, through='shop.ItemAddonGroupMemberships', related_name='member_addon_items',
+        help_text='types of addons this can be (eg. mushrooms as a pizza topping)')
 
     is_display_on_menu = models.BooleanField(default=True, help_text='can be ordered as standalone item')
     display_on_menu_position = models.PositiveIntegerField(null=True, blank=True,
