@@ -3,7 +3,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '../../pop-api'))
+SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '../../my_project'))
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -29,6 +29,7 @@ logging.basicConfig(level=log_level)
 logger = logging.getLogger(__name__)
 
 from settings.base import *
+from settings.app_configs import *
 from settings.vendor import *
 
 if LOCAL:

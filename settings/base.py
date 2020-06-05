@@ -71,6 +71,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'corsheaders',
     'storages',
+    'django_extensions',
     'djmoney',
     'request',
     'social_django',
@@ -124,21 +125,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-IOMMI_BASE_TEMPLATE = 'base.html'
-
 AUTHENTICATION_BACKENDS = [
     'apps.user.auth0backend.Auth0',
     'django.contrib.auth.backends.ModelBackend',
     'django.contrib.auth.backends.RemoteUserBackend',
 ]
 
-LOGIN_URL = '/social_django/login/auth0'
-LOGIN_REDIRECT_URL = '/auth0/dashboard'
-
 ROOT_URLCONF = 'settings.urls'
 
-# DATABASES -> SEE VENDOR OR LOCAL SETTINGS
-
+# DATABASES = --> SEE VENDOR OR LOCAL SETTINGS
 
 TEMPLATES = [{
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -155,8 +150,6 @@ TEMPLATES = [{
         ],
     },
 }, ]
-
-PASSWORD_RESET_TIMEOUT_DAYS = 7
 
 # PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
@@ -219,21 +212,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# https://django-request.readthedocs.io/en/latest/settings.html#request-ignore-paths
-REQUEST_IGNORE_PATHS = (
-    r'^admin/',
-)
-
-# Internationalization
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
-USE_I18N = False
-USE_L10N = False
-USE_TZ = True
-CURRENCIES = ('THB',)
-
-AUTH_USER_MODEL = 'user.User'
 
 # Static files (CSS, JavaScript, Images)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
