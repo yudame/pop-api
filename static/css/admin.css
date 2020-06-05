@@ -1,0 +1,28 @@
+#branding h1 {
+    padding: 0;
+    margin: 0 20px 0 0;
+    font-weight: 300;
+    font-size: 24px;
+    color: #555;
+}
+
+#branding h1, #branding h1 a:link, #branding h1 a:visited {
+    color: #999;
+}
+
+#header{
+    background: #800000;
+}
+
+div.breadcrumbs {
+    background: #444;
+    color: #999;
+}
+
+.module h2, .module caption, .inline-group h2 {
+    background: #C05050;
+}
+
+.object-tools a:hover {
+    background-color: #C05050;
+}

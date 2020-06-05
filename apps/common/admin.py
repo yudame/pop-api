@@ -1,3 +1,12 @@
 from django.contrib import admin
 
-# Register your models here.
+
+class CSSAdminMixin(object):
+    class Media:
+        css = {
+            'all': ('css/admin.css',),
+        }
+
+
+class MyModelAdmin(admin.ModelAdmin, CSSAdminMixin):
+    pass
