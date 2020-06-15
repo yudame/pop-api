@@ -31,8 +31,13 @@ class Order(Timestampable, Annotatable, models.Model):
 
     customer = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="orders")
     shop = models.ForeignKey('shop.Shop', on_delete=models.PROTECT, related_name='orders')
+
     # items = models.ManyToManyField('shop.Item', blank=True, related_name='orders', through='order.OrderItem')
-    #  order_item is annotatable, has many discounts, quantity(decimal?), and no unique_together constraints
+    #  OrderItem is annotatable, has many discounts, quantity(decimal?), and no unique_together constraints
+
+    # ad_hoc_items = models.ManyToManyField('shop.AdHocItem', blank=True, related_name='orders', through='order.OrderAdHocItem')
+    #  OrderItem is annotatable and authorable, , has quantity and no unique_together constraints
+
 
     # # PROCESS
     # previous_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default='')  # for context of where it came from
