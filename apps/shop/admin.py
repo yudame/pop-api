@@ -146,6 +146,7 @@ class ItemAdmin(MyModelAdmin):
 @admin.register(AddonGroup)
 class AddonGroupAdmin(MyModelAdmin):
     list_display = (
+        '__str__',
         # 'id',
         # 'valid_at',
         # 'expired_at',
@@ -154,8 +155,8 @@ class AddonGroupAdmin(MyModelAdmin):
         # 'published_at',
         # 'edited_at',
         # 'unpublished_at',
-        'name',
-        # 'description',
+        # 'name',
+        'description',
         # 'image',
     )
     list_filter = (
@@ -176,15 +177,16 @@ class AddonGroupAdmin(MyModelAdmin):
 @admin.register(ItemAddonGroups)
 class ItemAddonGroupsAdmin(MyModelAdmin):
     list_display = (
+        '__str__',
         # 'id',
         # 'created_at',
         # 'modified_at',
-        'item',
-        'addon_group',
+        # 'item',
+        # 'addon_group',
         'addon_max_count',
         'addon_free_count',
-        # 'standard_price_currency',
-        'standard_price',
+        # 'per_addon_price_currency',
+        'per_addon_price',
     )
     list_filter = ('created_at', 'modified_at', 'item', 'addon_group')
     raw_id_fields = ('notes',)
@@ -194,14 +196,16 @@ class ItemAddonGroupsAdmin(MyModelAdmin):
 @admin.register(ItemAddonGroupMemberships)
 class ItemAddonGroupMembershipsAdmin(MyModelAdmin):
     list_display = (
+        '__str__',
         # 'id',
         # 'created_at',
         # 'modified_at',
-        'item',
-        'addon_group',
+        # 'item',
+        # 'addon_group',
         'is_never_free',
         # 'addon_price_currency',
-        'addon_price',
+        'custom_addon_price',
+        'get_addon_price_display',
     )
     list_filter = (
         # 'created_at',
