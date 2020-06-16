@@ -12,6 +12,8 @@ class AddonGroup(Timestampable, Publishable, Expirable, Annotatable, models.Mode
     description = models.TextField(default='', blank=True)
     image = models.OneToOneField('common.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='addon_group')
 
+    class Meta:
+        verbose_name_plural = "Addon Groups"
 
 class ItemAddonGroups(Timestampable, Annotatable, models.Model):
     """
@@ -28,6 +30,9 @@ class ItemAddonGroups(Timestampable, Annotatable, models.Model):
     standard_price = MoneyField(max_digits=8, decimal_places=2, null=True, blank=True, default_currency='THB',
         help_text='set price for all extra addons (eg. all toppings are $1 extra each)')
 
+    class Meta:
+        verbose_name_plural = "Item Addon Groups"
+
 
 class ItemAddonGroupMemberships(Timestampable, Annotatable, models.Model):
     """
@@ -41,3 +46,6 @@ class ItemAddonGroupMemberships(Timestampable, Annotatable, models.Model):
     is_never_free = models.BooleanField(default=False)
     addon_price = MoneyField(max_digits=8, decimal_places=2, null=True, blank=True, default_currency='THB',
         help_text='price when not automatically free')
+
+    class Meta:
+        verbose_name_plural = "Item Addon Group Memberships"

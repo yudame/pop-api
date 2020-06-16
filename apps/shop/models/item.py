@@ -69,3 +69,6 @@ class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
     # MODEL FUNCTIONS
     def __str__(self):
         return f"{self.name} | {self.menu_section.name+' |' if self.menu_section else ''} {self.menu.shop.name}"
+
+    class Meta:
+        ordering = ('display_on_menu_position',)
