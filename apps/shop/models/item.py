@@ -58,8 +58,8 @@ class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
     # promotion - Promotion model has item, promo_price, Publishable, Expirable
 
     unavailable_periods = ArrayField(
-        models.CharField(choices=PERIOD_CHOICES, max_length=4), default=list, blank=True
-    )
+        models.CharField(choices=PERIOD_CHOICES, max_length=4), default=list, blank=True,
+        help_text='list of period choices when unavailable (eg. [\'bf\',\'ln\'] for breakfast, lunch)')
 
     # HISTORY MANAGER
     history = HistoricalRecords()
@@ -68,7 +68,11 @@ class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
 
     # MODEL FUNCTIONS
     def __str__(self):
-        return f"{self.name} | {self.menu_section.name+' |' if self.menu_section else ''} {self.menu.shop.name}"
+        try:
+            group = self.menu_section.name if self.menu_section else ",".join([g.name for g in self.groups_as_addon.all()])
+            return f"{self.name} | {group+' |' if group else ''} {self.menu.shop.name}"
+        except:
+            return self.name or self.id
 
     class Meta:
         ordering = ('display_on_menu_position',)
