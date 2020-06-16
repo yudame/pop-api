@@ -84,10 +84,11 @@ THIRD_PARTY_APPS = [
     'rest_framework_jwt',
     # 'rest_framework.authtoken',
     'django_filters',
-    'iommi',
+    # 'iommi',
     # 'simple_history',
     # 'anymail',
     # 'ultracache',
+    'fontawesome_5',
 ]
 
 APPS = [
@@ -120,7 +121,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.RemoteUserMiddleware',
     'request.middleware.RequestMiddleware',
     # 'simple_history.middleware.HistoryRequestMiddleware',
-    'iommi.middleware',
+    # 'iommi.middleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
