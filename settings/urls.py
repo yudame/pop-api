@@ -12,12 +12,12 @@ urlpatterns = [
     # path('dashboard/', include('apps.dashboard.urls', namespace='dashboard')),
     # if using namespace, include app_name = "dashboard" in urls.py
 
-    path('', include('apps.user.urls', namespace='user')),
+    path('auth', include('apps.user.urls', namespace='user')),
 
     path('auth0/', include('apps.user.auth0_urls', namespace='auth0')),
 
     # path('trello/', include('apps.trello.urls', namespace='trello')),
-    path('shop/', include('apps.shop.urls', namespace='shop')),
+    path('', include('apps.shop.urls', namespace='shop')),
 
 ]
 

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+{% load fontawesome_5 %}
+
+{% block css %}
+{% endblock css %}
+
+
+{% block javascript %}
+
+{% endblock javascript %}
+
+{% block content %}{% load humanize %}
+
+<h1>{{ shop.name }}</h1>
+
+{% for menu_section in shop.menu.menu_sections.all %}
+  <h3>{{ menu_section.name }}</h3>
+  <table class="table">
+    <tbody>
+      {% for item in menu_section.items.all %}
+        <tr>
+          <td>{{ item.price }}</td>
+          <td class="font-weight-bold">{{ item.name }}</td>
+        <td>
+
+          <div class="input-group mb-3" style="width: 7rem;">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+{#                <i class="fas fa-minus-square"></i>#}
+                {% fa5_icon 'minus-square' 'fab' %}
+              </span>
+            </div>
+            <input type="text" class="form-control" aria-label="quantity" value="0">
+            <div class="input-group-append">
+              <span class="input-group-text">
+                <i class="fas fa-plus-square"></i>
+              </span>
+            </div>
+          </div>
+        </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+{% endfor %}
+
+<div class="row">
+
+
+</div>
+{% endblock %}
