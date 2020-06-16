@@ -70,6 +70,7 @@ class MenuCategoryAdmin(MyModelAdmin):
         # 'id',
         'name',
         'parent',
+        'icon',
     )
     list_filter = ('parent',)
     search_fields = ('name',)
@@ -80,6 +81,7 @@ class MenuSectionAdmin(MyModelAdmin):
     list_display = (
         # 'id',
         'name',
+        'custom_icon',
         'menu',
         'menu_category',
         'is_display_on_menu',
