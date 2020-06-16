@@ -1,14 +1,16 @@
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.utils.text import slugify
 from djmoney.models.fields import CurrencyField
 from djmoney.settings import CURRENCY_CHOICES
 from simple_history.models import HistoricalRecords
 
-from apps.common.behaviors import Timestampable, Locatable, Contactable, Translatable
+from apps.common.behaviors import Timestampable, Locatable, Contactable, Translatable, Permalinkable
 from settings import AUTH_USER_MODEL
 
 
-class Shop(Timestampable, Locatable, Contactable, Translatable, models.Model):
+class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, models.Model):
 
     owner = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="shop")
     name = models.CharField(max_length=50)
@@ -40,10 +42,22 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, models.Model):
     def __str__(self):
         return self.name or f"Shop {self.id}"
 
-    def get_slug(self):
-        return slugify(self.name)
+    def reset_slug(self):
+        self.slug = slugify(self.name)
+
+    # @models.permalink
+    # def get_absolute_url(self):
+    #     url_kwargs = self.get_url_kwargs(slug=self.slug)
+    #     return (self.url_name, (), url_kwargs)
+
 
     # META
     class Meta:
         ordering = ('name',)
         unique_together = ('owner', 'name')
+
+
+@receiver(pre_save, sender=Shop)
+def pre_save_slug(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.reset_slug()

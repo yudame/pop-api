@@ -21,10 +21,9 @@ class Permalinkable(models.Model):
     #     return (self.url_name, (), url_kwargs)
 
 
-
-@receiver(pre_save)
-def pre_save_slug(sender, instance, *args, **kwargs):
-    if not issubclass(sender, Permalinkable):
-       return
-    if not instance.slug:
-        instance.slug = slugify(instance.slug_source)
+# @receiver(pre_save)
+# def pre_save_slug(sender, instance, *args, **kwargs):
+#     if not issubclass(sender, Permalinkable):
+#        return
+#     if not instance.slug:
+#         instance.slug = slugify(instance.slug_source)
