@@ -185,7 +185,7 @@ class ItemAddonGroupsAdmin(MyModelAdmin):
         # 'addon_group',
         'addon_max_count',
         'addon_free_count',
-        # 'per_addon_price_currency',
+        # 'custom_per_addon_price_currency',
         'per_addon_price',
     )
     list_filter = ('created_at', 'modified_at', 'item', 'addon_group')
