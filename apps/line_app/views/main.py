@@ -24,20 +24,23 @@ def index(request):
 
 @csrf_exempt
 def callback(request):
-    if request.method == "GET":
-        return HttpResponse("got ur get")
     if request.method == "POST":
-
         signature = request.headers['X-Line-Signature']
-        global domain
-        domain = request.META['HTTP_HOST']
-        # self.body = request.get_data(as_text=True)
-        body = request.body.decode('utf-8')
+        # global domain
+        # domain = request.META['HTTP_HOST']
+        body = request.get_data(as_text=True)
+        # body = request.body.decode('utf-8')
+        # logger.debug("Request body: " + body)
+        try:
+            handler.handle(body, signature)
+        except InvalidSignatureError:
+            print("Invalid signature. Please check your channel access token/channel secret.")
+            return HttpResponse(status=400)  # Bad Request
 
-        print(body, signature)
-
-        handler.handle(body, signature)
         return HttpResponse(status=200)  # OK
+
+    elif request.method == "GET":
+        return HttpResponse("got ur GET, now better do a POST")
 
 
 @handler.add(MessageEvent, message=TextMessage)
