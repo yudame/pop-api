@@ -28,6 +28,7 @@ ALLOWED_HOSTS = [
     '.amazonaws.com',
     'localhost',
     '127.0.0.1',
+    '.ngrok.io',
 ]
 
 if LOCAL:
@@ -104,6 +105,7 @@ APPS = [
     'apps.production',
     # 'apps.event',
     # 'apps.trello',
+    'apps.line_app',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + APPS
