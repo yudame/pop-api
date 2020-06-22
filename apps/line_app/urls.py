@@ -5,5 +5,5 @@ app_name = "line_app"
 
 urlpatterns = [
     path('', main.index, name='index'),
-    path('callback/', main.callback, name='callback'), # add this line
+    path('callback/<uuid:line_channel_id>/', main.callback, name='callback'),
 ]
