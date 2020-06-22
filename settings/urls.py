@@ -19,6 +19,8 @@ urlpatterns = [
     # path('trello/', include('apps.trello.urls', namespace='trello')),
     path('', include('apps.shop.urls', namespace='shop')),
 
+    path('line_app/', include('apps.line_app.urls', namespace='line_app')),
+
 ]
 
 # Django Rest Framework API Docs

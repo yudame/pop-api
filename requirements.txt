@@ -28,6 +28,7 @@ djangorestframework==3.11.0
 drf-jwt==1.16.1
 iommi==0.7.0
 ipython==7.14.0
+line-bot-sdk
 measurement==3.2.0
 # psycopg2
 psycopg2-binary
