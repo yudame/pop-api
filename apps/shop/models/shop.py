@@ -27,6 +27,9 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
     is_ghost_location = models.BooleanField(default=False)
     currency = CurrencyField(default='THB')
 
+    # INTERFACES: BOTS AND WEBSITES
+    line_channel = models.ForeignKey('line_app.LineChannel', null=True, blank=True, on_delete=models.SET_NULL)
+
     # inherited fields:
     # address, latitude, longitude
     # contact_name, contact_phone, contact_email
