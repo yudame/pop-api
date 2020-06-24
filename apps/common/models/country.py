@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from djmoney.models.fields import MoneyField, CurrencyField
 
 
 class Country(
@@ -11,8 +12,7 @@ class Country(
     calling_code = models.CharField(max_length=3, blank=True)
 
     # assuming countries stick to one currency nationwide
-    currency = models.ForeignKey('common.Currency', related_name='countries',
-                                 null=True, on_delete=models.SET_NULL)
+    currency = CurrencyField(help_text='default currency for the country', null=True, blank=True)
 
     # MODEL PROPERTIES
 
