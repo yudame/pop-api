@@ -32,7 +32,6 @@ def callback(request, line_channel_id):
 
         # global domain
         # domain = request.META['HTTP_HOST']
-        # logger.debug("Request body: " + body)
 
         try:
             line_bot.handle(request_data, signature)
