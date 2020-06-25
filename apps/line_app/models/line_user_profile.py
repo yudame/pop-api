@@ -27,4 +27,10 @@ class LineUserProfile(Timestampable, models.Model):
     def say_my_name(self):
         for line_channel in self.line_channels.all():
             line_bot = line_channel.get_bot()
-            line_bot.send_text_message(self, f"{_('AFAIK, your name is')} {self.name}.")
+            line_bot.send_text_message(self, f"{_('AFAIK, your name is')} {self.name or '_?_'}.")
+
+    def show_my_face(self):
+        if self.picture_url:
+            for line_channel in self.line_channels.all():
+                line_bot = line_channel.get_bot()
+                line_bot.send_image_message(self, self.picture_url)

@@ -6,7 +6,8 @@ from datetime import timedelta
 from django.utils import timezone
 from linebot import LineBotApi
 from linebot import WebhookHandler
-from linebot.models import MessageEvent, TextMessage, TextSendMessage, SendMessage, ImageMessage, StickerMessage, FileMessage, LocationMessage
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, SendMessage, ImageMessage, StickerMessage, \
+    FileMessage, LocationMessage, ImageSendMessage
 from linebot.models import SourceUser
 from apps.common.utilities.multithreading import start_new_thread
 
@@ -93,5 +94,6 @@ class LineBot(ABC):
     def send_text_message(self, to_user_profile, text):
         self.api.push_message(to_user_profile.user_id, TextSendMessage(text=text))
 
-    def send_image_message(self, to_user_profile, image_url):
-        pass
+    def send_image_message(self, to_user_profile, image_url, thumbnail_image_url=None):
+        thumbnail_image_url = thumbnail_image_url or image_url
+        self.api.push_message(to_user_profile.user_id, ImageSendMessage(image_url, thumbnail_image_url))
