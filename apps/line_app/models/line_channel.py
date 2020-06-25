@@ -1,7 +1,9 @@
+import logging
 import uuid
 from django.db import models
 from django.urls import reverse
-from linebot.models import TextMessage
+from linebot.models import TextMessage, LocationMessage, ImageMessage, StickerMessage
+
 from apps.line_app.views.line_bot import LineBot
 from apps.common.behaviors import Timestampable
 
@@ -35,10 +37,17 @@ class LineChannel(Timestampable, models.Model):
             self.line_bot = LineBot(self)
         return self.line_bot
 
-    def respond_to(self, message_type, line_event):
-        if message_type == TextMessage:
+    def respond_to(self, line_event):
+        from apps.line_app.models import LineUserProfile
+
+        if isinstance(line_event.message, TextMessage):
             return line_event.message.text
-        return "Ok, roger.."
+        elif isinstance(line_event.message, LocationMessage):
+            line_user_profile = LineUserProfile.objects.get(line_user_id=line_event.source.user_id)
+            line_user_profile.save_location(line_event.message)
+            return "Thanks! your location is saved"
+        else:
+            return "Ok, roger.."
 
     def __str__(self):
         return self.name

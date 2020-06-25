@@ -43,11 +43,11 @@ class LineBot(ABC):
     def _setup_handler(self):
         self.handler = WebhookHandler(self.line_channel.secret)
 
-        for message_type in (TextMessage, ImageMessage, StickerMessage, FileMessage, LocationMessage):
+        for message_type_class in [FileMessage, LocationMessage, StickerMessage, ImageMessage, TextMessage, ]:
 
-            @self.handler.add(MessageEvent, message=message_type)
+            @self.handler.add(MessageEvent, message=message_type_class)
             def handle_message(event):
-                response = self.line_channel.respond_to(message_type, event)
+                response = self.line_channel.respond_to(event)
                 if isinstance(response, str):
                     self.api.reply_message(event.reply_token, TextSendMessage(text=response))
                 elif isinstance(response, SendMessage):

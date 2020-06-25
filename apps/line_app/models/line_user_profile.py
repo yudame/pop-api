@@ -25,6 +25,12 @@ class LineUserProfile(Timestampable, models.Model):
     # MODEL PROPERTIES
 
     # MODEL FUNCTIONS
+    def check_has_user(self):
+        if self.user:
+            return True
+        self.user = User.objects.create()
+        self.save()
+
     def say_my_name(self):
         for line_channel in self.line_channels.all():
             line_bot = line_channel.get_bot()
@@ -38,9 +44,9 @@ class LineUserProfile(Timestampable, models.Model):
 
     def save_location(self, line_location_message):
         if not isinstance(line_location_message, LocationMessage):
-            return
-        if not self.user:
-            self.user = User.objects.create()
+            return False
+
+        self.check_has_user()
 
         self.user.unstructured_text_address = ""
         if line_location_message.title:
@@ -49,3 +55,4 @@ class LineUserProfile(Timestampable, models.Model):
         self.user.latitude = line_location_message.latitude
         self.user.longitude = line_location_message.longitude
         self.user.save()
+        return True
