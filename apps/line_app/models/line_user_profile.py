@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import gettext as _
 
 from apps.common.behaviors import Timestampable
 
@@ -26,4 +27,4 @@ class LineUserProfile(Timestampable, models.Model):
     def say_my_name(self):
         for line_channel in self.line_channels.all():
             line_bot = line_channel.get_bot()
-            line_bot.send_text_message(self, f"AFAIK, your name is {self.name}.")
+            line_bot.send_text_message(self, f"{_('AFAIK, your name is')} {self.name}.")
