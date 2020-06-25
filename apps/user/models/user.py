@@ -1,4 +1,6 @@
 import hashlib
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.signals import pre_save, post_save
@@ -72,27 +74,27 @@ class User(AbstractUser, Timestampable, Locatable):
             return f"User {self.id}" if self.id else "anonymous"
 
 
-# @receiver(pre_save, sender=User)
-# def pre_save(sender, instance, **kwargs):
-#     # hopefully this never has to run because it's too late to alert the user that they need to verify their email
-#     # if instance.email and instance.email_is_verified:
-#     #     if User.objects.get(pk=instance.pk).email is not instance.email:
-#     #         instance.email_is_verified = False
-#
-#     if instance.username and not instance.email:
-#         from django.core.validators import validate_email
-#         from django.core.exceptions import ValidationError
-#         try:
-#             validate_email(instance.username)
-#         except ValidationError:
-#             pass
-#         else:
-#             instance.email = instance.username
-#             instance.email_is_verified = False
-#
-#     if not instance.username or instance.username == "random":
-#         instance.username = str(uuid.uuid4())[-12:]
-#
+@receiver(pre_save, sender=User)
+def pre_save(sender, instance, **kwargs):
+    # hopefully this never has to run because it's too late to alert the user that they need to verify their email
+    # if instance.email and instance.email_is_verified:
+    #     if User.objects.get(pk=instance.pk).email is not instance.email:
+    #         instance.email_is_verified = False
+
+    if instance.username and not instance.email:
+        from django.core.validators import validate_email
+        from django.core.exceptions import ValidationError
+        try:
+            validate_email(instance.username)
+        except ValidationError:
+            pass
+        else:
+            instance.email = instance.username
+            instance.email_is_verified = False
+
+    if not instance.username or instance.username == "random":
+        instance.username = str(uuid.uuid4())[-12:]
+
 # @receiver(post_save, sender=User)
 # def post_save(sender, instance, **kwargs):
 #     pass
