@@ -88,3 +88,10 @@ class LineBot(ABC):
                 line_user_profile.save()
         except Exception as e:
             logging.warning(str(e))
+
+
+    def send_text_message(self, to_user_profile, text):
+        self.api.push_message(to_user_profile.user_id, TextSendMessage(text=text))
+
+    def send_image_message(self, to_user_profile, image_url):
+        pass

@@ -23,3 +23,7 @@ class LineUserProfile(Timestampable, models.Model):
     # MODEL PROPERTIES
 
     # MODEL FUNCTIONS
+    def say_my_name(self):
+        for line_channel in self.line_channels.all():
+            line_bot = line_channel.get_bot()
+            line_bot.send_text_message(self, f"AFAIK, your name is {self.name}.")
