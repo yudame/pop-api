@@ -30,9 +30,10 @@ class LineChannel(Timestampable, models.Model):
 
 
     # MODEL FUNCTIONS
-
     def get_bot(self):
-        return LineBot(self)
+        if not hasattr(self, 'line_bot'):
+            self.line_bot = LineBot(self)
+        return self.line_bot
 
     def respond_to(self, message_type, line_event):
         if message_type == TextMessage:
