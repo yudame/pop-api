@@ -14,4 +14,9 @@ class LineChannelMembership(Timestampable, models.Model):
 
     # MODEL PROPERTIES
 
+    @property
+    def uuid(self):
+        return f"{self.line_channel.id}:{self.line_user_profile.user_id}"
+
+
     # MODEL FUNCTIONS

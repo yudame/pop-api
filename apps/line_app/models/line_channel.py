@@ -2,9 +2,8 @@ import uuid
 from django.db import models
 from django.urls import reverse
 from linebot.models import TextMessage
-
-from apps.common.behaviors import Timestampable
 from apps.line_app.views.line_bot import LineBot
+from apps.common.behaviors import Timestampable
 
 
 class LineChannel(Timestampable, models.Model):
