@@ -59,19 +59,19 @@ class LineBot(ABC):
         def default_handler(event):
             self.api.reply_message(event.reply_token, TextSendMessage(text="well.. that was unexpected"))
 
-    def follower_registration(self, follower_user_id: str, force_update: bool = False) -> None:
+    def follower_registration(self, follower_line_user_id: str, force_update: bool = False) -> None:
         """
         check user is in profile database and has line channnel membership
-        :param follower_user_id: string eg. "U1a195ed7fa0fc615589f3105ec9d0a95"
+        :param follower_line_user_id: string eg. "U1a195ed7fa0fc615589f3105ec9d0a95"
         :return: None
         """
         # if not all([
-        #     len(follower_user_id) > 4,
-        #     follower_user_id.startswith('U')
+        #     len(follower_line_user_id) > 4,
+        #     follower_line_user_id.startswith('U')
         # ]):
         #     return
         from apps.line_app.models import LineUserProfile, LineChannelMembership
-        line_user_profile, lup_created = LineUserProfile.objects.get_or_create(user_id=follower_user_id)
+        line_user_profile, lup_created = LineUserProfile.objects.get_or_create(line_user_id=follower_line_user_id)
         LineChannelMembership.objects.get_or_create(line_user_profile=line_user_profile,
                                                     line_channel=self.line_channel)
         try:
@@ -81,7 +81,7 @@ class LineBot(ABC):
                 not line_user_profile.name,
                 line_user_profile.modified_at > timezone.now() - timedelta(days=28)
             ]):
-                line_profile = self.api.get_profile(follower_user_id)
+                line_profile = self.api.get_profile(follower_line_user_id)
                 line_user_profile.name = line_profile.display_name
                 line_user_profile.picture_url = line_profile.picture_url
                 line_user_profile.language = line_profile.language
@@ -92,8 +92,8 @@ class LineBot(ABC):
 
 
     def send_text_message(self, to_user_profile, text):
-        self.api.push_message(to_user_profile.user_id, TextSendMessage(text=text))
+        self.api.push_message(to_user_profile.line_user_id, TextSendMessage(text=text))
 
     def send_image_message(self, to_user_profile, image_url, thumbnail_image_url=None):
         thumbnail_image_url = thumbnail_image_url or image_url
-        self.api.push_message(to_user_profile.user_id, ImageSendMessage(image_url, thumbnail_image_url))
+        self.api.push_message(to_user_profile.line_user_id, ImageSendMessage(image_url, thumbnail_image_url))

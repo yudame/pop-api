@@ -18,9 +18,9 @@ class LineChannelAdmin(admin.ModelAdmin):
 @admin.register(LineUserProfile)
 class LineUserProfileAdmin(admin.ModelAdmin):
     list_display = (
-        'user_id',
+        'line_user_id',
         'name',
-        'line_id',
+        'line_username_id',
         'language',
     )
     date_hierarchy = 'created_at'

@@ -2,16 +2,17 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext as _
+from linebot.models import LocationMessage
 
 from apps.common.behaviors import Timestampable
+from apps.user.models import User
+from settings import AUTH_USER_MODEL
 
 
 class LineUserProfile(Timestampable, models.Model):
+    user = models.OneToOneField(AUTH_USER_MODEL, null=True, on_delete=models.PROTECT)
 
-    # user = models.OneToOneField(User, on_delete=models.CASCADE) #OneToOneField is used to extend the original User object provided from Django.
-
-    user_id = models.CharField(max_length=40)
-
+    line_user_id = models.CharField(max_length=40)
     name = models.CharField(max_length=30, null=True)
     language = models.CharField(max_length=8, null=True)
     picture_url = models.URLField(null=True)
@@ -19,7 +20,7 @@ class LineUserProfile(Timestampable, models.Model):
 
     line_channels = models.ManyToManyField('line_app.LineChannel', through='line_app.LineChannelMembership', blank=True)
 
-    line_id = models.CharField(max_length=25, null=True)  # public line username, optional
+    line_username_id = models.CharField(max_length=25, null=True)  # public line username, optional
 
     # MODEL PROPERTIES
 
@@ -34,3 +35,17 @@ class LineUserProfile(Timestampable, models.Model):
             for line_channel in self.line_channels.all():
                 line_bot = line_channel.get_bot()
                 line_bot.send_image_message(self, self.picture_url)
+
+    def save_location(self, line_location_message):
+        if not isinstance(line_location_message, LocationMessage):
+            return
+        if not self.user:
+            self.user = User.objects.create()
+
+        self.user.unstructured_text_address = ""
+        if line_location_message.title:
+            self.user.unstructured_text_address = f"{line_location_message.title}: "
+        self.user.unstructured_text_address += f"{line_location_message.address}"
+        self.user.latitude = line_location_message.latitude
+        self.user.longitude = line_location_message.longitude
+        self.user.save()
