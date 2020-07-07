@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
@@ -12,11 +14,11 @@ class DashboardView(LoginRequiredMixin, View):
         if not shop_slug:
             try:
                 return redirect('shop:dashboard_with_slug', request.user.shop.get_slug())
-            except: # user.shop is missing
+            except AttributeError:  # user.shop is missing
                 if request.user.is_staff:
                     return redirect('admin:index')
                 else:
-                    raise HttpResponseNotFound()  # 404
+                    return HttpResponseNotFound()  # 404
 
         self.shop = get_object_or_404(Shop, slug=shop_slug)
         self.context = {
