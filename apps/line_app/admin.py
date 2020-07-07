@@ -24,3 +24,12 @@ class LineUserProfileAdmin(admin.ModelAdmin):
         'language',
     )
     date_hierarchy = 'created_at'
+
+@admin.register(LineChannelMembership)
+class LineChannelMembershipAdmin(admin.ModelAdmin):
+    list_display = (
+        'line_user_profile',
+        'line_channel',
+        'is_staff',
+    )
+    date_hierarchy = 'created_at'

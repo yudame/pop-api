@@ -61,7 +61,7 @@ class LineBot(ABC):
 
     def follower_registration(self, follower_line_user_id: str, force_update: bool = False) -> None:
         """
-        check user is in profile database and has line channnel membership
+        check user is in profile database and has line channel membership
         :param follower_line_user_id: string eg. "U1a195ed7fa0fc615589f3105ec9d0a95"
         :return: None
         """
