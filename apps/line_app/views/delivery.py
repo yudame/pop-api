@@ -1,9 +1,11 @@
 from abc import ABC
 
-from apps.shop.models import Shop
-
 
 class Delivery(ABC):
-    shop = Shop.objects.first()
 
+    def render_bot_message(self):
+        from apps.shop.models import Shop
+        self.shop = Shop.objects.first()
 
+        from apps.line_app.bot_templates.delivery import DeliveryTimelineMessage
+        return DeliveryTimelineMessage(self).render()

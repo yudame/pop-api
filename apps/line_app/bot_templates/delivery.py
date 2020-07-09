@@ -1,9 +1,13 @@
 from apps.line_app.bot_templates.abstract_message_class import AbstractLineMessage
+from apps.line_app.views.delivery import Delivery
 
 
 class DeliveryTimelineMessage(AbstractLineMessage):
 
-    def render(self, delivery_instance):
+    def render_alt_text(self, delivery_instance: Delivery) -> str:
+        return "will arrive in about 35 minutes"
+
+    def render_flex_dict(self, delivery_instance: Delivery) -> dict:
         return {
   "type": "bubble",
   "size": "mega",

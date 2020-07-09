@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 from linebot.models import TextMessage, LocationMessage, ImageMessage, StickerMessage
 
+from apps.line_app.views.delivery import Delivery
 from apps.line_app.views.line_bot import LineBot
 from apps.common.behaviors import Timestampable
 
@@ -41,6 +42,11 @@ class LineChannel(Timestampable, models.Model):
         from apps.line_app.models import LineUserProfile
 
         if isinstance(line_event.message, TextMessage):
+            if line_event.message.text == "menu":
+                return 'menu coming soon'
+                # return MenuMessage
+            elif line_event.message.text == "delivery":
+                return Delivery.render_bot_message()
             return line_event.message.text
         elif isinstance(line_event.message, LocationMessage):
             line_user_profile = LineUserProfile.objects.get(line_user_id=line_event.source.user_id)
