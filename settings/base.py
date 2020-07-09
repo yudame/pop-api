@@ -23,7 +23,7 @@ DEBUG = LOCAL or STAGE
 WSGI_APPLICATION = 'settings.wsgi.application'
 
 ALLOWED_HOSTS = [
-    # '.mycompany.com',
+    '.yuda.me',
     '.herokuapp.com',
     '.amazonaws.com',
     'localhost',
@@ -39,11 +39,11 @@ if LOCAL:
     CORS_ORIGIN_ALLOW_ALL = True
 else:
     CORS_ORIGIN_WHITELIST = [
-        'https://pop-api*.herokuapp.com',
-        'https://*.yudame.com',
+        'https://pop-*.herokuapp.com',
+        'https://*.yuda.me',
         'https://s3.amazonaws.com',
-        'https://localhost',
-        'https://127.0.0.1',
+        'http://localhost',
+        'http://127.0.0.1',
     ]
 
 if PRODUCTION:
