@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 from linebot.models import TextMessage, LocationMessage, ImageMessage, StickerMessage
 
+from apps.common.models import Image
 from apps.line_app.views.delivery import Delivery
 from apps.line_app.views.line_bot import LineBot
 from apps.common.behaviors import Timestampable
@@ -57,14 +58,17 @@ class LineChannel(Timestampable, models.Model):
                 return delivery.render_bot_message()
             return line_event.message.text
         elif isinstance(line_event.message, ImageMessage):
-            Asset.objects.filter(shop=self.shop_set)
-            asset, a_created = Asset.objects.get_or_create(name="", image=None)
+
+            image = Image.objects.create(original_url=line_event.message.content_provider.original_content_url)
+            self.shop.gramables.add(image)
+            return "✓ photo saved"
+
         elif isinstance(line_event.message, LocationMessage):
             line_user_profile = LineUserProfile.objects.get(line_user_id=line_event.source.user_id)
             line_user_profile.save_location(line_event.message)
-            return "Thanks! your location is saved"
+            return "Thanks! your location is saved 📍"
         else:
-            return "Ok, roger.."
+            return "🆗👍"
 
     def __str__(self):
         return self.name
