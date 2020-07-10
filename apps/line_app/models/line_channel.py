@@ -59,9 +59,16 @@ class LineChannel(Timestampable, models.Model):
             return line_event.message.text
         elif isinstance(line_event.message, ImageMessage):
 
-            image = Image.objects.create(original_url=line_event.message.content_provider.original_content_url)
-            self.shop.gramables.add(image)
-            return "✓ photo saved"
+            logging.debug(line_event.message.content_provider.original_content_url, line_event.message.content_provider.preview_image_url)
+
+            original_url = line_event.message.content_provider.original_content_url or line_event.message.content_provider.preview_image_url
+
+            if original_url:
+                image = Image.objects.create(original_url=original_url)
+                self.shop.gramables.add(image)
+                return "✓ photo saved"
+            else:
+                return "problem, Line didn't provide a url. I just got this: " + str(line_event.message.content_provider.__dict__)
 
         elif isinstance(line_event.message, LocationMessage):
             line_user_profile = LineUserProfile.objects.get(line_user_id=line_event.source.user_id)

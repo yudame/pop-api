@@ -10,8 +10,8 @@ class Uploadable(models.Model):
 
     url = models.URLField(default="")
 
-    original_url = models.URLField(default="")
-    backup_url = models.URLField(default="")  # pretty much always on AWS S3
+    original_url = models.URLField(default="", blank=True)
+    backup_url = models.URLField(default="", blank=True)  # pretty much always on AWS S3
     meta_data = JSONField(blank=True, null=True)
 
     class Meta:
@@ -51,3 +51,8 @@ class Uploadable(models.Model):
         if 'ext' in self.meta_data:
             title = title + " .%s" % (self.meta_data['ext'] or "").upper()
         return title
+
+
+"""
+
+"""
