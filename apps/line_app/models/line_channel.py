@@ -7,6 +7,7 @@ from linebot.models import TextMessage, LocationMessage, ImageMessage, StickerMe
 from apps.line_app.views.delivery import Delivery
 from apps.line_app.views.line_bot import LineBot
 from apps.common.behaviors import Timestampable
+from apps.line_app.views.menu import Menu
 
 
 class LineChannel(Timestampable, models.Model):
@@ -45,7 +46,8 @@ class LineChannel(Timestampable, models.Model):
 
         if isinstance(line_event.message, TextMessage):
             if line_event.message.text == "menu":
-                return 'menu coming soon'
+                menu = Menu()
+                return menu.render_bot_message()
                 # return MenuMessage
             elif line_event.message.text == "delivery":
                 delivery = Delivery()
