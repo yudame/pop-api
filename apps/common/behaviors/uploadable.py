@@ -9,6 +9,9 @@ class Uploadable(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     url = models.URLField(default="")
+
+    original_url = models.URLField(default="")
+    backup_url = models.URLField(default="")  # pretty much always on AWS S3
     meta_data = JSONField(blank=True, null=True)
 
     class Meta:
