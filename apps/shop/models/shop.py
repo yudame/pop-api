@@ -28,9 +28,10 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
     currency = CurrencyField(default='THB')
 
     # INTERFACES: BOTS AND WEBSITES
-    line_channel = models.ForeignKey('line_app.LineChannel', null=True, blank=True, on_delete=models.SET_NULL)
+    # line_channel = line_app.LineChannel
+    # website = website.Website
 
-    # inherited fields:
+    # INHERITED FIELDS:
     # address, latitude, longitude
     # contact_name, contact_phone, contact_email
     # base_language, language

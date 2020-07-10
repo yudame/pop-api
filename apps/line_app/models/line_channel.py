@@ -13,6 +13,9 @@ from apps.line_app.views.menu import Menu
 class LineChannel(Timestampable, models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
+    shop = models.ForeignKey('shop.Shop', null=True, on_delete=models.PROTECT, related_name="line_channel")
+    admin_channel = models.BooleanField(default=False)
+
     name = models.CharField(max_length=31)
     description = models.CharField(max_length=255, null=True, blank=True)
     email_address = models.EmailField(null=True, blank=True)
@@ -53,6 +56,9 @@ class LineChannel(Timestampable, models.Model):
                 delivery = Delivery()
                 return delivery.render_bot_message()
             return line_event.message.text
+        elif isinstance(line_event.message, ImageMessage):
+            Asset.objects.filter(shop=self.shop_set)
+            asset, a_created = Asset.objects.get_or_create(name="", image=None)
         elif isinstance(line_event.message, LocationMessage):
             line_user_profile = LineUserProfile.objects.get(line_user_id=line_event.source.user_id)
             line_user_profile.save_location(line_event.message)
