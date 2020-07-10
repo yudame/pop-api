@@ -51,8 +51,3 @@ class Uploadable(models.Model):
         if 'ext' in self.meta_data:
             title = title + " .%s" % (self.meta_data['ext'] or "").upper()
         return title
-
-
-"""
-
-"""
