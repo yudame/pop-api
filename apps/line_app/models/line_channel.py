@@ -5,7 +5,6 @@ from django.urls import reverse
 from linebot.models import TextMessage, LocationMessage, ImageMessage, StickerMessage
 
 from apps.common.models import Image
-from apps.common.views import cloudinary
 from apps.line_app.views.delivery import Delivery
 from apps.line_app.views.line_bot import LineBot
 from apps.common.behaviors import Timestampable
@@ -60,7 +59,8 @@ class LineChannel(Timestampable, models.Model):
             return line_event.message.text
         elif isinstance(line_event.message, ImageMessage):
 
-            logging.debug(line_event.message.content_provider.original_content_url, line_event.message.content_provider.preview_image_url)
+            logging.debug(line_event.message.content_provider.original_content_url,
+                          line_event.message.content_provider.preview_image_url)
 
             message_content = self.line_bot.api.get_message_content(line_event.message.id)
             filename = '/tmp/some_image.unknown'
@@ -68,19 +68,17 @@ class LineChannel(Timestampable, models.Model):
                 for chunk in message_content.iter_content():
                     fd.write(chunk)
 
-            image = Image.objects.get_or_create(url="", original_url="")
-
-            try:
-                cloudinary_response = cloudinary.uploader.upload(filename)
-                image.meta_data = cloudinary_response
-                image.save
-
-            except:
-                image.delete()
-
-            if original_url:
-                image = Image.objects.create(original_url=original_url)
+            empty_grammables = self.shop.gramables.filter(url="", original_url="")
+            if empty_grammables.exists():
+                image = empty_grammables.first()
+            else:
+                image = Image.objects.create()
                 self.shop.gramables.add(image)
+
+            image.upload(filename)
+            image.save()
+
+            if image.original_url:
                 return "✓ photo saved"
             else:
                 return "problem, Line didn't provide a url. I just got this: " + str(line_event.message.content_provider.__dict__)
