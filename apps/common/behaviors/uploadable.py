@@ -5,6 +5,11 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 
 
+# USE CLOUDINARY AS DEFUALT CLOUD HOST
+import cloudinary
+cloudinary.config()
+
+
 class Uploadable(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -19,35 +24,27 @@ class Uploadable(models.Model):
 
     # MODEL PROPERTIES
     @property
+    def file_name(self):
+        try: return self.meta_data.get('original_filename', "")
+        except AttributeError: pass
+
+    @property
     def file_type(self):
-        if self.meta_data and isinstance(self.meta_data, str):
-            self.meta_data = json.loads(self.meta_data)
-        try:
-            return self.meta_data.get('type', "") if self.meta_data else ""
-        except:
-            return ""
+        try: return self.meta_data.get('type', "")
+        except AttributeError: return ""
 
     @property
-    def name(self):
-        if self.meta_data and isinstance(self.meta_data, str):
-            self.meta_data = json.loads(self.meta_data)
-        return self.meta_data.get('name', "") if self.meta_data else ""
+    def file_format(self):
+        try: return self.meta_data.get('format', "")
+        except AttributeError: return ""
 
-    @property
-    def file_extension(self):
-        if self.meta_data and isinstance(self.meta_data, str):
-            self.meta_data = json.loads(self.meta_data)
-        return self.meta_data.get('ext', "") if self.meta_data else ""
 
-    @property
-    def link_title(self):
-        if self.name:
-            title = self.name
-        elif 'etc' in self.meta_data:
-            title = (self.meta_data['etc'] or "").upper()
-        else:
-            title = (self.meta_data['type'] or
-                     "").upper() if 'type' in self.meta_data else ""
-        if 'ext' in self.meta_data:
-            title = title + " .%s" % (self.meta_data['ext'] or "").upper()
-        return title
+    # MODEL FUNCTIONS
+    def upload_file(self, local_filename):
+        if not self.url:
+            import cloudinary.uploader
+            cloudinary_response_dict = cloudinary.uploader.upload(local_filename)
+            if cloudinary_response_dict['bytes'] > 0:
+                self.metadata = cloudinary_response_dict
+                self.original_url = cloudinary_response_dict['url']
+                self.url = cloudinary_response_dict['url']

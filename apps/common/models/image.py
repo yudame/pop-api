@@ -12,11 +12,11 @@ class Image(Uploadable, Timestampable):
     @property
     def width(self):
         if self.is_image:
-            return self.meta_data['meta'].get('width') if self.meta_data.get(
+            return self.meta_data.get('width') if self.meta_data.get(
                 'meta') else None
 
     @property
     def height(self):
         if self.is_image:
-            return self.meta_data['meta'].get('height') if self.meta_data.get(
+            return self.meta_data.get('height') if self.meta_data.get(
                 'meta') else None
