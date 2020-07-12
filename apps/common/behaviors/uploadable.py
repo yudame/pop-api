@@ -45,6 +45,6 @@ class Uploadable(models.Model):
             import cloudinary.uploader
             cloudinary_response_dict = cloudinary.uploader.upload(local_filename)
             if cloudinary_response_dict['bytes'] > 0:
-                self.metadata = cloudinary_response_dict
+                self.meta_data = cloudinary_response_dict
                 self.original_url = cloudinary_response_dict['url']
                 self.url = cloudinary_response_dict['url']
