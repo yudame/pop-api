@@ -5,6 +5,7 @@ from django.urls import reverse
 from linebot.models import TextMessage, LocationMessage, ImageMessage, StickerMessage
 
 from apps.common.models import Image
+from apps.common.views import cloudinary
 from apps.line_app.views.delivery import Delivery
 from apps.line_app.views.line_bot import LineBot
 from apps.common.behaviors import Timestampable
@@ -61,7 +62,21 @@ class LineChannel(Timestampable, models.Model):
 
             logging.debug(line_event.message.content_provider.original_content_url, line_event.message.content_provider.preview_image_url)
 
-            original_url = line_event.message.content_provider.original_content_url or line_event.message.content_provider.preview_image_url
+            message_content = self.line_bot.api.get_message_content(line_event.message.id)
+            filename = '/tmp/some_image.unknown'
+            with open(filename, 'wb') as fd:
+                for chunk in message_content.iter_content():
+                    fd.write(chunk)
+
+            image = Image.objects.get_or_create(url="", original_url="")
+
+            try:
+                cloudinary_response = cloudinary.uploader.upload(filename)
+                image.meta_data = cloudinary_response
+                image.save
+
+            except:
+                image.delete()
 
             if original_url:
                 image = Image.objects.create(original_url=original_url)
