@@ -75,7 +75,7 @@ class LineChannel(Timestampable, models.Model):
                 image = Image.objects.create()
                 self.shop.gramables.add(image)
 
-            image.upload(filename)
+            image.upload_file(filename)
             image.save()
 
             if image.original_url:
