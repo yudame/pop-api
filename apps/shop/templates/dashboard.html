@@ -14,7 +14,7 @@
 
   <h1>{{ shop.name }} Dashboard</h1>
 
-  <h2>Image Uploads</h2>
+  <h2 class="mt-5">Image Uploads</h2>
 
   {% for image in shop.gramables.all %}
 
@@ -23,12 +23,23 @@
     {% else %}
       <img src="{{ image.url }}" alt="" class="img-thumbnail" style="max-height: 15rem;">
     {% endif %}
+    <div class="dropdown show">
+      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        use for..
+      </a>
+
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item" href="#">Menu Item ⚠️ </a>
+        <a class="dropdown-item" href="#">Promotion ⚠️ </a>
+{#        <a class="dropdown-item" href="#">Shop</a>#}
+      </div>
+    </div>
 
   {% endfor %}
 
 
 
-  <h2>Menu</h2>
+  <h2 class="mt-5">Menu</h2>
 
   {% for menu_section in shop.menu.menu_sections.all %}
     <h3>{{ menu_section.name }}</h3>
