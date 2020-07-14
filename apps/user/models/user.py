@@ -40,12 +40,6 @@ class User(AbstractUser, Timestampable, Locatable):
     #     return str(RefreshToken.for_user(self).access_token)
 
     @property
-    def four_digit_login_code(self):
-        if self.email.endswith("@example.com"): return "1234"  # for test accounts
-        hash_object = hashlib.md5(bytes(f"{self.id}{self.email}{self.last_login}", encoding='utf-8'))
-        return str(int(hash_object.hexdigest(), 16))[-4:]
-
-    @property
     def is_agreed_to_terms(self):
         if self.agreed_to_terms_at and self.agreed_to_terms_at > timezone.make_aware(datetime(2019, 11, 1)):
             return True
@@ -60,6 +54,11 @@ class User(AbstractUser, Timestampable, Locatable):
 
 
     # MODEL FUNCTIONS
+    def get_otp(self, num_digits=4):
+        hash_object = hashlib.md5(bytes(f"{self.username}{self.created_at}{self.last_login}", encoding='utf-8'))
+        return str(int(hash_object.hexdigest(), 16))[-num_digits:]
+
+
     def __str__(self):
         try:
             if self.first_name:
