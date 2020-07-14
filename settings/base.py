@@ -50,9 +50,9 @@ else:
     ]
 
 if PRODUCTION:
-    HOSTNAME, APP_NAME = "pop.yudame.com", "Pop by Yudame"
+    HOSTNAME, APP_NAME = "pop-api.yudame.com", "Pop by Yudame"
 elif STAGE:
-    HOSTNAME, APP_NAME = "stage.pop.yudame.com", "Pop STAGE ENV"
+    HOSTNAME, APP_NAME = "pop-stage.yudame.com", "Pop STAGE ENV"
 else:
     APP_NAME = "Pop DEV ENV"
     try:

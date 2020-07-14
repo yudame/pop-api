@@ -2,6 +2,7 @@ import logging
 import uuid
 from django.db import models
 from django.urls import reverse
+from django.utils.http import urlencode
 from linebot.models import TextMessage, LocationMessage, ImageMessage, StickerMessage
 
 from apps.common.models import Image
@@ -9,6 +10,7 @@ from apps.line_app.views.delivery import Delivery
 from apps.line_app.views.line_bot import LineBot
 from apps.common.behaviors import Timestampable
 from apps.line_app.views.menu import Menu
+from settings import HOSTNAME
 
 
 class LineChannel(Timestampable, models.Model):
@@ -55,8 +57,19 @@ class LineChannel(Timestampable, models.Model):
                 # return MenuMessage
             elif line_event.message.text == "delivery":
                 delivery = Delivery()
-                return delivery.render_bot_message()
-            return line_event.message.text
+            elif line_event.message.text == "dashboard":
+                # get link to shop dasbhoard and include otp login credentials
+                line_user_profile = LineUserProfile.objects.get(line_user_id=line_event.source.user_id)
+                user = line_user_profile.user
+                if user.is_staff or self.shop == user.shop:  # owner of shop
+                    dashboard_url = reverse('shop:dashboard_with_slug', kwargs={'shop_slug': self.shop.slug})
+                    login_kwargs = {'username': user.username, 'otp': user.get_otp()}
+                    return f"Manage {self.shop.name} at " + f'https://{HOSTNAME}{dashboard_url}?{urlencode(login_kwargs)}'
+                else:
+                    return "sorry admins only 🤨"
+
+            else:
+                return "received " + line_event.message.text
         elif isinstance(line_event.message, ImageMessage):
 
             logging.debug(line_event.message.content_provider.original_content_url,

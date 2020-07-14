@@ -1,15 +1,32 @@
-import logging
-
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import login
+from django.contrib.auth.mixins import AccessMixin
+from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
-from django.http import HttpResponseNotFound
 
-from apps.common.views.iommi_prototype import Page, html, Table, Form, Column
-from apps.shop.models import Shop, Item
+from apps.shop.models import Shop
+from apps.user.models import User
 
 
-class DashboardView(LoginRequiredMixin, View):
+class LoginOrOTPMixin(AccessMixin):
+    """Verify that the current user is authenticated."""
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+
+        username, otp = request.GET.get('username'), request.GET.get('otp')
+        if username and otp:
+            user_query = User.objects.filter(username=username)
+            if user_query.exists():
+                user = user_query.first()
+                if otp == user.get_otp():
+                    login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+                    return super().dispatch(request, *args, **kwargs)
+
+        return self.handle_no_permission()
+
+
+class DashboardView(LoginOrOTPMixin, View):
     def dispatch(self, request, shop_slug="", *args, **kwargs):
         if not shop_slug:
             try:
