@@ -54,6 +54,5 @@ class LineUserProfile(Timestampable, models.Model):
 
 @receiver(pre_save, sender=LineUserProfile)
 def check_has_user(sender, instance, *args, **kwargs):
-    if instance.user:
-        return True
+    if not instance.user_id:
         instance.user = User.objects.create()
