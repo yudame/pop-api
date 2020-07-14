@@ -13,14 +13,14 @@ class LineUserProfile(Timestampable, models.Model):
     user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.PROTECT)
 
     line_user_id = models.CharField(max_length=40)
-    name = models.CharField(max_length=30, null=True)
-    language = models.CharField(max_length=8, null=True)
-    picture_url = models.URLField(null=True)
-    status_message = models.CharField(max_length=550, null=True)
+    name = models.CharField(max_length=30, null=True, blank=True)
+    language = models.CharField(max_length=8, null=True, blank=True)
+    picture_url = models.URLField(null=True, blank=True)
+    status_message = models.CharField(max_length=550, null=True, blank=True)
 
     line_channels = models.ManyToManyField('line_app.LineChannel', through='line_app.LineChannelMembership', blank=True)
 
-    line_username_id = models.CharField(max_length=25, null=True)  # public line username, optional
+    line_username_id = models.CharField(max_length=25, null=True, blank=True)  # public line username, optional
 
     # MODEL PROPERTIES
 
