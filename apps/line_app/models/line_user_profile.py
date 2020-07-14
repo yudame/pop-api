@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils.translation import gettext as _
 from linebot.models import LocationMessage
@@ -10,7 +10,7 @@ from settings import AUTH_USER_MODEL
 
 
 class LineUserProfile(Timestampable, models.Model):
-    user = models.OneToOneField(AUTH_USER_MODEL, null=True, on_delete=models.PROTECT)
+    user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.PROTECT)
 
     line_user_id = models.CharField(max_length=40)
     name = models.CharField(max_length=30, null=True)
@@ -25,11 +25,6 @@ class LineUserProfile(Timestampable, models.Model):
     # MODEL PROPERTIES
 
     # MODEL FUNCTIONS
-    def check_has_user(self):
-        if self.user:
-            return True
-        self.user = User.objects.create()
-        self.save()
 
     def say_my_name(self):
         for line_channel in self.line_channels.all():
@@ -45,8 +40,8 @@ class LineUserProfile(Timestampable, models.Model):
     def save_location(self, line_location_message):
         if not isinstance(line_location_message, LocationMessage):
             return False
-
-        self.check_has_user()
+        if not self.user:
+            return False
 
         self.user.unstructured_text_address = ""
         if line_location_message.title:
@@ -56,3 +51,9 @@ class LineUserProfile(Timestampable, models.Model):
         self.user.longitude = line_location_message.longitude
         self.user.save()
         return True
+
+@receiver(pre_save, sender=LineUserProfile)
+def check_has_user(sender, instance, *args, **kwargs):
+    if instance.user:
+        return True
+        instance.user = User.objects.create()
