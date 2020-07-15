@@ -1,6 +1,8 @@
 from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
+
+
 from settings import DEBUG
 
 urlpatterns = [
@@ -12,9 +14,9 @@ urlpatterns = [
     # path('dashboard/', include('apps.dashboard.urls', namespace='dashboard')),
     # if using namespace, include app_name = "dashboard" in urls.py
 
-    path('auth', include('apps.user.urls', namespace='user')),
+    # path('auth', include('apps.user.urls', namespace='user')),
 
-    path('auth0/', include('apps.user.auth0_urls', namespace='auth0')),
+    # path('auth0/', include('apps.user.auth0_urls', namespace='auth0')),
 
     # path('trello/', include('apps.trello.urls', namespace='trello')),
     path('', include('apps.shop.urls', namespace='shop')),
@@ -60,12 +62,12 @@ if DEBUG:
 
 
 # test Auth0 urls
-from apps.common.utilities import auth0authorization
+# from apps.common.utilities import auth0authorization
 
-urlpatterns += [
-    path('api/public', auth0authorization.public),
-    path('api/private', auth0authorization.private),
-    path('api/private-scoped', auth0authorization.private_scoped),
-    path('', include('django.contrib.auth.urls')),
-    path('social_django/', include('social_django.urls')),
-]
+# urlpatterns += [
+#     path('api/public', auth0authorization.public),
+#     path('api/private', auth0authorization.private),
+#     path('api/private-scoped', auth0authorization.private_scoped),
+#     path('', include('django.contrib.auth.urls')),
+#     path('social_django/', include('social_django.urls')),
+# ]
