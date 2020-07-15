@@ -63,7 +63,7 @@
 
 
       <input type="submit" class="btn btn-primary mb-2 float-right"
-             value="{% if request.session.shop_setup_form_index > 0 %}Finish{% else %}Next{% endif %}"
+             value="{% if request.session.shop_setup_form_index > 2 %}Finish{% else %}Next{% endif %}"
       />
 
       {% if request.session.shop_setup_form_index > 0 %}
