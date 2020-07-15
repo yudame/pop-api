@@ -62,9 +62,8 @@ class LineChannel(Timestampable, models.Model):
                 line_user_profile = LineUserProfile.objects.get(line_user_id=line_event.source.user_id)
                 user = line_user_profile.user
                 if user.is_staff or self.shop == user.shop:  # owner of shop
-                    dashboard_url = reverse('shop:dashboard_with_slug', kwargs={'shop_slug': self.shop.slug})
                     login_kwargs = {'username': user.username, 'otp': user.get_otp()}
-                    return f"Manage {self.shop.name} at " + f'https://{HOSTNAME}{dashboard_url}?{urlencode(login_kwargs)}'
+                    return f"Manage {self.shop.name} at " + f'https://{HOSTNAME}{self.shop.get_absolute_url()}?{urlencode(login_kwargs)}'
                 else:
                     return "sorry admins only 🤨"
 

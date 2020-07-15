@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.urls import reverse
 from django.utils.text import slugify
 from djmoney.models.fields import CurrencyField
 from djmoney.settings import CURRENCY_CHOICES
@@ -56,6 +57,8 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
     #     url_kwargs = self.get_url_kwargs(slug=self.slug)
     #     return (self.url_name, (), url_kwargs)
 
+    def get_absolute_url(self):
+        return reverse('shop:dashboard_with_slug', kwargs={'shop_slug': self.slug})
 
     # META
     class Meta:
