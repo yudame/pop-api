@@ -10,7 +10,7 @@ from settings import AUTH_USER_MODEL
 
 
 class LineUserProfile(Timestampable, models.Model):
-    user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.PROTECT)
+    user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='line_user_profile')
 
     line_user_id = models.CharField(max_length=40)
     name = models.CharField(max_length=30, null=True, blank=True)
