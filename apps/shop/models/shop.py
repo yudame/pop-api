@@ -20,7 +20,7 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
                                       related_name='shop_as_logo',
                                       help_text='if not square will be padded, like a social media profile pic')
     icon_image = models.OneToOneField('common.Image', null=True, blank=True, on_delete=models.SET_NULL,
-                                      related_name='shop_as_icon', 
+                                      related_name='shop_as_icon',
                                       help_text='version of the logo that fits in a small square')
 
     # SOCIAL ACCOUNTS

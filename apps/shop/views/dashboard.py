@@ -28,14 +28,10 @@ class LoginOrOTPMixin(AccessMixin):
 
 class DashboardView(LoginOrOTPMixin, View):
     def dispatch(self, request, shop_slug="", *args, **kwargs):
-        if not shop_slug:
-            try:
-                return redirect('shop:dashboard_with_slug', request.user.shop.get_slug())
-            except AttributeError:  # user.shop is missing
-                if request.user.is_staff:
-                    return redirect('admin:index')
-                else:
-                    return HttpResponseNotFound()  # 404
+        if not shop_slug and getattr(request.user, 'shop', None):
+            return redirect('shop:dashboard_with_slug', request.user.shop.get_slug())
+        elif not shop_slug:
+            return HttpResponseNotFound()  # 404
 
         self.shop = get_object_or_404(Shop, slug=shop_slug)
         self.context = {
