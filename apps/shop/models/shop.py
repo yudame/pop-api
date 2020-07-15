@@ -16,7 +16,12 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
     owner = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="shop")
     name = models.CharField(max_length=50)
     description = models.TextField(default="", blank=True)
-    square_logo_src = models.URLField(default="", blank=True)
+    logo_image = models.OneToOneField('common.Image', null=True, blank=True, on_delete=models.SET_NULL,
+                                      related_name='shop_as_logo',
+                                      help_text='if not square will be padded, like a social media profile pic')
+    icon_image = models.OneToOneField('common.Image', null=True, blank=True, on_delete=models.SET_NULL,
+                                      related_name='shop_as_icon', 
+                                      help_text='version of the logo that fits in a small square')
 
     # SOCIAL ACCOUNTS
     facebook_href = models.URLField(default="", blank=True)
