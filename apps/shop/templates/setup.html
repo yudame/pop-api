@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+{% load fontawesome_5 %}
+
+{% block tab_title %}
+  {{ shop.name }}
+{% endblock tab_title %}
+
+{% block css %}
+{% endblock css %}
+
+
+{% block javascript %}
+
+{% endblock javascript %}
+
+{% block content %}{% load humanize %}
+
+  <h1>{{ shop.name|default:"My New Shop" }} Setup</h1>
+
+  <form action="{% url 'shop:setup' shop_id=shop.id %}" method="post" class="col-12 col-md-8">
+    {% load widget_tweaks %}{% csrf_token %}
+
+    {% if shop_form.subject.errors %}
+      <ol role="alertdialog">
+        {% for error in form.subject.errors %}
+          <li role="alert">
+            <strong>{{ error|escape }}</strong>
+          </li>
+        {% endfor %}
+      </ol>
+    {% endif %}
+
+    {% for form_field in shop_setup_form %}
+
+      <div class="form-group">
+
+        {{ form_field.label_tag }}
+
+        {% if form_field.field.icon %}
+          <div class="input-group mb-4">
+              <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    {{ form_field.field.icon.as_html }}
+                  </span>
+              </div>
+              {{ form_field }}
+          </div>
+        {% else %}
+          {{ form_field }}
+        {% endif %}
+
+        {% if field.help_text %}
+          <p class="help">{{ field.help_text|safe }}</p>
+        {% endif %}
+
+      </div>
+
+    {% endfor %}
+
+    <div class="my-5">
+
+
+
+      <input type="submit" class="btn btn-primary mb-2 float-right"
+             value="{% if request.session.shop_setup_form_index > 0 %}Finish{% else %}Next{% endif %}"
+      />
+
+      {% if request.session.shop_setup_form_index > 0 %}
+        <input type="submit" class="btn btn-primary mb-2" value="Back" />
+      {% endif %}
+
+    </div>
+  </form>
+
+{% endblock %}
