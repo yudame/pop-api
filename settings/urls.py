@@ -19,7 +19,7 @@ urlpatterns = [
     # path('auth0/', include('apps.user.auth0_urls', namespace='auth0')),
 
     # path('trello/', include('apps.trello.urls', namespace='trello')),
-    path('', include('apps.shop.urls', namespace='shop')),
+    path('shop/', include('apps.shop.urls', namespace='shop')),
 
     path('line_app/', include('apps.line_app.urls', namespace='line_app')),
 
@@ -64,10 +64,10 @@ if DEBUG:
 # test Auth0 urls
 # from apps.common.utilities import auth0authorization
 
-# urlpatterns += [
-#     path('api/public', auth0authorization.public),
-#     path('api/private', auth0authorization.private),
-#     path('api/private-scoped', auth0authorization.private_scoped),
-#     path('', include('django.contrib.auth.urls')),
-#     path('social_django/', include('social_django.urls')),
-# ]
+urlpatterns += [
+    # path('api/public', auth0authorization.public),
+    # path('api/private', auth0authorization.private),
+    # path('api/private-scoped', auth0authorization.private_scoped),
+    path('', include('django.contrib.auth.urls')),
+    # path('social_django/', include('social_django.urls')),
+]
