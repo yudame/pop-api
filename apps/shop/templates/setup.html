@@ -62,12 +62,12 @@
 
 
 
-      <input type="submit" class="btn btn-primary mb-2 float-right"
+      <input type="submit" name="submit" class="btn btn-primary mb-2 float-right"
              value="{% if request.session.shop_setup_form_index > 2 %}Finish{% else %}Next{% endif %}"
       />
 
       {% if request.session.shop_setup_form_index > 0 %}
-        <input type="submit" class="btn btn-primary mb-2" value="Back" />
+        <input type="submit" name="submit" class="btn btn-primary mb-2" value="Back" />
       {% endif %}
 
     </div>

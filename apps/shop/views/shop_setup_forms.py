@@ -28,10 +28,10 @@ class ShopFormA(BootstrapModelForm):
     class Meta:
         model = Shop
         fields = [
-            'name', 'description', 'unstructured_text_address',
+            'name', 'description', 'base_language'
         ]
         labels = {
-            'name': _('Name'), 'description': _('About'), 'unstructured_text_address': _('Full Address')
+            'name': _('Name'), 'description': _('About'), 'base_language': _('First Language')
         }
         icons = {
             'name': Icon('store'),
@@ -42,13 +42,32 @@ class ShopFormB(BootstrapModelForm):
     class Meta:
         model = Shop
         fields = [
-            'facebook_href', 'instagram_href', 'google_maps_href',
+            'unstructured_text_address', 'contact_name', 'contact_phone_number', 'contact_email',
         ]
         labels = {
-            'facebook_href': _('Facebook Profile Link'), 'instagram_href': _('Instagram Profile Link'), 'google_maps_href': _('Google Maps Profile Link')
+            'unstructured_text_address': _('Full Address'),
+        }
+
+
+class ShopFormC(BootstrapModelForm):
+    class Meta:
+        model = Shop
+        fields = [
+            'slug', 'facebook_href', 'instagram_href', 'google_maps_href', 'trip_advisor_href'
+        ]
+        labels = {
+            'slug': _('Pop Handle'),
+            'facebook_href': _('Facebook Profile Link'),
+            'instagram_href': _('Instagram Profile Link'),
+            'google_maps_href': _('Google Maps Profile Link'),
+            'trip_advisor_href': _('TripAdvisor Profile Link'),
         }
         icons = {
-            'facebook_href': Icon('facebook', 'fab'), 'instagram_href': Icon('instagram', 'fab'), 'google_maps_href': Icon('map-marker'),
+            'slug': Icon('at'),
+            'facebook_href': Icon('facebook', 'fab'),
+            'instagram_href': Icon('instagram', 'fab'),
+            'google_maps_href': Icon('map-marker'),
+            'trip_advisor_href': Icon('tripadvisor', 'fab')
         }
 
 class LineChannelFormA(BootstrapModelForm):
