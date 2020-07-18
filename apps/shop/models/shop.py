@@ -37,7 +37,7 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
     # line_channel = line_app.LineChannel
     # website = website.Website
 
-    gramables = models.ManyToManyField('common.Image')
+    gramables = models.ManyToManyField('common.Image', blank=True)
 
     # INHERITED FIELDS:
     # address, latitude, longitude
