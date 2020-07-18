@@ -30,7 +30,7 @@ class LineChannel(Timestampable, models.Model):
     secret = models.CharField(max_length=32, null=True, blank=True,
                               help_text="Channel secret on basic settings screen")
     assertion_signing_key = models.CharField(max_length=40, null=True, blank=True)
-    bot_id = models.CharField(max_length=31, null=True, blank=True)
+    bot_id = models.CharField(max_length=31, null=True, blank=True, help_text="eg. @A1b2c3")
     access_token = models.CharField(max_length=200, null=True, blank=True)
 
     creator_user_id = models.CharField(max_length=40, null=True, blank=True)
@@ -40,6 +40,13 @@ class LineChannel(Timestampable, models.Model):
     def line_bot_callback_uri(self):
         return reverse('line_app:callback', kwargs={'line_channel_id': self.id})
 
+    @property
+    def QR_img_src(self):
+        return f"https://qr-official.line.me/sid/M/{self.bot_id.strip('@')}.png"
+
+    @property
+    def line_share_url(self):
+        return f"https://line.me/R/nv/recommendOA/{self.bot_id}"
 
     # MODEL FUNCTIONS
     def get_bot(self):
@@ -55,6 +62,8 @@ class LineChannel(Timestampable, models.Model):
                 menu = Menu()
                 return menu.render_bot_message()
                 # return MenuMessage
+            elif line_event.message.text == "share":
+                return self.line_share_url
             elif line_event.message.text == "delivery":
                 delivery = Delivery()
             elif line_event.message.text == "dashboard":

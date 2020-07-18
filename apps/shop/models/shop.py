@@ -50,6 +50,11 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
 
     # MODEL PROPERTIES
 
+    @property
+    def customer_line_channel(self):
+        try: return self.line_channel.filter(admin_channel=False).first()
+        except: return None
+
     # MODEL FUNCTIONS
     def __str__(self):
         return self.name or f"Shop {self.id}"
