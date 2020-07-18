@@ -70,4 +70,7 @@ urlpatterns += [
     # path('api/private-scoped', auth0authorization.private_scoped),
     path('', include('django.contrib.auth.urls')),
     # path('social_django/', include('social_django.urls')),
+
+    path('referrals/', include("pinax.referrals.urls", namespace="pinax_referrals")),
+
 ]

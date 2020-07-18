@@ -31,6 +31,7 @@ ipython==7.14.0
 line-bot-sdk
 measurement==3.2.0
 # psycopg2
+git+git://github.com/tomcounsell/pinax-referrals.git
 psycopg2-binary
 python-dotenv==0.13.0
 python-jose==3.1.0
@@ -43,7 +44,7 @@ requests==2.23.0
 schedule==0.6.0
 simplejson==3.17.0
 social-auth-app-django==3.1.0
-six==1.14.0
+six
 toolz==0.10.0
 waitress==1.4.3
 
