@@ -44,14 +44,13 @@ class SetupView(LoginRequiredMixin, View):
 
         if shop_setup_form.is_valid():
             shop_setup_form.save()
-            if request.session.get('shop_setup_form_index') < len(self.shop_setup_forms) - 1:
-                print(request.POST)
-                if request.POST.get('submit') == 'Back':
-                    request.session['shop_setup_form_index'] -= 1
-                else:
-                    request.session['shop_setup_form_index'] += 1
+            if request.POST.get('submit') == 'Back':
+                request.session['shop_setup_form_index'] -= 1
+            elif request.session.get('shop_setup_form_index') < len(self.shop_setup_forms) - 1:
+                request.session['shop_setup_form_index'] += 1
             else:
                 request.session['shop_setup_form_index'] = 0
+
             return redirect('shop:setup', shop_id=self.shop.id)
         else:
             context = {

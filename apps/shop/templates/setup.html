@@ -50,8 +50,10 @@
           {{ form_field }}
         {% endif %}
 
-        {% if field.help_text %}
-          <p class="help">{{ field.help_text|safe }}</p>
+        {% if form_field.help_text %}
+          <p class="help text-right" style="font-size: .66rem;">
+            <i>{{ form_field.help_text|safe }}</i>
+          </p>
         {% endif %}
 
       </div>
@@ -63,7 +65,7 @@
 
 
       <input type="submit" name="submit" class="btn btn-primary mb-2 float-right"
-             value="{% if request.session.shop_setup_form_index > 2 %}Finish{% else %}Next{% endif %}"
+             value="{% if request.session.shop_setup_form_index > 3 %}Finish{% else %}Next{% endif %}"
       />
 
       {% if request.session.shop_setup_form_index > 0 %}
