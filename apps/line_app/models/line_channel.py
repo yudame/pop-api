@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.http import urlencode
 from linebot.models import TextMessage, LocationMessage, ImageMessage, StickerMessage
+from pinax.referrals.models import Referral
 
 from apps.common.models import Image
 from apps.line_app.views.delivery import Delivery
@@ -31,6 +32,8 @@ class LineChannel(Timestampable, models.Model):
                               help_text="Channel secret on basic settings screen")
     assertion_signing_key = models.CharField(max_length=40, null=True, blank=True)
     bot_id = models.CharField(max_length=31, null=True, blank=True, help_text="eg. @A1b2c3")
+    direct_link_url = models.URLField(null=True, blank=True, help_text="eg. https://lin.ee/123abc")
+
     access_token = models.CharField(max_length=200, null=True, blank=True)
 
     creator_user_id = models.CharField(max_length=40, null=True, blank=True)
@@ -42,11 +45,21 @@ class LineChannel(Timestampable, models.Model):
 
     @property
     def QR_img_src(self):
-        return f"https://qr-official.line.me/sid/M/{self.bot_id.strip('@')}.png"
+        if self.bot_id:
+            return f"https://qr-official.line.me/sid/M/{self.bot_id.strip('@')}.png"
+        return ""
 
     @property
     def line_share_url(self):
-        return f"https://line.me/R/nv/recommendOA/{self.bot_id}"
+        if self.bot_id:
+            return f"https://line.me/R/nv/recommendOA/{self.bot_id}"
+        return ""
+
+    @property
+    def account_manager_url(self):
+        if self.bot_id:
+            return f"https://manager.line.biz/account/{self.bot_id}"
+        return ""
 
     # MODEL FUNCTIONS
     def get_bot(self):
@@ -56,6 +69,8 @@ class LineChannel(Timestampable, models.Model):
 
     def respond_to(self, line_event):
         from apps.line_app.models import LineUserProfile
+        line_user_profile = LineUserProfile.objects.get(line_user_id=line_event.source.user_id)
+        user = line_user_profile.user
 
         if isinstance(line_event.message, TextMessage):
             if line_event.message.text == "menu":
@@ -64,12 +79,17 @@ class LineChannel(Timestampable, models.Model):
                 # return MenuMessage
             elif line_event.message.text == "share":
                 return self.line_share_url
+            elif line_event.message.text == "refer":
+                referral = Referral.objects.get_or_create(
+                    user=user,
+                    label="general",
+                    redirect_to=self.line_share_url
+                )
+                return referral.url
             elif line_event.message.text == "delivery":
                 delivery = Delivery()
             elif line_event.message.text == "dashboard":
                 # get link to shop dasbhoard and include otp login credentials
-                line_user_profile = LineUserProfile.objects.get(line_user_id=line_event.source.user_id)
-                user = line_user_profile.user
                 if user.is_staff or self.shop == user.shop:  # owner of shop
                     login_kwargs = {'username': user.username, 'otp': user.get_otp()}
                     return f"Manage {self.shop.name} at " + f'https://{HOSTNAME}{self.shop.get_absolute_url()}?{urlencode(login_kwargs)}'

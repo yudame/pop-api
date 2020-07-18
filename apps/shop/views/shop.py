@@ -4,7 +4,7 @@ from django.views.generic import View
 
 from apps.line_app.models import LineChannel
 from apps.shop.models import Shop
-from apps.shop.views.shop_setup_forms import ShopFormA, ShopFormB, ShopFormC, LineChannelFormA, LineChannelFormB
+from apps.shop.views.shop_setup_forms import ShopFormA, ShopFormB, ShopFormC, LineChannelFormA, LineChannelFormB, LineChannelFormC
 
 
 class SetupView(LoginRequiredMixin, View):
@@ -20,7 +20,7 @@ class SetupView(LoginRequiredMixin, View):
         if not request.session.get('shop_setup_form_index'):
             request.session['shop_setup_form_index'] = 0
 
-        self.shop_setup_forms = [ShopFormA, ShopFormB, ShopFormC, LineChannelFormA, LineChannelFormB]
+        self.shop_setup_forms = [ShopFormA, ShopFormB, ShopFormC, LineChannelFormA, LineChannelFormB, LineChannelFormC]
         self.current_form = self.shop_setup_forms[request.session.get('shop_setup_form_index', 0)]
 
         return super().dispatch(request, *args, **kwargs)

@@ -20,6 +20,14 @@
 
   <img src="{{ shop.customer_line_channel.QR_img_src }}" alt="Line Channel QR" class="img-thumbnail" style="max-height: 10rem;">
 
+  {% if shop.customer_line_channel.direct_link_url %}
+    <a class="btn btn-primary" href="{{ shop.customer_line_channel.direct_link_url }}">
+      <i class="fab fa-line"></i>
+      LINE App
+    </a>
+  {% endif %}
+
+
   <h2 class="mt-5">Image Uploads</h2>
 
   {% for image in shop.gramables.all %}

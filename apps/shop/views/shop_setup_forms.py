@@ -123,3 +123,24 @@ class LineChannelFormB(BootstrapModelForm):
         }
         readonly_fields = ('line_bot_callback_uri', 'use_webhook')
 
+
+class LineChannelFormC(BootstrapModelForm):
+    class Meta:
+        model = LineChannel
+        fields = ['direct_link_url',]
+        labels = {
+            'direct_link_url': _('Direct link'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = kwargs.get('instance', None)
+        if instance and instance.bot_id:
+            self.fields['direct_link_url'].help_text += f'''
+                <br/>
+                can be found at
+                <i class="fas fa-link"></i> 
+                <a href="{instance.account_manager_url}/gainfriends" style="text-decoration: underline;cursor: pointer;" target="_blank">
+                    LINE Account Manager - Gain Friends
+                </a>.
+            '''
