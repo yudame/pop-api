@@ -1,14 +1,14 @@
 from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
-
+from django.views.generic import TemplateView
 
 from settings import DEBUG
 
 urlpatterns = [
 
     # static page
-    # path('', TemplateView.as_view(template_name='home.html'), name="home"),
+    path('', TemplateView.as_view(template_name='home.html'), name="home"),
 
     # route prefix for urlpatterns in apps/dashboard/urls.py
     # path('dashboard/', include('apps.dashboard.urls', namespace='dashboard')),

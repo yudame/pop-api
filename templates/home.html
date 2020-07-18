@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% load fontawesome_5 %}
+
+{% block tab_title %}
+  Pop
+{% endblock tab_title %}
+
+{% block css %}
+{% endblock css %}
+
+
+{% block javascript %}
+
+{% endblock javascript %}
+
+{% block content %}{% load humanize %}
+
+
+  <section class="section section bg-soft pb-5 overflow-hidden z-2">
+
+    <div class="row justify-content-center text-center pt-3">
+      <div class="col-lg-8 col-xl-8">
+        <h1 class="">
+          <i class="fas fa-certificate"></i>
+          Pop
+        </h1>
+        <div class="d-flex flex-column flex-wrap flex-md-row justify-content-md-center my-5">
+          <a href="#" class="btn btn-primary">
+            <i class="fab fa-line mr-2 text-lg-center"></i>
+            Login with Line
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+{% endblock %}
