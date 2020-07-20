@@ -135,11 +135,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-AUTHENTICATION_BACKENDS = [
-    'apps.user.auth0backend.Auth0',
-    'django.contrib.auth.backends.ModelBackend',
-    'django.contrib.auth.backends.RemoteUserBackend',
-]
+# AUTHENTICATION_BACKENDS = [
+#     # 'apps.user.auth0backend.Auth0',
+#     'django.contrib.auth.backends.ModelBackend',
+#     'django.contrib.auth.backends.RemoteUserBackend',
+# ]
 
 ROOT_URLCONF = 'settings.urls'
 
@@ -177,32 +177,32 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': (
-        # 'rest_framework.permissions.IsAdminUser',
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 50,
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+#         'rest_framework.authentication.BasicAuthentication',
+#         'rest_framework.authentication.SessionAuthentication',
+#         'rest_framework.authentication.TokenAuthentication',
+#     ],
+#     'DEFAULT_PERMISSION_CLASSES': (
+#         # 'rest_framework.permissions.IsAdminUser',
+#         'rest_framework.permissions.IsAuthenticated',
+#     ),
+#     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+#     'PAGE_SIZE': 50,
+# }
 
-JWT_AUTH = {
-    'JWT_PAYLOAD_GET_USERNAME_HANDLER':
-        'auth0authorization.utils.jwt_get_username_from_payload_handler',
-    'JWT_DECODE_HANDLER':
-        'auth0authorization.utils.jwt_decode_token',
-    'JWT_ALGORITHM': 'RS256',
-    'JWT_AUDIENCE': APP_NAME,
-    'JWT_ISSUER': 'https://pop-api.yuda.me/',
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-}
+# JWT_AUTH = {
+#     'JWT_PAYLOAD_GET_USERNAME_HANDLER':
+#         'auth0authorization.utils.jwt_get_username_from_payload_handler',
+#     'JWT_DECODE_HANDLER':
+#         'auth0authorization.utils.jwt_decode_token',
+#     'JWT_ALGORITHM': 'RS256',
+#     'JWT_AUDIENCE': APP_NAME,
+#     'JWT_ISSUER': 'https://pop-api.yuda.me/',
+#     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators

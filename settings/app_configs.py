@@ -2,8 +2,8 @@
 # Users
 AUTH_USER_MODEL = 'user.User'
 PASSWORD_RESET_TIMEOUT_DAYS = 7
-LOGIN_URL = '/social_django/login/auth0'
-LOGIN_REDIRECT_URL = '/auth0/dashboard'
+# LOGIN_URL = '/social_django/login/auth0'
+# LOGIN_REDIRECT_URL = '/auth0/dashboard'
 
 
 # Internationalization
@@ -24,15 +24,6 @@ https://django-request.readthedocs.io/en/latest/settings.html#request-ignore-pat
 REQUEST_IGNORE_PATHS = (
     r'^admin/',
 )
-
-"""
-iommi is a Django-based framework that magically create pages, 
-forms and tables with advanced out-of-the-box functionality based on your 
-applications models - without sacrificing flexibility and control.
-https://pypi.org/project/iommi/
-"""
-IOMMI_BASE_TEMPLATE = 'base.html'
-
 
 # DEVELOPER TOOLS
 SHELL_PLUS = "ipython"
