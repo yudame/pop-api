@@ -1,22 +1,30 @@
 import logging
 import os
-
-import requests
 from linebot.models import RichMenu, RichMenuBounds, RichMenuArea, URIAction, PostbackAction, RichMenuSize
 from django.db import models
 
 from settings import STATICFILES_DIRS, HOSTNAME
 
 
+(MAIN_MENU, ) = range(1)
+RICH_MENU_INDEX_CHOICES = [
+    (MAIN_MENU, 'main menu'),
+]
+
 class LineRichMenu(models.Model):
     line_channel = models.ForeignKey('line_app.LineChannel', on_delete=models.CASCADE, related_name='line_rich_menus')
-    index = models.IntegerField(default=1)
+    index = models.SmallIntegerField(choices=RICH_MENU_INDEX_CHOICES, default=MAIN_MENU)
+
     # admin_only = models.BooleanField(default=False)
     line_rich_menu_id = models.CharField(max_length=50, null=True)
 
     # MODEL PROPERTIES
-    @property
-    def rich_menu_object(self):
+
+
+    # MODEL FUNCTIONS
+
+    def get_menu(self, index=MAIN_MENU):
+
         return RichMenu(
             size=RichMenuSize(width=1000, height=315),
             selected=True,
@@ -39,11 +47,10 @@ class LineRichMenu(models.Model):
             ]
         )
 
-    # MODEL FUNCTIONS
 
     def publish(self):
         line_channel_bot = self.line_channel.get_bot()
-        self.line_rich_menu_id = line_channel_bot.api.create_rich_menu(rich_menu=self.rich_menu_object)
+        self.line_rich_menu_id = line_channel_bot.api.create_rich_menu(rich_menu=self.get_menu())
 
         logging.debug("rich_menu_id", self.line_rich_menu_id)
 
@@ -56,12 +63,12 @@ class LineRichMenu(models.Model):
         return self.line_rich_menu_id
 
 
-    def assign_to_user(self, user_object):
+    def assign_to_user(self, line_user_profile):
         line_channel_bot = self.line_channel.get_bot()
         if not self.line_rich_menu_id:
             self.publish()
         line_channel_bot.api.link_rich_menu_to_user(
-            user_object.line_user_profile.line_user_id,
+            line_user_profile.line_user_id,
             self.line_rich_menu_id
         )
 
@@ -76,3 +83,6 @@ class LineRichMenu(models.Model):
             self.line_rich_menu_id
         )
 
+    class Meta:
+        ordering = ('index',)
+        unique_together = ('line_channel', 'index')

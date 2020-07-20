@@ -1,4 +1,3 @@
-import json
 import logging
 from abc import ABC
 from datetime import timedelta
@@ -7,22 +6,18 @@ from django.utils import timezone
 from linebot import LineBotApi
 from linebot import WebhookHandler
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, SendMessage, ImageMessage, StickerMessage, \
-    FileMessage, LocationMessage, ImageSendMessage
+    FileMessage, LocationMessage, ImageSendMessage, FollowEvent
 from linebot.models import SourceUser
+
 from apps.common.utilities.multithreading import start_new_thread
+from apps.line_app.models import LineUserProfile, LineChannelMembership
 
 
 class LineBot(ABC):
 
     def __init__(self, line_channel):
-
         self.line_channel = line_channel
         self.api = LineBotApi(line_channel.access_token)
-        try:
-            self.shop = line_channel.shop
-        except:  # todo: put proper exception type here
-            self.shop = None
-
         self._setup_handler()
 
     @start_new_thread
@@ -32,9 +27,12 @@ class LineBot(ABC):
         # request_data_dict = json.loads(request_data_string)
 
         payload = self.handler.parser.parse(request_data_string, signature, as_payload=True)
+        last_user_id = None
         for event in payload.events:
             if isinstance(event.source, SourceUser):
-                self.follower_registration(str(event.source.user_id))
+                if last_user_id != str(event.source.user_id):
+                    self.follower_registration(str(event.source.user_id))
+                    last_user_id = str(event.source.user_id)
 
         self.handler.handle(request_data_string, signature)
         from django.db import connection
@@ -47,13 +45,24 @@ class LineBot(ABC):
 
             @self.handler.add(MessageEvent, message=message_type_class)
             def handle_message(event):
-                response = self.line_channel.respond_to(event)
+                response = LineChannelMembership.objects.get(
+                    line_user_profile__line_user_id=str(event.source.user_id),
+                    line_channel=self.line_channel
+                ).respond_to(event)
                 if isinstance(response, str):
                     self.api.reply_message(event.reply_token, TextSendMessage(text=response))
                 elif isinstance(response, SendMessage):
                     self.api.reply_message(event.reply_token, response)
                 else:
                     raise Exception("response is not of type SendMessage from linebot.models")
+
+        @self.handler.add(FollowEvent)
+        def default_handler(event):
+            LineChannelMembership.objects.get(
+                line_user_profile__line_user_id=str(event.source.user_id),
+                line_channel=self.line_channel
+            ).set_rich_menu()
+            self.api.reply_message(event.reply_token, TextSendMessage(text=self.line_channel.welcome_text))
 
         @self.handler.default()
         def default_handler(event):
@@ -70,7 +79,7 @@ class LineBot(ABC):
         #     follower_line_user_id.startswith('U')
         # ]):
         #     return
-        from apps.line_app.models import LineUserProfile, LineChannelMembership
+
         line_user_profile, lup_created = LineUserProfile.objects.get_or_create(line_user_id=follower_line_user_id)
         LineChannelMembership.objects.get_or_create(line_user_profile=line_user_profile,
                                                     line_channel=self.line_channel)
@@ -78,8 +87,7 @@ class LineBot(ABC):
             if any([
                 lup_created,
                 force_update,
-                not line_user_profile.name,
-                line_user_profile.modified_at > timezone.now() - timedelta(days=28)
+                line_user_profile.modified_at < timezone.now() - timedelta(days=2)
             ]):
                 line_profile = self.api.get_profile(follower_line_user_id)
                 line_user_profile.name = line_profile.display_name
