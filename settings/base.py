@@ -50,9 +50,9 @@ else:
     ]
 
 if PRODUCTION:
-    HOSTNAME, APP_NAME = "pop-api.yudame.com", "Pop by Yudame"
+    HOSTNAME, APP_NAME = "pop-api.yuda.me", "Pop by Yudame"
 elif STAGE:
-    HOSTNAME, APP_NAME = "pop-stage.yudame.com", "Pop STAGE ENV"
+    HOSTNAME, APP_NAME = "pop-stage.yuda.me", "Pop STAGE ENV"
 else:
     APP_NAME = "Pop DEV ENV"
     try:
@@ -200,7 +200,7 @@ JWT_AUTH = {
         'auth0authorization.utils.jwt_decode_token',
     'JWT_ALGORITHM': 'RS256',
     'JWT_AUDIENCE': APP_NAME,
-    'JWT_ISSUER': 'https://pop.yudame.com/',
+    'JWT_ISSUER': 'https://pop-api.yuda.me/',
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
 

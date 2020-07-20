@@ -133,7 +133,7 @@ class SIBEmail(AnymailMessageMixin, EmailMultiAlternatives):
 
         self.merge_global_data = self.data
         try:
-            if LOCAL:  # and not all([email.endswith("@pop.yuda.me") for email in self.to]):
+            if LOCAL:  # and not all([email.endswith("@yuda.me") for email in self.to]):
                 print(
                     f"On LOCAL, successful mock sending of email data {self.data} using SIB template {self.template_name}")
             elif not len(self.recipients()):
