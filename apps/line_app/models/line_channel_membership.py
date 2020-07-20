@@ -4,7 +4,7 @@ import logging
 from django.db import models
 from apps.common.behaviors import Timestampable
 from apps.line_app.models.line_rich_menu import MAIN_MENU, LineRichMenu
-from django.utils.http import urlencode
+from django.utils.http import urlencode, urlsafe_base64_encode
 from linebot.models import TextMessage, LocationMessage, ImageMessage, StickerMessage
 from pinax.referrals.models import Referral
 
@@ -32,7 +32,8 @@ class LineChannelMembership(Timestampable, models.Model):
 
     @property
     def url_safe_uuid(self):
-        return base64.b64encode(bytes(self._uuid.encode())).decode()
+        return urlsafe_base64_encode(bytes(self._uuid.encode()))
+        # return base64.urlsafe_b64encode(bytes(self._uuid.encode())).decode()
 
     @property
     def current_rich_menu(self):

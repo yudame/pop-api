@@ -3,6 +3,7 @@ import os
 
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
+from django.utils.http import urlencode
 from linebot.models import RichMenu, RichMenuBounds, RichMenuArea, URIAction, PostbackAction, RichMenuSize
 from django.db import models
 
