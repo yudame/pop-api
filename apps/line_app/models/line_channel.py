@@ -65,12 +65,55 @@ class LineChannel(Timestampable, models.Model):
     def welcome_text(self):
         return "Hi 👋 Now you can get rewards✹ and click the menu button to order."
 
+
     # MODEL FUNCTIONS
     def get_bot(self):
         if not hasattr(self, 'line_bot'):
             from apps.line_app.views.line_bot import LineBot
             self.line_bot = LineBot(self)
         return self.line_bot
+
+
+    # def encrypt(self, string_to_encrypt):
+    #     if not len(self.secret) == 32:
+    #         return ""
+    #
+    #     from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
+    #     import os
+    #
+    #     chacha = ChaCha20Poly1305(key=bytes(self.secret.encode())[:32])
+    #     nonce = os.urandom(12)
+    #     cipher_text = chacha.encrypt(
+    #         nonce=bytes(nonce),
+    #         data=bytes(string_to_encrypt.encode()),
+    #         associated_data=bytes(self.id)
+    #     )
+    #     return f"{nonce}:{cipher_text}"
+    #
+    #
+    #     # from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+    #     # from cryptography.hazmat.backends import default_backend
+    #     # initialization_vector = os.urandom(16)
+    #     # cipher = Cipher(
+    #     #     algorithms.AES(self.line_channel.secret.encode('utf-8')),
+    #     #     mode=modes.CBC(initialization_vector),
+    #     #     backend=default_backend()
+    #     # )
+    #     # encryptor = cipher.encryptor()
+    #     # cipher_text = encryptor.update(bytes(self._uuid.encode('utf-8')))
+    #     # return f"{initialization_vector}{cipher_text}"
+    #
+    # def decrypt(self, string_to_decrypt):
+    #     from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
+    #
+    #     chacha = ChaCha20Poly1305(key=bytes(self.secret.encode())[:32])
+    #     nonce, cipher_text = string_to_decrypt.split(":")
+    #     unencrypetd_data = chacha.decrypt(
+    #         nonce=bytes(nonce),
+    #         data=bytes(cipher_text),
+    #         associated_data=bytes(self.id)
+    #     )
+    #     return str(unencrypetd_data)
 
 
     def __str__(self):

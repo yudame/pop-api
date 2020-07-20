@@ -1,9 +1,9 @@
+import base64
 import logging
 
 from django.db import models
 from apps.common.behaviors import Timestampable
 from apps.line_app.models.line_rich_menu import MAIN_MENU, LineRichMenu
-from apps.line_app.views.delivery import Delivery
 from django.utils.http import urlencode
 from linebot.models import TextMessage, LocationMessage, ImageMessage, StickerMessage
 from pinax.referrals.models import Referral
@@ -21,17 +21,18 @@ class LineChannelMembership(Timestampable, models.Model):
     line_channel = models.ForeignKey('line_app.LineChannel', on_delete=models.CASCADE,
                                      related_name='line_channel_memberships')
 
-    current_rich_menu = models.ForeignKey('line_app.LineRichMenu', null=True, on_delete=models.PROTECT)
-
     is_following = models.BooleanField(default=False)
     is_promotable = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False, help_text='user is admin or staff for line channel')
 
     # MODEL PROPERTIES
+    @property
+    def _uuid(self):
+        return f"{self.line_channel.id}:{self.line_user_profile.line_user_id}"
 
     @property
-    def uuid(self):
-        return f"{self.line_channel.id}:{self.line_user_profile.line_user_id}"
+    def url_safe_uuid(self):
+        return base64.b64encode(bytes(self._uuid.encode())).decode()
 
 
     # MODEL FUNCTIONS

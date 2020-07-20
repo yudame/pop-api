@@ -1,5 +1,8 @@
 import logging
 import os
+
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from linebot.models import RichMenu, RichMenuBounds, RichMenuArea, URIAction, PostbackAction, RichMenuSize
 from django.db import models
 
@@ -12,18 +15,23 @@ RICH_MENU_INDEX_CHOICES = [
 ]
 
 class LineRichMenu(models.Model):
-    line_channel = models.ForeignKey('line_app.LineChannel', on_delete=models.CASCADE, related_name='line_rich_menus')
-    index = models.SmallIntegerField(choices=RICH_MENU_INDEX_CHOICES, default=MAIN_MENU)
+    line_channel_membership = models.ForeignKey('line_app.LineChannelMembership', on_delete=models.CASCADE, related_name='line_rich_menus')
 
-    # admin_only = models.BooleanField(default=False)
+    index = models.SmallIntegerField(choices=RICH_MENU_INDEX_CHOICES, default=MAIN_MENU)
+    _is_currently_active = models.BooleanField(default=False)
     line_rich_menu_id = models.CharField(max_length=50, null=True)
 
     # MODEL PROPERTIES
 
+    # @property
+    # def line_channel(self):
+    #     return self.line_channel_membership.line_channel
 
     # MODEL FUNCTIONS
 
     def get_menu(self, index=MAIN_MENU):
+
+        login_kwargs = {'eid': self.line_channel_membership.url_safe_uuid}
 
         return RichMenu(
             size=RichMenuSize(width=1000, height=315),
@@ -38,11 +46,17 @@ class LineRichMenu(models.Model):
                 ),
                 RichMenuArea(
                     bounds=RichMenuBounds(x=300+33+15, y=8, width=300, height=300),
-                    action=PostbackAction(label='Order', data='action=get_menu')
+                    action=URIAction(
+                        label='Order',
+                        uri=f'https://{HOSTNAME}{self.line_channel.shop.menu.get_absolute_url()}?{urlencode(login_kwargs)}'
+                    )
                 ),
                 RichMenuArea(
                     bounds=RichMenuBounds(x=600 + 67 + 15, y=8, width=300, height=300),
-                    action=URIAction(label='Preferences', uri=f'https://{HOSTNAME}{self.line_channel.shop.get_absolute_url()}')
+                    action=URIAction(
+                        label='Preferences',
+                        uri=f'https://{HOSTNAME}{self.line_channel.shop.get_absolute_url()}'
+                    )
                 ),
             ]
         )
@@ -83,6 +97,13 @@ class LineRichMenu(models.Model):
             self.line_rich_menu_id
         )
 
+
     class Meta:
         ordering = ('index',)
-        unique_together = ('line_channel', 'index')
+        # unique_together = ('line_channel_membership', 'index')
+
+
+@receiver(pre_delete, sender=LineRichMenu)
+def delete_repo(sender, instance, **kwargs):
+    line_channel_bot = instance.line_channel.get_bot()
+    line_channel_bot.api.delete_rich_menu(instance.line_rich_menu_id)
