@@ -79,14 +79,10 @@ urlpatterns += [
 
 # test Auth0 urls
 # from apps.common.utilities import auth0authorization
-
-urlpatterns += [
-    # path('api/public', auth0authorization.public),
-    # path('api/private', auth0authorization.private),
-    # path('api/private-scoped', auth0authorization.private_scoped),
-    path('', include('django.contrib.auth.urls')),
-    # path('social_django/', include('social_django.urls')),
-
-    path('referrals/', include("pinax.referrals.urls", namespace="pinax_referrals")),
-
-]
+#
+# urlpatterns += [
+#     path('api/public', auth0authorization.public),
+#     path('api/private', auth0authorization.private),
+#     path('api/private-scoped', auth0authorization.private_scoped),
+#     path('social_django/', include('social_django.urls')),
+# ]
