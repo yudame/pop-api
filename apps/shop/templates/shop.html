@@ -16,18 +16,73 @@
 
 {% block content %}{% load humanize %}
 
-  <h1>{{ shop.name }} Dashboard</h1>
+{#  <img src="{{ shop.customer_line_channel.QR_img_src }}" alt="Line Channel QR" class="img-thumbnail" style="max-height: 10rem;">#}
 
-  <img src="{{ shop.customer_line_channel.QR_img_src }}" alt="Line Channel QR" class="img-thumbnail" style="max-height: 10rem;">
+  <div class="profile-card pt-5 mt-5">
+    <div class="card bg-primary shadow-soft border-light">
 
-  {% if shop.customer_line_channel.direct_link_url %}
-    <a class="btn btn-primary" href="{{ shop.customer_line_channel.direct_link_url }}">
-      <i class="fab fa-line"></i>
-      LINE App
-    </a>
-  {% endif %}
+      <div class="card-header">
+        <div class="row">
+          <div class="col-6">
+            <div class="profile-image bg-primary shadow-inset border border-light rounded p-3 ml-3 my-2">
+              <img src="{{ shop.logo_image.url }}" class="card-img-top rounded" alt="{{ shop.name }} logo">
+            </div>
+          </div>
 
+          <div class="col-6">
+            <h3 class="my-2">
+              {{ shop.name }}
+            </h3>
+            {% if shop.customer_line_channel.direct_link_url %}
+              <a class="btn btn-lg btn-primary my-3" href="{{ shop.customer_line_channel.direct_link_url }}">
+                <i class="fab fa-line" style="color: green;"></i>
+                Add on LINE
+              </a>
+            {% endif %}
 
+            <ul class="list-unstyled d-flex my-3">
+              {% if shop.facebook_href %}
+                <li>
+                  <a href="{{ shop.facebook_href }}" target="_blank" aria-label="facebook social link" class="icon icon-xs icon-facebook mr-3">
+                    <span class="fab fa-facebook-f"></span>
+                  </a>
+                </li>
+              {% endif %}
+              {% if shop.instagram_href %}
+                <li>
+                  <a href="{{ shop.instagram_href }}" target="_blank" aria-label="instagram social link" class="icon icon-xs icon-instagram mr-3">
+                    <span class="fab fa-instagram"></span>
+                  </a>
+                </li>
+              {% endif %}
+              {% if shop.trip_advisor_href %}
+                <li>
+                  <a href="{{ shop.trip_advisor_href }}" target="_blank" aria-label="tripadvisor social link" class="icon icon-xs icon-tripadvisor mr-3">
+                    <span class="fab fa-tripadvisor"></span>
+                  </a>
+                </li>
+              {% endif %}
+              {% if shop.google_maps_href %}
+                <li>
+                  <a href="{{ shop.google_maps_href }}" target="_blank" aria-label="google_maps social link" class="icon icon-xs icon-google_maps mr-3">
+                    <span class="fas fa-map-pin"></span>
+                  </a>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body">
+
+        <p class="card-text">
+
+        </p>
+
+      </div>
+    </div>
+  </div>
 
 
 {% endblock %}
