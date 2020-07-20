@@ -2,16 +2,8 @@ import logging
 import uuid
 from django.db import models
 from django.urls import reverse
-from django.utils.http import urlencode
-from linebot.models import TextMessage, LocationMessage, ImageMessage, StickerMessage
-from pinax.referrals.models import Referral
 
-from apps.common.models import Image
-from apps.line_app.views.delivery import Delivery
-from apps.line_app.views.line_bot import LineBot
 from apps.common.behaviors import Timestampable
-from apps.line_app.views.menu import Menu
-from settings import HOSTNAME
 
 
 (CUSTOMER_CHANNEL, ADMIN_CHANNEL, LOGIN_CHANNEL) = ('bot', 'admin', 'login')
@@ -20,6 +12,7 @@ CHANNEL_TYPE_CHOICES = [
     (ADMIN_CHANNEL, 'admin messaging API'),
     (LOGIN_CHANNEL, 'LINE Login'),
 ]
+
 
 class LineChannel(Timestampable, models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -68,75 +61,17 @@ class LineChannel(Timestampable, models.Model):
             return f"https://manager.line.biz/account/{self.bot_id}"
         return ""
 
+    @property
+    def welcome_text(self):
+        return "Hi 👋 Now you can get rewards✹ and click the menu button to order."
+
     # MODEL FUNCTIONS
     def get_bot(self):
         if not hasattr(self, 'line_bot'):
+            from apps.line_app.views.line_bot import LineBot
             self.line_bot = LineBot(self)
         return self.line_bot
 
-    def respond_to(self, line_event):
-        from apps.line_app.models import LineUserProfile
-        line_user_profile = LineUserProfile.objects.get(line_user_id=line_event.source.user_id)
-        user = line_user_profile.user
-
-        if isinstance(line_event.message, TextMessage):
-            if line_event.message.text == "menu":
-                menu = Menu()
-                return menu.render_bot_message()
-                # return MenuMessage
-            elif line_event.message.text == "share":
-                return self.line_share_url
-            elif line_event.message.text == "refer":
-                referral = Referral.objects.get_or_create(
-                    user=user,
-                    label="general",
-                    redirect_to=self.line_share_url
-                )
-                return referral.url
-            elif line_event.message.text == "delivery":
-                delivery = Delivery()
-            elif line_event.message.text == "dashboard":
-                # get link to shop dasbhoard and include otp login credentials
-                if user.is_staff or self.shop == user.shop:  # owner of shop
-                    login_kwargs = {'username': user.username, 'otp': user.get_otp()}
-                    return f"Manage {self.shop.name} at " + f'https://{HOSTNAME}{self.shop.get_absolute_url()}?{urlencode(login_kwargs)}'
-                else:
-                    return "sorry admins only 🤨"
-
-            else:
-                return "received " + line_event.message.text
-        elif isinstance(line_event.message, ImageMessage):
-
-            logging.debug(line_event.message.content_provider.original_content_url,
-                          line_event.message.content_provider.preview_image_url)
-
-            message_content = self.line_bot.api.get_message_content(line_event.message.id)
-            filename = '/tmp/some_image.unknown'
-            with open(filename, 'wb') as fd:
-                for chunk in message_content.iter_content():
-                    fd.write(chunk)
-
-            empty_grammables = self.shop.gramables.filter(url="", original_url="")
-            if empty_grammables.exists():
-                image = empty_grammables.first()
-            else:
-                image = Image.objects.create()
-                self.shop.gramables.add(image)
-
-            image.upload_file(filename)
-            image.save()
-
-            if image.original_url:
-                return "✓ photo saved"
-            else:
-                return "problem, Line didn't provide a url. I just got this: " + str(line_event.message.content_provider.__dict__)
-
-        elif isinstance(line_event.message, LocationMessage):
-            line_user_profile = LineUserProfile.objects.get(line_user_id=line_event.source.user_id)
-            line_user_profile.save_location(line_event.message)
-            return "Thanks! your location is saved 📍"
-        else:
-            return "🆗👍"
 
     def __str__(self):
         return self.name
