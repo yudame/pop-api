@@ -13,7 +13,7 @@ from settings import AUTH_USER_MODEL
 
 class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, models.Model):
 
-    owner = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="shop")
+    owner = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="shop")
     name = models.CharField(max_length=50)
     description = models.TextField(default="", blank=True)
     logo_image = models.OneToOneField('common.Image', null=True, blank=True, on_delete=models.SET_NULL,
@@ -52,8 +52,10 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
 
     @property
     def customer_line_channel(self):
-        try: return self.line_channel.filter(admin_channel=False).first()
-        except: return None
+        from apps.line_app.models.line_channel import LineChannel, CUSTOMER_CHANNEL
+        line_channel, lc_created = LineChannel.objects.get_or_create(shop=self, channel_type=CUSTOMER_CHANNEL)
+        return line_channel
+
 
     # MODEL FUNCTIONS
     def __str__(self):

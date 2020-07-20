@@ -36,7 +36,7 @@ class ShopFormA(BootstrapModelForm):
         icons = {
             'name': Icon('store'),
         }
-        required_fields = ['name',]
+        required_fields = ['name', ]
 
 class ShopFormB(BootstrapModelForm):
     class Meta:

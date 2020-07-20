@@ -14,11 +14,18 @@ from apps.line_app.views.menu import Menu
 from settings import HOSTNAME
 
 
+(CUSTOMER_CHANNEL, ADMIN_CHANNEL, LOGIN_CHANNEL) = ('bot', 'admin', 'login')
+CHANNEL_TYPE_CHOICES = [
+    (CUSTOMER_CHANNEL, 'customer messaging API'),
+    (ADMIN_CHANNEL, 'admin messaging API'),
+    (LOGIN_CHANNEL, 'LINE Login'),
+]
+
 class LineChannel(Timestampable, models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     shop = models.ForeignKey('shop.Shop', null=True, on_delete=models.PROTECT, related_name="line_channel")
-    admin_channel = models.BooleanField(default=False)
+    channel_type = models.CharField(max_length=5, choices=CHANNEL_TYPE_CHOICES, null=False)
 
     name = models.CharField(max_length=31)
     description = models.CharField(max_length=255, null=True, blank=True)
@@ -133,3 +140,6 @@ class LineChannel(Timestampable, models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        unique_together = ('shop', 'channel_type')

@@ -1,8 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
-
-from apps.line_app.models import LineChannel
 from apps.shop.models import Shop
 from apps.shop.views.shop_setup_forms import ShopFormA, ShopFormB, ShopFormC, LineChannelFormA, LineChannelFormB, LineChannelFormC
 
@@ -25,22 +23,21 @@ class SetupView(LoginRequiredMixin, View):
 
         return super().dispatch(request, *args, **kwargs)
 
-    def get_form_class_instance(self):
-        if self.current_form.Meta.model == Shop:
-            return self.shop
-        elif self.current_form.Meta.model == LineChannel:
-            line_channel, lc_created = LineChannel.objects.get_or_create(shop=self.shop)
-            return line_channel
 
     def get(self, request, *args, **kwargs):
         context = {
             'shop': self.shop,
-            'shop_setup_form': self.current_form(instance=self.get_form_class_instance())
+            'shop_setup_form': self.current_form(
+                instance=self.shop.customer_line_channel if 'LineChannel' in self.current_form.__name__ else self.shop
+            )
         }
         return render(request, 'setup.html', context)
 
     def post(self, request, *args, **kwargs):
-        shop_setup_form = self.current_form(request.POST, instance=self.get_form_class_instance())
+        shop_setup_form = self.current_form(
+            request.POST,
+            instance=self.shop.customer_line_channel if 'LineChannel' in self.current_form.__name__ else self.shop
+        )
 
         if shop_setup_form.is_valid():
             shop_setup_form.save()
