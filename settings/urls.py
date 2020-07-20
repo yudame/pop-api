@@ -25,6 +25,18 @@ urlpatterns = [
 
 ]
 
+
+# Webpages AUTH
+from django.contrib.auth import views as auth_views
+urlpatterns += [
+    path('login/', auth_views.LoginView.as_view(template_name='account/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='account/logout.html'), name='logout'),
+    # path('account/create/', account.CreateAccount.as_view(), name='create_account'),
+    # path('account/activate/', account.ActivateAccount.as_view(), name='activate_account'),
+    path('accounts/', include('django.contrib.auth.urls')),
+]
+
+
 # Django Rest Framework API Docs
 # from rest_framework.documentation import include_docs_urls
 # API_TITLE, API_DESCRIPTION = "Pop API", ""
@@ -60,6 +72,10 @@ if DEBUG:
 
     urlpatterns = [path('__debug__/', include(debug_toolbar.urls)), ] + urlpatterns
 
+# PLUGINS
+urlpatterns += [
+    path('referrals/', include("pinax.referrals.urls", namespace="pinax_referrals")),
+]
 
 # test Auth0 urls
 # from apps.common.utilities import auth0authorization

@@ -2,8 +2,8 @@
 # Users
 AUTH_USER_MODEL = 'user.User'
 PASSWORD_RESET_TIMEOUT_DAYS = 7
-# LOGIN_URL = '/social_django/login/auth0'
-# LOGIN_REDIRECT_URL = '/auth0/dashboard'
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/dashboard'
 
 
 # Internationalization
