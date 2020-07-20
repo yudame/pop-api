@@ -82,7 +82,7 @@ class LineChannelMembership(Timestampable, models.Model):
             logging.debug(line_event.message.content_provider.original_content_url,
                           line_event.message.content_provider.preview_image_url)
 
-            message_content = self.line_channel.line_bot.api.get_message_content(line_event.message.id)
+            message_content = self.line_channel.get_bot().api.get_message_content(line_event.message.id)
             filename = '/tmp/some_image.unknown'
             with open(filename, 'wb') as fd:
                 for chunk in message_content.iter_content():
