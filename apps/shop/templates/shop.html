@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% load fontawesome_5 %}
+
+{% block tab_title %}
+  {{ shop.name }}
+{% endblock tab_title %}
+
+{% block css %}
+{% endblock css %}
+
+
+{% block javascript %}
+
+{% endblock javascript %}
+
+{% block content %}{% load humanize %}
+
+  <h1>{{ shop.name }} Dashboard</h1>
+
+  <img src="{{ shop.customer_line_channel.QR_img_src }}" alt="Line Channel QR" class="img-thumbnail" style="max-height: 10rem;">
+
+  {% if shop.customer_line_channel.direct_link_url %}
+    <a class="btn btn-primary" href="{{ shop.customer_line_channel.direct_link_url }}">
+      <i class="fab fa-line"></i>
+      LINE App
+    </a>
+  {% endif %}
+
+
+
+
+{% endblock %}
