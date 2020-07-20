@@ -1,39 +1,12 @@
-from django.contrib.auth import login
-from django.contrib.auth.mixins import AccessMixin
-from django.http import HttpResponseNotFound
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
-
+from django.shortcuts import render
 from apps.shop.models import Shop
-from apps.user.models import User
+from apps.shop.views.login_mixins import ShopAccessMixin, LineRichMenuLoginMixin, OTPLoginMixin
 
 
-class LoginOrOTPMixin(AccessMixin):
-    """Verify that the current user is authenticated."""
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return super().dispatch(request, *args, **kwargs)
-
-        username, otp = request.GET.get('username'), request.GET.get('otp')
-        if username and otp:
-            user_query = User.objects.filter(username=username)
-            if user_query.exists():
-                user = user_query.first()
-                if otp == user.get_otp():
-                    login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-                    return super().dispatch(request, *args, **kwargs)
-
-        return self.handle_no_permission()
-
-
-class DashboardView(LoginOrOTPMixin, View):
+class DashboardView(ShopAccessMixin, LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, View):
     def dispatch(self, request, shop_slug="", *args, **kwargs):
-        if not shop_slug and getattr(request.user, 'shop', None):
-            return redirect('shop:dashboard_with_slug', request.user.shop.get_slug())
-        elif not shop_slug:
-            return HttpResponseNotFound()  # 404
-
-        self.shop = get_object_or_404(Shop, slug=shop_slug)
         self.context = {
             "shop": self.shop
         }
