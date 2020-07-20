@@ -46,7 +46,7 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
 
 
     # HISTORY MANAGER
-    history = HistoricalRecords()
+    # history = HistoricalRecords()
 
     # MODEL PROPERTIES
 

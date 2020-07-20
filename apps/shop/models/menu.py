@@ -37,7 +37,7 @@ class Menu(Timestampable, models.Model):
 
 
     # HISTORY MANAGER
-    history = HistoricalRecords()
+    # history = HistoricalRecords()
 
     # MODEL PROPERTIES
 

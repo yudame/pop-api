@@ -62,7 +62,7 @@ class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
         help_text='list of period choices when unavailable (eg. [\'bf\',\'ln\'] for breakfast, lunch)')
 
     # HISTORY MANAGER
-    history = HistoricalRecords()
+    # history = HistoricalRecords()
 
     # MODEL PROPERTIES
 
