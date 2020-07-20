@@ -23,9 +23,9 @@ class LineRichMenu(models.Model):
 
     # MODEL PROPERTIES
 
-    # @property
-    # def line_channel(self):
-    #     return self.line_channel_membership.line_channel
+    @property
+    def line_channel(self):
+        return self.line_channel_membership.line_channel
 
     # MODEL FUNCTIONS
 
@@ -77,26 +77,35 @@ class LineRichMenu(models.Model):
         return self.line_rich_menu_id
 
 
-    def assign_to_user(self, line_user_profile):
-        line_channel_bot = self.line_channel.get_bot()
-        if not self.line_rich_menu_id:
-            self.publish()
-        line_channel_bot.api.link_rich_menu_to_user(
-            line_user_profile.line_user_id,
-            self.line_rich_menu_id
-        )
+    # def assign_to_user(self, line_user_profile):
+    #     line_channel_bot = self.line_channel.get_bot()
+    #     if not self.line_rich_menu_id:
+    #         self.publish()
+    #     line_channel_bot.api.link_rich_menu_to_user(
+    #         line_user_profile.line_user_id,
+    #         self.line_rich_menu_id
+    #     )
+    #
+    #
+    # def assign_to_users(self, user_queryset):
+    #     line_channel_bot = self.line_channel.get_bot()
+    #     if not self.line_rich_menu_id:
+    #         self.publish()
+    #
+    #     line_channel_bot.api.link_rich_menu_to_users(
+    #         [user.line_user_profile.line_user_id for user in user_queryset],
+    #         self.line_rich_menu_id
+    #     )
 
-
-    def assign_to_users(self, user_queryset):
-        line_channel_bot = self.line_channel.get_bot()
-        if not self.line_rich_menu_id:
-            self.publish()
-
-        line_channel_bot.api.link_rich_menu_to_users(
-            [user.line_user_profile.line_user_id for user in user_queryset],
-            self.line_rich_menu_id
-        )
-
+    def set_currently_active(self):
+        for lrm in LineRichMenu.objects.filter(
+                line_channel_membership=self.line_channel_membership,
+                _is_currently_active=True
+        ):
+            lrm._is_currently_active = False
+            lrm.save()
+        self._is_currently_active = True
+        self.save()
 
     class Meta:
         ordering = ('index',)
@@ -106,4 +115,8 @@ class LineRichMenu(models.Model):
 @receiver(pre_delete, sender=LineRichMenu)
 def delete_repo(sender, instance, **kwargs):
     line_channel_bot = instance.line_channel.get_bot()
-    line_channel_bot.api.delete_rich_menu(instance.line_rich_menu_id)
+    from linebot.exceptions import LineBotApiError
+    try:
+        line_channel_bot.api.delete_rich_menu(instance.line_rich_menu_id)
+    except LineBotApiError:
+        pass

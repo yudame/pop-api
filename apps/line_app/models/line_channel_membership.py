@@ -34,14 +34,15 @@ class LineChannelMembership(Timestampable, models.Model):
     def url_safe_uuid(self):
         return base64.b64encode(bytes(self._uuid.encode())).decode()
 
+    @property
+    def current_rich_menu(self):
+        return self.line_rich_menus.filter(_is_currently_active=True).first()
 
     # MODEL FUNCTIONS
 
     def set_rich_menu(self, index=MAIN_MENU):
-        self.current_rich_menu, rm_created = LineRichMenu.objects.get_or_create(line_channel=self.line_channel, index=index)
-        if self.current_rich_menu:
-            self.current_rich_menu.assign_to_user(self.line_user_profile)
-            self.save()
+        self.rich_menu, rm_created = LineRichMenu.objects.get_or_create(line_channel=self.line_channel, index=index)
+        self.rich_menu.set_currently_active()
 
 
     def respond_to(self, line_event):
