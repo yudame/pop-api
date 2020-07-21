@@ -1,5 +1,6 @@
 from django.contrib.postgres.fields import JSONField
 from django.db import models
+from djmoney.money import Money
 from simple_history.models import HistoricalRecords
 from djmoney.models.fields import MoneyField
 from apps.common.behaviors import Timestampable, Annotatable
@@ -33,8 +34,8 @@ class Order(Timestampable, Annotatable, models.Model):
     # customer = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="orders")
     # shop = models.ForeignKey('shop.Shop', on_delete=models.PROTECT, related_name='orders')
 
-    line_channel_membership = models.OneToOneField('line_app.LineChannelMembership', null=True,
-                                                   on_delete=models.SET_NULL)
+    line_channel_membership = models.ForeignKey('line_app.LineChannelMembership', null=True,
+                                                on_delete=models.SET_NULL)
 
     items = models.ManyToManyField('shop.Item', blank=True, through='shop.OrderItem', related_name='orders')
     #  OrderItem is annotatable, has many discounts, quantity(decimal?), and no unique_together constraints
@@ -47,12 +48,12 @@ class Order(Timestampable, Annotatable, models.Model):
     # fees = models.ManyToManyField('shop.Fee', through='OrderFee', blank=True, related_name='orders')
 
     # MONEY
-    # total_to_pay = MoneyField(max_digits=8, decimal_places=2, null=True, default_currency='THB')
+    # total_money_to_pay = MoneyField(max_digits=8, decimal_places=2, null=True, default_currency='THB')
 
     # payments = other model. an order can have many payments if split (or one fails)
     #     payment_method = models.CharField(max_length=20)
     #     payment_at = models.DateTimeField(null=True, blank=True)  # is_confirmed
-    # total_payed = function of sum of payments with payment_at (ie. confirmed)
+    # total_money_payed = function of sum of payments with payment_at (ie. confirmed)
 
     # # todo: move delivery info to order.Delivery model. a delivery is locatable and annotatable
     # # todo: a delivery has a unique set of statuses only applicable to delivery-type orders
@@ -66,9 +67,48 @@ class Order(Timestampable, Annotatable, models.Model):
     # next_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=PLACED)  # move the order towards a goal
     status_log = JSONField(default=dict, blank=True, null=True)
 
+    completed_at = models.DateTimeField(null=True, blank=True)  # please do not set dates in the future!
 
     # MODEL PROPERTIES
 
+    @property
+    def items_total_price_amount(self):
+        return sum([
+            order_item.price.amount for order_item in self.order_items.all()
+        ])
+
+    @property
+    def items_total_price(self):
+        return Money(self.items_total_price_amount, self.order_items.first().price.currency)
+
+
+    @property
+    def is_completed(self) -> bool:
+        from django.utils.timezone import now
+        return True if self.completed_at and self.completed_at < now() else False
+
+    @is_completed.setter
+    def is_completed(self, value: bool):
+        from django.utils.timezone import now
+        if value is True:
+            self.completed_at = now()
+        elif value is False and self.is_completed:
+            self.completed_at = None
+
     # MODEL FUNCTIONS
+
+    def get_cart_dict(self):
+        cart_dict = {}
+        for order_item in self.order_items.all():
+            cart_dict[order_item.id] = {
+                'item_id': order_item.item,
+                'quantity': order_item.quantity,
+                'price_amount': order_item.price.amount
+            }
+            # todo: add promotions, discounts, fees
+            cart_dict['total_price_amount'] = self.items_total_price_amount
+        return cart_dict
+
+
     def __str__(self):
         return f"Order for {self.line_channel_membership}"
