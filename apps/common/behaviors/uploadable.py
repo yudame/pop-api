@@ -17,7 +17,7 @@ class Uploadable(models.Model):
 
     original_url = models.URLField(default="", blank=True)
     backup_url = models.URLField(default="", blank=True)  # pretty much always on AWS S3
-    meta_data = JSONField(blank=True, null=True)
+    meta_data = JSONField(default=dict, blank=True, null=True)
 
     class Meta:
         abstract = True
