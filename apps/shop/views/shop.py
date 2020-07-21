@@ -21,7 +21,7 @@ class ShopViewMixin(View):
 
         request.session['shop_id'] = self.shop.id
         self.context = {
-            "shop": self.shop
+            "shop": self.shop,
         }
         return super().dispatch(request, shop_slug="", *args, **kwargs)
 

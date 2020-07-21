@@ -11,7 +11,14 @@
 
 
 {% block javascript %}
-
+  <script>
+    const SHOP_ID = "{{ shop.id }}";
+    const LINE_CHANNEL_MEMBERSHIP_ID = "{{ line_channel_membership.id }}";
+    const DEBUG = {% if debug %}true{% else %}false{% endif %};
+    const CSRF_TOKEN = '{{ csrf_token }}';
+    var SHOPPING_CART = {{ shopping_cart_json }};
+  </script>
+  <script src="{{ STATIC_URL }}shop/menu.js?v=0"></script>
 {% endblock javascript %}
 
 {% block content %}{% load humanize %}
@@ -27,7 +34,9 @@
       <div class="my-4">
         <ul class="list-inline mb-1">
           <li class="list-inline-item">
-            <button class="btn btn-icon-only" type="button" aria-label="add button" title="add to order">
+            <button id="item_{{ item.id }}_btn" class="btn btn-icon-only add-menu-item" type="button"
+                    aria-label="add button" title="add to order"
+                    data-item_id="{{ item.id }}" data-item_quantity="0">
               {% fa5_icon 'plus-square' %}
             </button>
           </li>

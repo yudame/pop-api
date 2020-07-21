@@ -231,7 +231,7 @@ STATIC_URL = '/static/'
 # Additional locations of static files
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-    # ('user', os.path.join(SITE_ROOT, 'apps/user/static')),
+    ('shop', os.path.join(SITE_ROOT, 'apps/shop/static')),
 ]
 
 # General apps settings
