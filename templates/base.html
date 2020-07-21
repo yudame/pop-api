@@ -56,6 +56,8 @@
 
   <!-- FONT-AWESOME -->
   {% fontawesome_5_static %}
+  <!-- pull from CDN too just because some browsers need help -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
   {% block theme_css %}
     <link href="{{ STATIC_URL }}vendor/theme-neumorphism/css/neumorphism.css" rel="stylesheet">
