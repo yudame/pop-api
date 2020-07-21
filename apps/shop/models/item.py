@@ -61,10 +61,12 @@ class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
         models.CharField(choices=PERIOD_CHOICES, max_length=4), default=list, blank=True,
         help_text='list of period choices when unavailable (eg. [\'bf\',\'ln\'] for breakfast, lunch)')
 
+
     # HISTORY MANAGER
     # history = HistoricalRecords()
 
     # MODEL PROPERTIES
+
 
     # MODEL FUNCTIONS
     def __str__(self):
