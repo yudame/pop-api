@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from apps.shop.models import Shop
@@ -6,26 +6,28 @@ from apps.shop.views.setup_forms import ShopFormA, ShopFormB, ShopFormC, LineCha
 from apps.shop.views.shop import ShopViewMixin
 
 
-class SetupView(LoginRequiredMixin, ShopViewMixin, View):
-    def dispatch(self, request, shop_id, *args, **kwargs):
+class ShopOwnerRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
 
-        self.shop = get_object_or_404(Shop, id=shop_id)
-        if not any([
-            request.user.is_staff,
-            request.user == self.shop.owner
+        print(self.shop, self.request.user.is_staff, self.request.user == self.shop.owner)
+
+        if self.shop and any([
+            self.request.user.is_staff,
+            self.request.user == self.shop.owner
         ]):
-            return self.handle_no_permission()
+            return True
+        return False
 
-        if not request.session.get('shop_setup_form_index'):
-            request.session['shop_setup_form_index'] = 0
 
+class SetupView(LoginRequiredMixin, ShopViewMixin, ShopOwnerRequiredMixin, View):
+    def dispatch(self, request, shop_id, *args, **kwargs):
         self.shop_setup_forms = [ShopFormA, ShopFormB, ShopFormC, LineChannelFormA, LineChannelFormB, LineChannelFormC]
         self.current_form = self.shop_setup_forms[request.session.get('shop_setup_form_index', 0)]
-
-        return super().dispatch(request, *args, **kwargs)
+        return super().dispatch(request, shop_id, *args, **kwargs)
 
 
     def get(self, request, *args, **kwargs):
+        print(self.current_form)
         context = {
             'shop': self.shop,
             'shop_setup_form': self.current_form(
@@ -44,7 +46,7 @@ class SetupView(LoginRequiredMixin, ShopViewMixin, View):
             shop_setup_form.save()
             if request.POST.get('submit') == 'Back':
                 request.session['shop_setup_form_index'] -= 1
-            elif request.session.get('shop_setup_form_index') < len(self.shop_setup_forms) - 1:
+            elif request.session.get('shop_setup_form_index', len(self.shop_setup_forms)) < len(self.shop_setup_forms) - 1:
                 request.session['shop_setup_form_index'] += 1
             else:
                 request.session['shop_setup_form_index'] = 0
