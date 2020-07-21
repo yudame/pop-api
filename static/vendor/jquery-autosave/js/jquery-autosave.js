@@ -6,6 +6,7 @@ var defaults = {
   method: "POST",
   event:  "change",
   data:   {},
+  headers: {},
   type:   "html",
   debug:  false,
   before: function(){},
@@ -16,9 +17,9 @@ var defaults = {
 
 function Plugin(element, options){
   this.element = element;
-  //merge defualts and options without changing either
+  //merge defaults and options without changing either
   this.options = $.extend( {}, defaults, options);
-  
+
   this._defaults = defaults;
   this._name = pluginName;
   this.init();
@@ -28,14 +29,14 @@ Plugin.prototype.init = function(){
   var $this = $(this.element);
   var inline_options = getDataAttributes($this);
   var init_options = this.options; //preserve initial options
-  
+
   //override just the event variable, check back and use updated data later
   var inline_options = getDataAttributes($this);
-  init_options.event = inline_options.event || init_options.event
+  init_options.event = inline_options.event || init_options.event;
 
   $this.on(init_options.event,function(e){
 
-    // before, done, fail, always use init_options 
+    // before, done, fail, always use init_options
     // so as to not be overwritten by inline_options
     if(init_options.before){
       init_options.before.call($this); // call in the context of the element
@@ -43,15 +44,16 @@ Plugin.prototype.init = function(){
 
     var inline_options = getDataAttributes($this); //get latest inline options
     options = $.extend({}, init_options, inline_options); //inline options overwrite options
-    var data = $.extend({}, options.data, inline_options) //include all inline options in data
+    var data = $.extend({}, options.data, inline_options); //include all inline options in data
+    var headers = $.extend({}, options.headers, inline_options); //include all inline options in headers
 
     //if data.debug included as string, change to boolean
     if (options.debug == "false"){ options.debug = false; }
 
     //remove url, method, type, debug from request params, add event
-    delete data.url; 
-    delete data.method; 
-    delete data.type; 
+    delete data.url;
+    delete data.method;
+    delete data.type;
     delete data.debug;
     data.event = options.event;
 
@@ -62,6 +64,7 @@ Plugin.prototype.init = function(){
         type:     options.method,
         cache:    false,
         data:     data,
+        headers:  headers,
         dataType: options.type
       })
       .done(function(data, textStatus, jqXHR){
