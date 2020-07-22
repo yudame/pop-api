@@ -3,7 +3,7 @@ from apps.line_app.bot_templates.abstract_message_class import AbstractLineMessa
 
 class ExampleMessage(AbstractLineMessage):
 
-    required_kwargs = [
+    context_required = [
 
     ]
 

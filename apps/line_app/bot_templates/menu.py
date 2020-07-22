@@ -4,7 +4,7 @@ from apps.line_app.views.delivery import Delivery
 
 class MenuTimelineMessage(AbstractLineMessage):
 
-    required_kwargs = [
+    context_required = [
 
     ]
 

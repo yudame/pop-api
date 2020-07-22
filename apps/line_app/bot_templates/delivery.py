@@ -4,7 +4,7 @@ from apps.line_app.views.delivery import Delivery
 
 class DeliveryTimelineMessage(AbstractLineMessage):
 
-    required_kwargs = [
+    context_required = [
       'shop_name',
     ]
 

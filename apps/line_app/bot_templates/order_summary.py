@@ -1,11 +1,9 @@
 from apps.line_app.bot_templates.abstract_message_class import AbstractLineMessage
-from apps.line_app.views.order_summary import OrderSummary
 
 
 class OrderSummaryMessage(AbstractLineMessage):
 
-    required_kwargs = [
-        'order_summary'
+    context_required = [
         'shop_name'
     ]
 

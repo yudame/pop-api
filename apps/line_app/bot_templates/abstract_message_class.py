@@ -5,10 +5,10 @@ from linebot.models import FlexSendMessage, SendMessage, TextSendMessage
 
 class AbstractLineMessage(ABC):
 
-    required_kwargs = []
+    context_required = []
 
     def __init__(self, context: dict):
-        for kw in self.required_kwargs:
+        for kw in self.context_required:
             if kw not in context:
                 raise Exception(f"{kw} is missing from context")
         self.context = context
