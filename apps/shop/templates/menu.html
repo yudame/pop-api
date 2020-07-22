@@ -16,7 +16,7 @@
     const LINE_CHANNEL_MEMBERSHIP_ID = "{{ line_channel_membership.id }}";
     const DEBUG = {% if debug %}true{% else %}false{% endif %};
     const CSRF_TOKEN = '{{ csrf_token }}';
-    var SHOPPING_CART = {{ shopping_cart_json|default:'[]' }};
+    var SHOPPING_CART = {{ shopping_cart_json|safe }};
   </script>
   <script src="{{ STATIC_URL }}shop/menu.js?v=0"></script>
 {% endblock javascript %}
