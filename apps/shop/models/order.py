@@ -66,7 +66,7 @@ class Order(Timestampable, Annotatable, models.Model):
     # current_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=DRAFT)  # know current state
     # next_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=PLACED)  # move the order towards a goal
     status_log = JSONField(default=dict, blank=True, null=True)
-
+    draft_cart = JSONField(default=dict, blank=True, null=True)
     completed_at = models.DateTimeField(null=True, blank=True)  # please do not set dates in the future!
 
     # MODEL PROPERTIES
