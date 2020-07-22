@@ -97,17 +97,16 @@ class Order(Timestampable, Annotatable, models.Model):
 
     # MODEL FUNCTIONS
 
-    def get_cart_dict(self):
-        cart_dict = {}
+    def get_cart_list(self):
+        cart_list = []
         for order_item in self.order_items.all():
-            cart_dict[order_item.id] = {
+            cart_list.append({
                 'item_id': order_item.item,
                 'quantity': order_item.quantity,
                 'price_amount': order_item.price.amount
-            }
+            })
             # todo: add promotions, discounts, fees
-            cart_dict['total_price_amount'] = self.items_total_price_amount
-        return cart_dict
+        return cart_list
 
 
     def __str__(self):

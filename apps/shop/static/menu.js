@@ -2,54 +2,58 @@
 $(document).ready(function(){
 
   //$.each(iterable_obj, function(key, value) { ... });  // reminder for old hands
-  $.each(SHOPPING_CART, function( item_id, item_count ){
+
+
+  $.each(SHOPPING_CART, function( cart_item ){
+
+    // set quantity on item btn
+    $("#item_"+cart_item['item_id']+"_btn").data('quantity', cart_item['item_quantity'])
+
+    // update UI
 
   });
 
 
-  // $(".").onclick(function(){
-  //
-  // })
+});
 
 
+$('.add-menu-item').on('click', function(){
 
+  SHOPPING_CART.push({
+    'item_id': $(this).data('item_id'),
+    'quantity': 1
+  });
 
+  console.log(SHOPPING_CART);
+
+  save_cart();
 
 });
 
 
-// <button class="autosave" data-clicks="0">Click Me</button>
-
-//js
-$('.add-menu-item').autosave({
-  url: "/",
-  method: "PUT",
-  data: {
-    'shop_id': SHOP_ID,
-    'line_channel_membership_id': LINE_CHANNEL_MEMBERSHIP_ID,
-    'csrf_token': CSRF_TOKEN
-  },
-  type: "json",
-  event: "click",
-  debug: DEBUG,
-  before: function(){
-    // increment item count
-    $(this).data()['item_quantity'] += 1;
-
-
-    // update cart on screen
-
-    // get data snapshot of cart
-    var cart_dict = {};
-    $(".add_menu_item").each(function(item_elem){
-      cart_dict[item_elem.data('item_id')] = item_elem.data('item_quantity')
-    });
-
-    $(this).data('cart_items', cart_dict);
-  },
-  done: function(){
-
-
-    $(this).removeData('cart');
-  }
+$('.quantity-up').on('click', function(){
+  $(this).data()['quantity'] += 1
 });
+
+
+
+function save_cart(){
+  $.ajax({
+    url: "",
+    type: "POST",
+    cache: false,
+    data: {
+      'shop_id': SHOP_ID,
+      'line_channel_membership_id': LINE_CHANNEL_MEMBERSHIP_ID,
+      'csrfmiddlewaretoken': CSRF_TOKEN,
+      'cart': JSON.stringify(SHOPPING_CART)
+    },
+    headers: { "X-CSRFToken": CSRF_TOKEN },
+    dataType: "json"
+  })
+  .done(function(data, textStatus, jqXHR){
+
+  })
+  .fail(function(jqXHR, textStatus, errorThrown){})
+  .always(function(){});
+}

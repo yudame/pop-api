@@ -15,9 +15,10 @@ from apps.shop.views.shop import ShopViewMixin
 
 
 # todo: move me to views/order.py
-def update_order(order: Order, cart_items: dict):
-    for order_item_id, order_item in cart_items.items():
+def update_order(order: Order, cart_item_list: list) -> Order:
+    for cart_item in cart_item_list:
         pass
+    return order
 
 
 
@@ -34,34 +35,24 @@ class MenuView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopVi
 
         self.context.update({
             "line_channel_membership": line_channel_membership,
-            "shopping_cart_json": json.dumps(order.get_cart_dict()),
+            "shopping_cart_json": json.dumps(order.get_cart_list()),
+            "total_price_amount": order.items_total_price_amount,
         })
         return render(request, 'menu.html', self.context)
 
-
     def post(self, request, *args, **kwargs): #html interface
         logging.debug(request.POST)
-        line_channel_membership = request.POST.get('line_channel_membership_id', request.session.get('line_channel_membership_id'))
-        if not line_channel_membership:
-            messages.warning(request, "your account was missing, order must be restarted")
-            return redirect('shop:menu', shop_slug=self.shop.slug)
 
+        line_channel_membership = request.POST.get('line_channel_membership_id',
+                                                   request.session.get('line_channel_membership_id'))
+        if not line_channel_membership:
+            return JsonResponse({'error': "line_channel_membership_id"}, status=status.HTTP_406_NOT_ACCEPTABLE)
         order, o_created = Order.objects.get_or_create(line_channel_membership=line_channel_membership, completed_at=None)
 
-        # update_order(order, request.POST)
+        cart_item_list = json.loads(request.POST.get('cart'))
+        if not cart_item_list or not isinstance(cart_item_list, list):
+            return JsonResponse({'error': "sorry, I can only take a list"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
-        return render(request, 'menu.html', self.context)
-
-
-    def put(self, request, *args, **kwargs): #json interface
-        logging.debug(request.PUT)
-        order, o_created = Order.objects.get_or_create(line_channel_membership_id=request.session['line_channel_membership_id'], completed_at=None)
-
-        cart_dict = json.loads(request.PUT.get('autosave_data'))
-        if not cart_dict or not isinstance(cart_dict, dict):
-            return JsonResponse("sorry, I can only take a dict", status=status.HTTP_406_NOT_ACCEPTABLE)
-
-        update_order(order, cart_dict['cart_items'])
-
-        order_cart_dict = order.get_cart_dict()
-        return JsonResponse(json.dumps(order_cart_dict), status=status.HTTP_202_ACCEPTED)
+        order = update_order(order, cart_item_list)
+        order.save()
+        return JsonResponse({'success': "order saved"}, status=status.HTTP_202_ACCEPTED)
