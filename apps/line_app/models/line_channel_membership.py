@@ -55,9 +55,10 @@ class LineChannelMembership(Timestampable, models.Model):
             elif line_event.message.text.lower() == "order":
                 menu = Menu()
                 return menu.render_bot_message()
-                # return MenuMessage
+
             elif line_event.message.text.lower() == "share":
                 return self.line_channel.line_share_url
+
             elif line_event.message.text.lower() == "refer":
                 referral = Referral.objects.get_or_create(
                     user=self.line_user_profile.user,
@@ -65,8 +66,11 @@ class LineChannelMembership(Timestampable, models.Model):
                     redirect_to=self.line_channel.line_share_url
                 )
                 return referral.url
+
             elif line_event.message.text.lower() == "delivery":
                 delivery = Delivery()
+                return delivery.render_bot_message()
+
             elif line_event.message.text.lower() == "dashboard":
                 # get link to shop dasbhoard and include otp login credentials
                 if self.line_user_profile.user.is_staff or self.line_channel.shop == self.line_user_profile.user.shop:  # owner of shop
@@ -108,3 +112,14 @@ class LineChannelMembership(Timestampable, models.Model):
             return "Thanks! your location is saved 📍"
         else:
             return "🆗👍"
+
+    def send_order_summary(self, order):
+        from apps.line_app.views.order_summary import OrderSummary
+
+        # assert(order in self.orders.all())
+
+        order_summary = OrderSummary(order)
+        self.line_channel.get_bot().api.push_message(
+            self.line_user_profile.line_user_id,
+            order_summary.render_bot_message()
+        )

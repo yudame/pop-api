@@ -3,15 +3,7 @@ $(document).ready(function(){
 
   //$.each(iterable_obj, function(key, value) { ... });  // reminder for old hands
 
-
-  $.each(SHOPPING_CART, function( cart_item ){
-
-    // set quantity on item btn
-    $("#item_"+cart_item['item_id']+"_btn").data('quantity', cart_item['item_quantity'])
-
-    // update UI
-
-  });
+  rebuild_cart_UI();
 
 
 });
@@ -27,6 +19,7 @@ $('.add-menu-item').on('click', function(){
   console.log(SHOPPING_CART);
 
   save_cart();
+  rebuild_cart_UI();
 
 });
 
@@ -56,4 +49,29 @@ function save_cart(){
   })
   .fail(function(jqXHR, textStatus, errorThrown){})
   .always(function(){});
+}
+
+
+function rebuild_cart_UI(){
+
+  $.each(SHOPPING_CART, function( cart_item ){
+
+    // set quantity on item btn
+    $("#item_"+cart_item['item_id']+"_btn").data('quantity', cart_item['item_quantity'])
+
+
+    // update UI
+    new_order_item = $("#order_item_template").clone();
+    new_order_item.find(".item-quantity").html(cart_item['item_quantity']);
+    new_order_item.find(".item-name").html("item name, got from somewhere");
+    // if ("order_item_id" in cart_item){
+    //   new_order_item.attr("id", "order_item_"+cart_item['order_item_id']);
+    // }
+    new_order_item.appendTo("#order_items");
+    new_order_item.show();
+
+    console.log(new_order_item )
+
+  });
+
 }

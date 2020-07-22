@@ -23,15 +23,17 @@
 
 {% block content %}{% load humanize %}
 
-  <h1>{{ shop.name }} Menu</h1>
+{#  <h1>{{ shop.name }} Menu</h1>#}
+
 
   {% for menu_section in shop.menu.menu_sections.all %}
-    <h3 class="my-4">
+    <div class="card shadow-inset bg-primary border-light p-4 my-4 rounded">
+    <h3 class="my-2">
       {{ menu_section.name }}
     </h3>
 
     {% for item in menu_section.items.all %}
-      <div class="my-4">
+      <div class="my-2">
         <ul class="list-inline mb-1">
           <li class="list-inline-item">
             <button id="item_{{ item.id }}_btn" class="btn btn-icon-only add-menu-item" type="button"
@@ -54,21 +56,62 @@
         </ul>
       </div>
     {% endfor %}
-
-{#              <div class="input-group mb-3" style="width: 8rem;">#}
-{#                <div class="input-group-prepend">#}
-{#                  <span class="input-group-text">#}
-{#                    {% fa5_icon 'minus-square' %}#}
-{#                  </span>#}
-{#                </div>#}
-{#                <input type="text" class="form-control" aria-label="quantity" value="0" style="text-align: center">#}
-{#                <div class="input-group-append">#}
-{#                  <span class="input-group-text">#}
-{#                    {% fa5_icon 'plus-square' %}#}
-{#                  </span>#}
-{#                </div>#}
-{#              </div>#}
-
+    </div>
   {% endfor %}
 
-{% endblock %}
+  <div class="container fixed-bottom navbar-theme-primary pt-3 border-top">
+
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10">
+
+        <!-- template order item -->
+{#        <div id="order_item_template" class="alert alert-danger alert-dismissible shadow-inset fade show" role="alert">#}
+
+
+        <div id="order_item_template" class="alert shadow-soft py-2" style="display: none;">
+          <ul class="alert-inner--text list-inline mb-0" style="width: 100%;">
+
+            <li class="list-inline-item pull-right">
+
+              <span class="item-quantity ml-3">
+                1
+              </span>
+
+              <span class="text-danger ml-3" title="remove"
+                      aria-label="Remove" data-dismiss="alert">
+                {% fa5_icon 'times-circle' %}
+              </span>
+
+            </li>
+
+            <li class="list-inline-item">
+              <span class="item-name">
+                item name
+              </span>
+            </li>
+
+          </ul>
+        </div>
+
+        <div id="order_items">
+          <!-- order items go here -->
+        </div>
+
+        <div class="mb-0" style="">
+          <button class="btn btn-danger" style="width: 100%;">
+            checkout
+          </button>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+
+
+{% endblock content %}
+
+{% block footer %}
+  <!-- nothing -->
+{% endblock footer %}
