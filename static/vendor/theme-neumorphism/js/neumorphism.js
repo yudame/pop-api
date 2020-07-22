@@ -268,36 +268,44 @@ $(document).ready(function () {
     });
 
     //CounterUp
-    $('.counter').counterUp({
+    if (typeof counterUp !== "undefined") {
+      $('.counter').counterUp({
         delay: 10,
         time: 1000,
         offset: 70,
         beginAt: 100,
         formatter: function (n) {
-            return n.replace(/,/g, '.');
+          return n.replace(/,/g, '.');
         }
-    });
+      });
+    }
 
     //Countdown
-    $('#clock').countdown('2020/10/10').on('update.countdown', function (event) {
+    if (typeof countdown !== "undefined") {
+      $('#clock').countdown('2020/10/10').on('update.countdown', function (event) {
         var $this = $(this).html(event.strftime(''
             + '<span>%-w</span> week%!w '
             + '<span>%-d</span> day%!d '
             + '<span>%H</span> hr '
             + '<span>%M</span> min '
             + '<span>%S</span> sec'));
-    });
+      });
+    }
 
     //Parallax
-    $('.jarallax').jarallax({
+    if (typeof jarallax !== "undefined") {
+      $('.jarallax').jarallax({
         speed: 0.2
-    });
+      });
+    }
 
     //Smooth scroll
-    var scroll = new SmoothScroll('a[href*="#"]', {
-        speed: 500,
-        speedAsDuration: true
-    });
+      if (typeof SmoothScroll !== "undefined") {
+        var scroll = new SmoothScroll('a[href*="#"]', {
+          speed: 500,
+          speedAsDuration: true
+        });
+      }
 
     // Equalize height to the max of the elements
     if ($(document).width() >= breakpoints.lg) {
