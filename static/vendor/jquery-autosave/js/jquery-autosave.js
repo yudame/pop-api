@@ -45,7 +45,7 @@ Plugin.prototype.init = function(){
     var inline_options = getDataAttributes($this); //get latest inline options
     options = $.extend({}, init_options, inline_options); //inline options overwrite options
     var data = $.extend({}, options.data, inline_options); //include all inline options in data
-    var headers = $.extend({}, options.headers, inline_options); //include all inline options in headers
+    // var headers = $.extend({}, options.headers, inline_options); //include all inline options in headers
 
     //if data.debug included as string, change to boolean
     if (options.debug == "false"){ options.debug = false; }
