@@ -35,7 +35,7 @@ class Order(Timestampable, Annotatable, models.Model):
     # shop = models.ForeignKey('shop.Shop', on_delete=models.PROTECT, related_name='orders')
 
     line_channel_membership = models.ForeignKey('line_app.LineChannelMembership', null=True,
-                                                on_delete=models.SET_NULL)
+                                                on_delete=models.SET_NULL, related_name='orders')
 
     items = models.ManyToManyField('shop.Item', blank=True, through='shop.OrderItem', related_name='orders')
     #  OrderItem is annotatable, has many discounts, quantity(decimal?), and no unique_together constraints
