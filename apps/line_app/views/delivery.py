@@ -8,4 +8,5 @@ class Delivery(ABC):
         self.shop = Shop.objects.first()
 
         from apps.line_app.bot_templates.delivery import DeliveryTimelineMessage
-        return DeliveryTimelineMessage(self).render()
+        context = {'shop_name': self.shop.name}
+        return DeliveryTimelineMessage(context=context).render()

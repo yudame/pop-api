@@ -1,17 +1,19 @@
 from apps.line_app.bot_templates.abstract_message_class import AbstractLineMessage
-from apps.line_app.views.delivery import Delivery
+from apps.line_app.views.order_summary import OrderSummary
 
 
-class DeliveryTimelineMessage(AbstractLineMessage):
+class OrderSummaryMessage(AbstractLineMessage):
 
     required_kwargs = [
-      'shop_name',
+        'order_summary'
+        'shop_name'
     ]
 
     def render_alt_text(self) -> str:
-        return "will arrive in about 35 minutes"
+        return "ready to pay"
 
     def render_flex_dict(self) -> dict:
+
         return {
   "type": "bubble",
   "size": "mega",

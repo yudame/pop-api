@@ -8,4 +8,7 @@ class Menu(ABC):
         self.shop = Shop.objects.first()
 
         from apps.line_app.bot_templates.menu import MenuTimelineMessage
-        return MenuTimelineMessage(self).render()
+        context = {
+            'shop': self.shop,
+        }
+        return MenuTimelineMessage(context).render()

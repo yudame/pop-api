@@ -4,10 +4,14 @@ from apps.line_app.views.delivery import Delivery
 
 class MenuTimelineMessage(AbstractLineMessage):
 
-    def render_alt_text(self, delivery_instance: Delivery) -> str:
+    required_kwargs = [
+
+    ]
+
+    def render_alt_text(self) -> str:
         return "make an order"
 
-    def render_flex_dict(self, delivery_instance: Delivery) -> dict:
+    def render_flex_dict(self) -> dict:
         return {
   "type": "bubble",
   "hero": {

@@ -5,12 +5,21 @@ from linebot.models import FlexSendMessage, SendMessage, TextSendMessage
 
 class AbstractLineMessage(ABC):
 
-    def __init__(self, object_instance):
-        self.object_instance = object_instance
+    required_kwargs = []
 
-    def render(self) -> SendMessage:
-        alt_text = self.render_alt_text(self.object_instance)
-        flex_dict = self.render_flex_dict(self.object_instance)
+    def __init__(self, context: dict):
+        for kw in self.required_kwargs:
+            if kw not in context:
+                raise Exception(f"{kw} is missing from context")
+        self.context = context
+
+    def render(self, message: str="") -> SendMessage:
+
+        if message:
+            return TextSendMessage(message)
+
+        alt_text = self.render_alt_text()
+        flex_dict = self.render_flex_dict()
 
         if flex_dict:
             return FlexSendMessage(
@@ -20,23 +29,24 @@ class AbstractLineMessage(ABC):
         elif alt_text:
             return TextSendMessage(alt_text)
         else:
-            return TextSendMessage("response not available")
+            raise NotImplemented("must provide message or message rendering")
 
-    def render_alt_text(self, object_instance) -> str:
+    def render_alt_text(self) -> str:
         """
         overwrite me
         :param object_instance:
         :return:
         """
-        return ""
+        raise NotImplementedError("must overwrite render_alt_text method")
 
-    def render_flex_dict(self, object_instance) -> dict:
+    def render_flex_dict(self) -> dict:
         """
         overwrite me
         :param object_instance:
         :return:
         """
-        return {}
+        # raise NotImplementedError("must overwrite render_flex_dict method")
+        pass
 
     class Meta:
         abstract = True

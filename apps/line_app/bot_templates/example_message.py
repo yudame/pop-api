@@ -3,7 +3,12 @@ from apps.line_app.bot_templates.abstract_message_class import AbstractLineMessa
 
 class ExampleMessage(AbstractLineMessage):
 
-    def render(self, some_instance):
-        return {
-            'instance': str(some_instance)
-        }
+    required_kwargs = [
+
+    ]
+
+    def render_alt_text(self) -> str:
+        return "Message for you, sir."
+
+    def render_flex_dict(self) -> dict:
+        return {}
