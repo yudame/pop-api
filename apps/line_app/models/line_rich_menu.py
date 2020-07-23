@@ -28,6 +28,14 @@ class LineRichMenu(models.Model):
     def line_channel(self):
         return self.line_channel_membership.line_channel
 
+    @property
+    def shop(self):
+        return self.line_channel_membership.line_channel.shop
+
+    @property
+    def is_currently_active(self) -> bool:
+        return bool(self._is_currently_active)
+
     # MODEL FUNCTIONS
 
     def get_menu(self, index=MAIN_MENU):
@@ -56,20 +64,26 @@ class LineRichMenu(models.Model):
                     bounds=RichMenuBounds(x=600 + 67 + 15, y=8, width=300, height=300),
                     action=URIAction(
                         label='Preferences',
-                        uri=f'https://{HOSTNAME}{self.line_channel.shop.get_absolute_url()}'
+                        uri=f'https://{HOSTNAME}{self.shop.get_absolute_url()}'
                     )
                 ),
             ]
         )
 
 
-    def publish(self):
+    def publish_and_save(self, force_refresh=False):
+        if self.line_rich_menu_id and not force_refresh:
+            return self.line_rich_menu_id
+
         line_channel_bot = self.line_channel.get_bot()
+
+        if self.line_rich_menu_id and force_refresh:
+            line_channel_bot.delete_rich_menu(self.line_rich_menu_id)
+
         self.line_rich_menu_id = line_channel_bot.api.create_rich_menu(rich_menu=self.get_menu())
+        logging.debug(f"rich_menu_id: {self.line_rich_menu_id}")
 
-        logging.debug("rich_menu_id", self.line_rich_menu_id)
-
-        # upload image and link it to richmenu
+        # upload image and link it to rich_menu
         # from https://developers.line.biz/en/reference/messaging-api/#upload-rich-menu-image
         with open(os.path.join(STATICFILES_DIRS[0], 'image/menu-circle-buttons.png'), 'rb') as f:
             line_channel_bot.api.set_rich_menu_image(self.line_rich_menu_id, 'image/png', f)
@@ -78,16 +92,18 @@ class LineRichMenu(models.Model):
         return self.line_rich_menu_id
 
 
-    # def assign_to_user(self, line_user_profile):
-    #     line_channel_bot = self.line_channel.get_bot()
-    #     if not self.line_rich_menu_id:
-    #         self.publish()
-    #     line_channel_bot.api.link_rich_menu_to_user(
-    #         line_user_profile.line_user_id,
-    #         self.line_rich_menu_id
-    #     )
-    #
-    #
+    def assign_to_user(self):
+        if not self.line_rich_menu_id:
+            raise Exception("rich menu must be published before it can be assigned to a user")
+
+        line_channel_bot = self.line_channel.get_bot()
+        line_channel_bot.api.link_rich_menu_to_user(
+            self.line_channel_membership.line_user_profile.line_user_id,
+            self.line_rich_menu_id
+        )
+        self.set_currently_active()
+
+
     # def assign_to_users(self, user_queryset):
     #     line_channel_bot = self.line_channel.get_bot()
     #     if not self.line_rich_menu_id:

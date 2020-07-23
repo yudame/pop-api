@@ -3,6 +3,7 @@ import logging
 
 from django.db import models
 from apps.common.behaviors import Timestampable
+from apps.common.utilities.multithreading import start_new_thread
 from apps.line_app.models.line_rich_menu import MAIN_MENU, LineRichMenu
 from django.utils.http import urlencode, urlsafe_base64_encode
 from linebot.models import TextMessage, LocationMessage, ImageMessage, StickerMessage
@@ -41,9 +42,12 @@ class LineChannelMembership(Timestampable, models.Model):
 
     # MODEL FUNCTIONS
 
-    def set_rich_menu(self, index=MAIN_MENU):
-        self.rich_menu, rm_created = LineRichMenu.objects.get_or_create(line_channel=self.line_channel, index=index)
-        self.rich_menu.set_currently_active()
+    def set_rich_menu(self, index=MAIN_MENU, force_refresh=False):
+        self.rich_menu, rm_created = LineRichMenu.objects.get_or_create(line_channel_membership=self, index=index)
+        if force_refresh or not self.rich_menu.is_currently_active:
+            self.rich_menu.publish_and_save(force_refresh=force_refresh)
+            self.rich_menu.assign_to_user()
+            self.rich_menu.save()
 
 
     def respond_to(self, line_event):
@@ -123,3 +127,8 @@ class LineChannelMembership(Timestampable, models.Model):
             self.line_user_profile.line_user_id,
             order_summary.render_bot_message()
         )
+
+    @start_new_thread
+    def run_async_rich_menu_check(self):
+        if not self.current_rich_menu:
+            self.set_rich_menu(force_refresh=False)

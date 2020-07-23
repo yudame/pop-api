@@ -27,7 +27,7 @@ class LineBot(ABC):
         # request_data_dict = json.loads(request_data_string)
 
         payload = self.handler.parser.parse(request_data_string, signature, as_payload=True)
-        last_user_id = None
+        last_user_id = ""
         for event in payload.events:
             if isinstance(event.source, SourceUser):
                 if last_user_id != str(event.source.user_id):
@@ -57,11 +57,7 @@ class LineBot(ABC):
                     raise Exception("response is not of type SendMessage from linebot.models")
 
         @self.handler.add(FollowEvent)
-        def default_handler(event):
-            LineChannelMembership.objects.get(
-                line_user_profile__line_user_id=str(event.source.user_id),
-                line_channel=self.line_channel
-            ).set_rich_menu()
+        def handle_follow(event):
             self.api.reply_message(event.reply_token, TextSendMessage(text=self.line_channel.welcome_text))
 
         @self.handler.default()
@@ -81,8 +77,12 @@ class LineBot(ABC):
         #     return
 
         line_user_profile, lup_created = LineUserProfile.objects.get_or_create(line_user_id=follower_line_user_id)
-        LineChannelMembership.objects.get_or_create(line_user_profile=line_user_profile,
-                                                    line_channel=self.line_channel)
+        line_channel_membership, lcm_created = LineChannelMembership.objects.get_or_create(
+            line_user_profile=line_user_profile,
+            line_channel=self.line_channel
+        )
+        line_channel_membership.run_async_rich_menu_check()
+
         try:
             if any([
                 lup_created,
@@ -98,10 +98,9 @@ class LineBot(ABC):
         except Exception as e:
             logging.warning(str(e))
 
-
-    def send_text_message(self, to_user_profile, text):
+    def send_text_message(self, to_user_profile: LineUserProfile, text: str):
         self.api.push_message(to_user_profile.line_user_id, TextSendMessage(text=text))
 
-    def send_image_message(self, to_user_profile, image_url, thumbnail_image_url=None):
+    def send_image_message(self, to_user_profile: LineUserProfile, image_url: str, thumbnail_image_url: str = None):
         thumbnail_image_url = thumbnail_image_url or image_url
         self.api.push_message(to_user_profile.line_user_id, ImageSendMessage(image_url, thumbnail_image_url))
