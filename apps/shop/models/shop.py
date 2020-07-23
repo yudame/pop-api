@@ -70,7 +70,7 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
     #     return (self.url_name, (), url_kwargs)
 
     def get_absolute_url(self):
-        return reverse('shop:dashboard_with_slug', kwargs={'shop_slug': self.slug})
+        return reverse('shop:shop', kwargs={'shop_slug': self.slug})
 
     # META
     class Meta:

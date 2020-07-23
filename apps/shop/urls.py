@@ -6,7 +6,7 @@ app_name = 'shop'
 
 urlpatterns = [
 
-    # MAIN HOME DASHBOARD
+    # MAIN HOME
     path('<slug:shop_slug>/', shop.ShopView.as_view(), name='shop'),
     path('<slug:shop_slug>/menu/', menu.MenuView.as_view(), name='menu'),
 

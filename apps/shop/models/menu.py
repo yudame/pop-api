@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from fontawesome_5.fields import IconField
 from simple_history.models import HistoricalRecords
 from apps.common.behaviors import Timestampable
@@ -42,6 +43,10 @@ class Menu(Timestampable, models.Model):
     # MODEL PROPERTIES
 
     # MODEL FUNCTIONS
+
+    def get_absolute_url(self):
+        return reverse('shop:menu', kwargs={'shop_slug': self.shop.slug})
+
     def __str__(self):
         return f"{self.shop.name} Menu"
 
