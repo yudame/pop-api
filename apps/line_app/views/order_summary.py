@@ -10,9 +10,6 @@ class OrderSummary(ABC):
         self.shop = order.line_channel_membership.line_channel.shop
 
     def render_bot_message(self):
-        from apps.shop.models import Shop
-        self.shop = Shop.objects.first()
-
         context = {
             'shop': self.shop,
             'order': self.order
