@@ -46,9 +46,9 @@ class ShopAdmin(MyModelAdmin):
 class MenuAdmin(MyModelAdmin):
     list_display = (
         # 'id',
+        'shop',
         'created_at',
         'modified_at',
-        'shop',
         'header_text',
         'footer_text',
         'breakfast_open_time',
