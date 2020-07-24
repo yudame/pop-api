@@ -45,7 +45,7 @@ else:
         'https://pop-*.herokuapp.com',
         'https://*.yuda.me',
         'https://s3.amazonaws.com',
-        'http://localhost',
+        # 'http://localhost',
         'http://127.0.0.1',
     ]
 

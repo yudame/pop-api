@@ -32,6 +32,11 @@ CACHES = {
     }
 }
 
+FONTAWESOME_5_CSS = "//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+# FONTAWESOME_5_CSS_ADMIN = None
+# FONTAWESOME_5_ICON_CLASS = 'default'
+# FONTAWESOME_5_PREFIX = 'fa'
+
 
 # SENDINBLUE.COM EMAIL SERVICE
 # ANYMAIL = {
