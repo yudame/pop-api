@@ -15,5 +15,15 @@ class Locatable(models.Model):
 
     timezone = TimeZoneField(blank=True)
 
+    def __str__(self):
+        if self.address and len(self.address.inline_string):
+            return self.address.inline_string
+        elif self.unstructured_text_address:
+            return self.unstructured_text_address
+        elif self.longitude and self.latitude:
+            return f"{self.latitude}, {self.longitude}"
+        else:
+            return "(no address)"
+
     class Meta:
         abstract = True

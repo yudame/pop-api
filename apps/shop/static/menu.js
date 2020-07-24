@@ -3,6 +3,10 @@ $(document).ready(function(){
 
   rebuild_cart_UI();
 
+  $("#checkout").on('click', function(){
+    save_cart(checkout=true);
+  });
+
 });
 
 
@@ -34,7 +38,9 @@ $('button.add-item').on('click', function(){
 });
 
 
-function save_cart(){
+function save_cart(checkout){
+  checkout = checkout || false;
+
   $.ajax({
     url: "",
     type: "POST",
@@ -43,15 +49,24 @@ function save_cart(){
       'shop_id': SHOP_ID,
       'line_channel_membership_id': LINE_CHANNEL_MEMBERSHIP_ID,
       // 'csrfmiddlewaretoken': CSRF_TOKEN,
-      'cart': JSON.stringify(SHOPPING_CART)
+      'cart': JSON.stringify(SHOPPING_CART),
+      'checkout': checkout
     },
     headers: { "X-CSRFToken": CSRF_TOKEN }, // or use? getCookie("csrftoken")
     dataType: "json"
   })
   .done(function(data, textStatus, jqXHR){
-
+    if (checkout){
+      window.location.href = LINE_CHANNEL_URL;
+    }
   })
-  .fail(function(jqXHR, textStatus, errorThrown){})
+  .fail(function(jqXHR, textStatus, errorThrown){
+    if (checkout) {
+      if (confirm("hold on... error saving your order")){
+        save_cart(checkout);
+      }
+    }
+  })
   .always(function(){});
 }
 

@@ -1,3 +1,5 @@
+import logging
+
 from django.db import models
 from djmoney.models.fields import MoneyField
 from djmoney.money import Money
@@ -24,6 +26,7 @@ class OrderItem(Timestampable, Annotatable, models.Model):
 
     @property
     def price(self):
+        logging.debug("calculating price .. again")
         if self.ad_hoc_price:
             return self.ad_hoc_price.amount * self.quantity
 

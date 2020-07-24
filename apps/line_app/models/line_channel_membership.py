@@ -132,3 +132,5 @@ class LineChannelMembership(Timestampable, models.Model):
     def run_async_rich_menu_check(self):
         if not self.current_rich_menu:
             self.set_rich_menu(force_refresh=False)
+        from django.db import connection
+        connection.close()

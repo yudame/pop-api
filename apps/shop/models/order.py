@@ -101,10 +101,10 @@ class Order(Timestampable, Annotatable, models.Model):
         cart_list = []
         for order_item in self.order_items.all():
             cart_list.append({
-                'order_item_id': order_item.id,
-                'item_id': order_item.item,
-                'name': order_item.item.name,
-                'quantity': order_item.quantity,
+                'order_item_id': str(order_item.id),
+                'item_id': str(order_item.item.id),
+                'name': str(order_item.item.name),
+                'quantity': int(order_item.quantity),
                 # 'price_amount': order_item.price.amount
             })
             # todo: add promotions, discounts, fees

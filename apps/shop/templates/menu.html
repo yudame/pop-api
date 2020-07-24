@@ -13,6 +13,7 @@
 {% block javascript %}
   <script>
     const SHOP_ID = "{{ shop.id }}";
+    const LINE_CHANNEL_URL = "{{ line_channel_membership.line_channel.direct_link_url }}";
     const LINE_CHANNEL_MEMBERSHIP_ID = "{{ line_channel_membership.id }}";
     const DEBUG = {% if debug %}true{% else %}false{% endif %};
     const CSRF_TOKEN = '{{ csrf_token }}';
@@ -95,7 +96,7 @@
         </div>
 
         <div class="my-3" style="">
-          <button class="btn btn-danger" type="button" style="width: 100%;">
+          <button id="checkout" class="btn btn-danger" type="button" style="width: 100%;">
             checkout
           </button>
         </div>
