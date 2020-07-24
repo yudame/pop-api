@@ -4,6 +4,7 @@ import logging
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 from django.shortcuts import render, redirect
 from rest_framework import status
@@ -45,6 +46,9 @@ def update_order(order: Order, cart_item_list: list) -> Order:
 
 
 class MenuView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopViewMixin, View):
+    @csrf_exempt
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         line_channel_membership = LineChannelMembership.objects.get(

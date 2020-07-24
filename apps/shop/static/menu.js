@@ -42,10 +42,10 @@ function save_cart(){
     data: {
       'shop_id': SHOP_ID,
       'line_channel_membership_id': LINE_CHANNEL_MEMBERSHIP_ID,
-      'csrfmiddlewaretoken': CSRF_TOKEN,
+      // 'csrfmiddlewaretoken': CSRF_TOKEN,
       'cart': JSON.stringify(SHOPPING_CART)
     },
-    headers: { "X-CSRFToken": CSRF_TOKEN },
+    headers: { "X-CSRFToken": CSRF_TOKEN }, // or use? getCookie("csrftoken")
     dataType: "json"
   })
   .done(function(data, textStatus, jqXHR){

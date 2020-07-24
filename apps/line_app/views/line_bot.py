@@ -83,13 +83,13 @@ class LineBot(ABC):
         )
         line_channel_membership.run_async_rich_menu_check()
 
-        try:
+        try:  # todo: move logic to LineChannelMembership method, then call here
             if any([
                 lup_created,
                 force_update,
                 line_user_profile.modified_at < timezone.now() - timedelta(days=2)
             ]):
-                line_profile = self.api.get_profile(follower_line_user_id)
+                line_profile = self.api.get_profile(line_user_profile.line_user_id)
                 line_user_profile.name = line_profile.display_name
                 line_user_profile.picture_url = line_profile.picture_url
                 line_user_profile.language = line_profile.language

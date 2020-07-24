@@ -20,7 +20,7 @@ class LineRichMenuLoginMixin(AccessMixin):
         lcm_uuid = urlsafe_base64_decode(eid).decode()
         line_channel_id, line_user_profile_id = lcm_uuid.split(':')
         if line_user_profile_id:
-            user = User.objects.filter(line_user_profile__id=line_user_profile_id).first()
+            user = User.objects.filter(line_user_profile__line_user_id=line_user_profile_id).first()
             if user:
                 # todo: use something more temporary. maybe RemoteUserBackend ??
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')

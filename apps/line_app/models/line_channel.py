@@ -17,7 +17,7 @@ CHANNEL_TYPE_CHOICES = [
 class LineChannel(Timestampable, models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
-    shop = models.ForeignKey('shop.Shop', null=True, on_delete=models.PROTECT, related_name="line_channel")
+    shop = models.ForeignKey('shop.Shop', null=True, on_delete=models.PROTECT, related_name="line_channels")
     channel_type = models.CharField(max_length=5, choices=CHANNEL_TYPE_CHOICES, null=False)
 
     name = models.CharField(max_length=31)
