@@ -103,6 +103,7 @@ class Order(Timestampable, Annotatable, models.Model):
             cart_list.append({
                 'order_item_id': order_item.id,
                 'item_id': order_item.item,
+                'name': order_item.item.name,
                 'quantity': order_item.quantity,
                 # 'price_amount': order_item.price.amount
             })

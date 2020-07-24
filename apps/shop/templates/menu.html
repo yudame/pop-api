@@ -36,9 +36,9 @@
       <div class="my-2">
         <ul class="list-inline mb-1">
           <li class="list-inline-item">
-            <button id="item_{{ item.id }}_btn" class="btn btn-icon-only add-menu-item" type="button"
-                    aria-label="add button" title="add to order"
-                    data-item_id="{{ item.id }}" data-item_quantity="0">
+            <button id="item_{{ item.id }}_btn" class="add-item btn btn-icon-only"
+                    type="button" title="add to order"
+                    data-item_id="{{ item.id }}" data-name="{{ item.name }}">
               {% fa5_icon 'plus-square' %}
             </button>
           </li>
@@ -64,46 +64,35 @@
     <div class="row justify-content-center">
       <div class="col-12 col-md-10">
 
-        <!-- template order item -->
-{#        <div id="order_item_template" class="alert alert-danger alert-dismissible shadow-inset fade show" role="alert">#}
+        <div style="display:none;">
+          <!-- template order item -->
+          <div id="order_item_template" class="order-item"
+               data-item_id="" data-quantity="" data-item_name="">
+            <div class="d-flex flex-row justify-content-between" >
 
-
-        <div id="order_item_template" class="alert shadow-soft py-2" style="display: none;">
-          <ul class="alert-inner--text list-inline mb-0" style="width: 100%;">
-
-            <li class="list-inline-item pull-right">
-
-              <span class="item-quantity ml-3">
-                1
+              <span class="item-name flex-fill">
+                item name
               </span>
 
-              <span class="text-danger ml-3" title="remove"
-                      aria-label="Remove" data-dismiss="alert">
+              <span class="item-quantity">1</span>x
+
+              <span class="item-remove text-muted ml-3" title="remove">
                 {% fa5_icon 'times-circle' %}
               </span>
 
-            </li>
-
-            <li class="list-inline-item">
-              <span class="item-name">
-                item name
-              </span>
-            </li>
-
-          </ul>
+            </div>
+          </div>
         </div>
 
-        <div id="order_items">
+        <div id="order_items" class="card bg-primary shadow-soft border-light px-4 py-3">
           <!-- order items go here -->
         </div>
 
-        <div class="mb-0" style="">
-          <button class="btn btn-danger" style="width: 100%;">
+        <div class="my-3" style="">
+          <button class="btn btn-danger" type="button" style="width: 100%;">
             checkout
           </button>
         </div>
-
-
 
       </div>
     </div>
