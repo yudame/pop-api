@@ -24,6 +24,7 @@ WSGI_APPLICATION = 'settings.wsgi.application'
 
 ALLOWED_HOSTS = [
     '.yuda.me',
+    '.popmenu.link',
     '.herokuapp.com',
     '.amazonaws.com',
 ]
@@ -44,6 +45,7 @@ else:
     CORS_ORIGIN_WHITELIST = [
         'https://pop-*.herokuapp.com',
         'https://*.yuda.me',
+        'https://*.popmenu.link',
         'https://s3.amazonaws.com',
         # 'http://localhost',
         'http://127.0.0.1',
