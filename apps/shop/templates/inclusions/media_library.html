@@ -1,0 +1,31 @@
+{% load static %}
+{% load humanize %}
+{% load fontawesome_5 %}
+
+
+<h2>
+  Image Uploads
+</h2>
+
+{% for image in shop.gramables.all %}
+
+  {% if image.thumbnail_url %}
+    <img src="{{ image.thumbnail_url }}" alt="" class="img-thumbnail" style="max-height: 15rem;">
+  {% else %}
+    <img src="{{ image.url }}" alt="" class="img-thumbnail" style="max-height: 15rem;">
+  {% endif %}
+  <div class="dropdown show">
+    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      use for {% fa5_icon 'angle-down' %}
+    </a>
+
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+      <a class="dropdown-item" href="#">
+        {% fa5_icon 'plus' %} Menu Item ⚠️
+      </a>
+      <a class="dropdown-item" href="#">Promotion ⚠️ </a>
+{#        <a class="dropdown-item" href="#">Shop</a>#}
+    </div>
+  </div>
+
+{% endfor %}

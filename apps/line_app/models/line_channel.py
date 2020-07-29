@@ -44,7 +44,7 @@ class LineChannel(Timestampable, models.Model):
         return reverse('line_app:callback', kwargs={'line_channel_id': self.id})
 
     @property
-    def QR_img_src(self):
+    def line_add_friend_QR_img_src(self):
         if self.bot_id:
             return f"https://qr-official.line.me/sid/M/{self.bot_id.strip('@')}.png"
         return ""

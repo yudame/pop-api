@@ -16,41 +16,107 @@
 
 {% block content %}{% load humanize %}
 
-  <h1>{{ shop.name }} Dashboard</h1>
+  <div class="row">
+    <div class="col-auto">
+{#      <h1 class="display-1">#}
+{#        {{ shop.name }} Dashboard#}
+{#      </h1>#}
+    </div>
+    <div class="col-auto">
 
-  <img src="{{ shop.customer_line_channel.QR_img_src }}" alt="Line Channel QR" class="img-thumbnail" style="max-height: 10rem;">
+{#      <img class="img-thumbnail" src="{{ shop.customer_line_channel.line_add_friend_QR_img_src }}" #}
+{#           alt="Line Channel QR" style="max-height: 10rem;">#}
 
-  {% if shop.customer_line_channel.direct_link_url %}
-    <a class="btn btn-primary" href="{{ shop.customer_line_channel.direct_link_url }}">
-      <i class="fab fa-line"></i>
-      LINE App
-    </a>
-  {% endif %}
+{#      {% if shop.customer_line_channel.direct_link_url %}#}
+{#        <a class="btn btn-primary" href="{{ shop.customer_line_channel.direct_link_url }}">#}
+{#          <i class="fab fa-line"></i>#}
+{#          LINE App#}
+{#        </a>#}
+{#      {% endif %}#}
 
+    </div>
+  </div>
 
-  <h2 class="mt-5">Image Uploads</h2>
+  <div class="row">
+    <div class="col-auto">
 
-  {% for image in shop.gramables.all %}
-
-    {% if image.thumbnail_url %}
-      <img src="{{ image.thumbnail_url }}" alt="" class="img-thumbnail" style="max-height: 15rem;">
-    {% else %}
-      <img src="{{ image.url }}" alt="" class="img-thumbnail" style="max-height: 15rem;">
-    {% endif %}
-    <div class="dropdown show">
-      <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        use for {% fa5_icon 'angle-down' %}
-      </a>
-
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <a class="dropdown-item" href="#">
-          {% fa5_icon 'plus' %} Menu Item ⚠️
-        </a>
-        <a class="dropdown-item" href="#">Promotion ⚠️ </a>
-{#        <a class="dropdown-item" href="#">Shop</a>#}
+      <!-- Tab Nav -->
+      <div class="nav-wrapper position-relative">
+        <ul class="nav nav-pills nav-fill" id="tabs-icons-text" role="tablist">
+          <li class="nav-item">
+              <a id="tabs-icons-text-1-tab" class="nav-link mb-sm-3 mb-md-0 active"
+                 role="tab" href="#tabs-icons-text-1" data-toggle="tab">
+                {% fa5_icon 'book-open' %}
+                Menu
+              </a>
+          </li>
+          <li class="nav-item mx-4">
+              <a id="tabs-icons-text-2-tab" class="nav-link mb-sm-3 mb-md-0"
+                 role="tab" href="#tabs-icons-text-2" data-toggle="tab">
+                <i class="fas fa-hand-holding-heart"></i>
+                Service
+              </a>
+          </li>
+          <li class="nav-item">
+              <a id="tabs-icons-text-3-tab" class="nav-link mb-sm-3 mb-md-0"
+                 role="tab" href="#tabs-icons-text-3" data-toggle="tab">
+                <i class="fas fa-chart-bar"></i>
+                Office
+              </a>
+          </li>
+        </ul>
       </div>
+      <!-- End of Tab Nav -->
+      <!-- Tab Content -->
+      <div class="tab-content" id="tabcontent2">
+        <div class="tab-pane fade active show" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+
+          {% include "inclusions/menu/menu_editor.html" with menu=shop.menu %}
+
+          <h5>Sample Text for spacing</h5>
+          <p>Day handsome addition horrible sensible goodness two contempt. Evening for married his account removal. Estimable me disposing of be moonlight cordially curiosity.</p>
+
+        </div>
+        <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+
+          <h2>build here</h2>
+          <ul>
+            <li>
+              customer touchpoints
+              <ul>
+                <li>triggers (alerts, CTAs)</li>
+                <li>actions (feedback)</li>
+                <li>rewards (DMs, loyalty)</li>
+                <li>interest (referrals, challenges)</li>
+              </ul>
+            </li>
+            <li>
+              delivery
+              <ul>
+                <li>pricing</li>
+                <li>distance</li>
+                <li>time estimates</li>
+              </ul>
+            </li>
+            <li>promotions & discounts</li>
+          </ul>
+
+          <h5>Sample Text for spacing</h5>
+          <p>Day handsome addition horrible sensible goodness two contempt. Evening for married his account removal. Estimable me disposing of be moonlight cordially curiosity.</p>
+
+        </div>
+        <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+
+          {% include "inclusions/media_library.html" with shop=shop %}
+
+          <h5>Sample Text for spacing</h5>
+          <p>Day handsome addition horrible sensible goodness two contempt. Evening for married his account removal. Estimable me disposing of be moonlight cordially curiosity.</p>
+        </div>
+      </div>
+      <!-- End of Tab Content -->
     </div>
 
-  {% endfor %}
+
+  </div>
 
 {% endblock %}
