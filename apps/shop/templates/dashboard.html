@@ -53,14 +53,14 @@
           <li class="nav-item mx-4">
               <a id="tabs-icons-text-2-tab" class="nav-link mb-sm-3 mb-md-0"
                  role="tab" href="#tabs-icons-text-2" data-toggle="tab">
-                <i class="fas fa-hand-holding-heart"></i>
+                {% fa5_icon 'hand-holding-heart' %}
                 Service
               </a>
           </li>
           <li class="nav-item">
               <a id="tabs-icons-text-3-tab" class="nav-link mb-sm-3 mb-md-0"
                  role="tab" href="#tabs-icons-text-3" data-toggle="tab">
-                <i class="fas fa-chart-bar"></i>
+                {% fa5_icon 'chart-bar' %}
                 Office
               </a>
           </li>
@@ -106,6 +106,18 @@
 
         </div>
         <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+
+          <hr>
+          <a class="text-dark font-weight-bold mr-3"
+             href="{% url 'shop:setup' shop_id=shop.id %}">
+            <span class="mr-1">
+              {% fa5_icon 'cog' %}
+            </span>
+              Setup Shop and Line Account
+          </a>
+          <hr>
+
+
 
           {% include "inclusions/media_library.html" with shop=shop %}
 

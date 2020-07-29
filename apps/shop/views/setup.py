@@ -47,6 +47,8 @@ class SetupView(LoginRequiredMixin, ShopViewMixin, ShopOwnerRequiredMixin, View)
                 request.session['shop_setup_form_index'] -= 1
             elif request.session.get('shop_setup_form_index', len(self.shop_setup_forms)) < len(self.shop_setup_forms) - 1:
                 request.session['shop_setup_form_index'] += 1
+            elif self.shop.slug:
+                return redirect('shop:dashboard', shop_slug=self.shop.slug)
             else:
                 request.session['shop_setup_form_index'] = 0
 
