@@ -28,6 +28,9 @@ class User(AbstractUser, Timestampable, Locatable):
     # FB_user_id = models.CharField(max_length=100, default="", blank=True)
     # FB_user_access_token = models.CharField(max_length=255, default="", blank=True)
 
+    # HIERARCHY
+    # mentor_users = models.ManyToManyField('user.User', blank=True, related_name='mentee_users')
+    # referred_by_user = models.ForeignKey('user.User', null=True, blank=True, related_name='referred_users')
 
     # HISTORY MANAGER
     # history = HistoricalRecords()  # requires django-simple-history

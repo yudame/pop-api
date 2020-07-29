@@ -7,13 +7,12 @@ from apps.shop.views.shop import ShopViewMixin
 
 
 class ShopOwnerRequiredMixin(UserPassesTestMixin):
-    def test_func(self):
-
-        print(self.shop, self.request.user.is_staff, self.request.user == self.shop.owner)
+    def test_func(self):  # test run by UserPassesTestMixin
 
         if self.shop and any([
             self.request.user.is_staff,
-            self.request.user == self.shop.owner
+            self.request.user == self.shop.owner,
+            # self.shop.owner.mentor_users.filter(user_id=self.request.user.id).exists(),
         ]):
             return True
         return False
