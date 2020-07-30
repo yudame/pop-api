@@ -117,7 +117,7 @@ class OrderSummaryMessage(AbstractLineMessage):
             "action": {
               "type": "postback",
               "label": "Place Order",
-              "data": f"{self.context['order'].id}"
+              "data": f"submit_order_{self.context['order'].id}"
             },
             "style": "primary"
           }

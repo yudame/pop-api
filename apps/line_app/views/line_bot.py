@@ -6,7 +6,7 @@ from django.utils import timezone
 from linebot import LineBotApi
 from linebot import WebhookHandler
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, SendMessage, ImageMessage, StickerMessage, \
-    FileMessage, LocationMessage, ImageSendMessage, FollowEvent
+    FileMessage, LocationMessage, ImageSendMessage, FollowEvent, PostbackEvent
 from linebot.models import SourceUser
 
 from apps.common.utilities.multithreading import start_new_thread
@@ -59,6 +59,15 @@ class LineBot(ABC):
         @self.handler.add(FollowEvent)
         def handle_follow(event):
             self.api.reply_message(event.reply_token, TextSendMessage(text=self.line_channel.welcome_text))
+
+        @self.handler.add(PostbackEvent)
+        def handle_postback(event):
+            from apps.communication.views.pushover import Pushover
+            if 'submit_order' in str(event.postback.data):
+                p = Pushover()
+                p.send_text("New order placed.  {{ link and details here }}")
+            # self.api.reply_message(event.reply_token, TextSendMessage(text=self.line_channel.welcome_text))
+
 
         @self.handler.default()
         def default_handler(event):
