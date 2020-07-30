@@ -60,10 +60,13 @@ class MenuView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopVi
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        line_channel_membership = LineChannelMembership.objects.get(
+        line_channel_membership = LineChannelMembership.objects.filter(
             line_user_profile__user=request.user,
             line_channel__shop_id=self.shop.id
-        )
+        ).first()
+        if not line_channel_membership:
+            messages.warning(request, "Connect with Line to view menu.")
+            return redirect('shop:shop', shop_slug=self.shop.slug)
         request.session['line_channel_membership_id'] = line_channel_membership.id
         order, o_created = Order.objects.get_or_create(line_channel_membership=line_channel_membership,
                                                        completed_at=None)
