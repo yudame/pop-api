@@ -12,3 +12,9 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
+
+input.input-quantity{
+    max-width: 3em;
+    text-align: center;
+    font-weight: bold;
+}

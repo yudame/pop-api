@@ -53,11 +53,13 @@
     </h4>
 
     {% for item in menu_section.items.all %}
-      {% include 'inclusions/menu/menu_item_card.html' with item=item %}
+      {% include 'inclusions/menu/menu_item.html' with item=item %}
     {% endfor %}
   {% endfor %}
 
-  <div class="" style="height: 5rem;">&nbsp;</div>
+  <div class="" style="height: 5rem;">
+    <!-- space for checkout button -->
+  </div>
 
   <div class="container fixed-bottom pt-3 border border-top bg-light">
 

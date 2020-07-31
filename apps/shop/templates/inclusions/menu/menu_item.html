@@ -1,0 +1,96 @@
+{% load static %}
+{% load fontawesome_5 %}
+
+<div class="rounded-lg shadow border border-light my-3"
+     data-toggle="modal" data-target="#item_{{ item.id }}_modal">
+  <div class="d-flex flex-row justify-content-between">
+
+    {% if item.image %}
+      <img class="fluid-image rounded-lg" src="http://www.placecage.com/140/140" alt="{{ item.name }} photo">
+    {% endif %}
+
+    <div class="d-flex flex-column p-3">
+      <div class="item-name font-weight-bold line-clamp-1">
+        {{ item.name }}
+      </div>
+      <div class="item-description py-1 line-clamp-2">
+        {{ item.description }}
+      </div>
+      <div class="item-price font-weight-light">
+        {{ item.price.amount|floatformat:"-2" }}
+      </div>
+
+    </div>
+
+    <div class="align-self-start m-3">
+
+      <button id="item_{{ item.id }}_btn" class="add-item btn btn-warning"
+              type="button" title="add to order"
+              data-item_id="{{ item.id }}" data-name="{{ item.name }}">
+        {% fa5_icon 'plus' color='white' %}
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="item_{{ item.id }}_modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      {% if item.image %}
+          <img class="fluid-image" src="http://www.placecage.com/140/140" alt="{{ item.name }} photo">
+      {% else %}
+        <div class="modal-header border-bottom-0 p-1"></div>
+      {% endif %}
+
+      <div class="modal-body bg-white">
+
+        <h5 class="font-weight-bold">
+          {{ item.name }}
+        </h5>
+        <p>
+          {{ item.description }}
+          <br>
+          <span class="font-weight-light">
+            {{ item.price.amount|floatformat:"-2" }}
+          </span>
+        </p>
+
+        <div id="item_{{ item.id }}_options" class="d-flex flex-column justify-content-center">
+
+          <div class="input-group pb-3" style="width: auto; margin: 0 auto;">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-warning btn-quantity" data-operator="subtract" data-element_id="item_{{ item.id }}_quantity">
+                {% fa5_icon 'minus' color='white' %}
+              </button>
+            </span>
+            <input id="item_{{ item.id }}_quantity" type="text" class="form-control input-quantity border border-warning mx-3 rounded"
+                   value="1" min="1" max="100">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-warning btn-quantity" data-operator="add" data-element_id="item_{{ item.id }}_quantity">
+                {% fa5_icon 'plus' color='white' %}
+              </button>
+            </span>
+          </div>
+
+
+          <textarea class="form-control" rows="1" placeholder="special request (eg. no garlic)"></textarea>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer bg-light">
+        <button type="button" class="btn btn-warning shadow" style="width: 100%;">
+          ADD TO ORDER
+        </button>
+        <button type="button" class="btn btn-light shadow border" data-dismiss="modal" style="width: 100%;">
+          BACK
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
