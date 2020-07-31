@@ -3,7 +3,7 @@
 {% load fontawesome_5 %}
 
 {% block tab_title %}
-  {{ shop.name }}
+  {{ shop.name }} Menu
 {% endblock tab_title %}
 
 {% block css %}
@@ -25,11 +25,30 @@
 
 {% block content %}{% load humanize %}
 
-{#  <h1>{{ shop.name }} Menu</h1>#}
+  <div class="jumbotron bg-transparent py-4 my-0">
+    <h1 class="display-4">
+      {{ shop.tagline|default:"food is life." }}
+    </h1>
+    <h5 class="font-weight-bold text-right">
+      {{ shop.name }}
+    </h5>
+  </div>
 
+  <div id="menu_section_nav" class="mb-4">
+    <ul class="list-inline px-2 py-4" style="white-space: nowrap; overflow: auto;">
+      {% for menu_section in shop.menu.menu_sections.all %}
+        <li class="list-inline-item">
+          <a class="btn shadow border {% if forloop.first %}btn-warning{% else %}btn-light{% endif %}"
+             href="#menu_section_{{ menu_section.id }}">
+            {{ menu_section.name }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
 
   {% for menu_section in shop.menu.menu_sections.all %}
-    <h4 class="font-weight-bold mt-4">
+    <h4 id="menu_section_{{ menu_section.id }}" class="font-weight-bold mt-4">
       {{ menu_section.name }}
     </h4>
 
@@ -70,8 +89,8 @@
         </div>
 
         <div class="my-3" style="">
-          <button id="checkout" class="btn btn-danger" type="button" style="width: 100%;">
-            checkout
+          <button id="checkout" class="btn btn-warning" type="button" style="width: 100%;">
+            PLACE ORDER
           </button>
         </div>
 
