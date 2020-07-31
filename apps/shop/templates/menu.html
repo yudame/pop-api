@@ -7,6 +7,7 @@
 {% endblock tab_title %}
 
 {% block css %}
+  <link href="{{ STATIC_URL }}shop/menu.css?v=0" rel="stylesheet">
 {% endblock css %}
 
 
@@ -28,45 +29,18 @@
 
 
   {% for menu_section in shop.menu.menu_sections.all %}
-    <div class="card shadow-inset bg-primary border-light p-4 my-4 rounded">
-    <h3 class="my-2">
+    <h4 class="font-weight-bold mt-4">
       {{ menu_section.name }}
-    </h3>
+    </h4>
 
     {% for item in menu_section.items.all %}
-      <div class="my-2">
-        <ul class="list-inline mb-1">
-          <li class="list-inline-item">
-            <button id="item_{{ item.id }}_btn" class="add-item btn btn-icon-only"
-                    type="button" title="add to order"
-                    data-item_id="{{ item.id }}" data-name="{{ item.name }}">
-              {% fa5_icon 'plus-square' %}
-            </button>
-          </li>
-          <li class="list-inline-item">
-            {{ item.name }}
-          </li>
-        </ul>
-        <ul class="list-inline">
-          <li class="list-inline-item">
-            {{ item.description }}
-          </li>
-          <li class="list-inline-item text-italic text-gray-600">
-            {{ item.price.amount|floatformat:"-2" }}
-          </li>
-        </ul>
-      </div>
+      {% include 'inclusions/menu/menu_item_card.html' with item=item %}
     {% endfor %}
-    </div>
   {% endfor %}
 
-  <div class="mb-10">
-    {% if debug %}
+  <div class="" style="height: 5rem;">&nbsp;</div>
 
-    {% endif %}
-  </div>
-
-  <div class="container fixed-bottom navbar-theme-primary pt-3 border-top">
+  <div class="container fixed-bottom pt-3 border border-top bg-light">
 
     <div class="row justify-content-center">
       <div class="col-12 col-md-10">
@@ -91,7 +65,7 @@
           </div>
         </div>
 
-        <div id="order_items" class="card bg-primary shadow-soft border-light px-4 py-3">
+        <div id="order_items" class="card px-4 py-3">
           <!-- order items go here -->
         </div>
 

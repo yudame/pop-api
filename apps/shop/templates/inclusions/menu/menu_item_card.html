@@ -1,0 +1,28 @@
+{% load static %}
+{% load fontawesome_5 %}
+
+<div class="rounded-lg shadow border border-light my-3">
+  <div class="d-flex flex-row justify-content-between">
+
+    {% if item.image %}
+      <img class="fluid-image rounded-lg" src="http://www.placecage.com/140/140" alt="Card image cap">
+    {% endif %}
+
+    <div class="d-flex flex-column p-3">
+      <div class="item-name font-weight-bold line-clamp-1">
+        {{ item.name }}
+      </div>
+      <div class="item-description py-1 line-clamp-2">
+        {{ item.description }}
+      </div>
+      <div class="item-price font-weight-light">
+        {{ item.price.amount|floatformat:"-2" }}
+      </div>
+
+    </div>
+
+    <div id="add_item_{{ item.id }}_btn" class="align-self-start btn btn-warning m-3">
+      {% fa5_icon 'plus' color='white' %}
+    </div>
+  </div>
+</div>
