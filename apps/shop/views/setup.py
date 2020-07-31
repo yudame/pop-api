@@ -21,7 +21,8 @@ class ShopOwnerRequiredMixin(UserPassesTestMixin):
 class SetupView(LoginRequiredMixin, ShopViewMixin, ShopOwnerRequiredMixin, View):
     def dispatch(self, request, shop_id, *args, **kwargs):
         self.shop_setup_forms = [ShopFormA, ShopFormB, ShopFormC, LineChannelFormA, LineChannelFormB, LineChannelFormC]
-        self.current_form = self.shop_setup_forms[request.session.get('shop_setup_form_index', 0)]
+        request.session['shop_setup_form_index'] = request.session.get('shop_setup_form_index', 0)
+        self.current_form = self.shop_setup_forms[request.session['shop_setup_form_index']]
         return super().dispatch(request, shop_id, *args, **kwargs)
 
 
