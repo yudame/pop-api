@@ -21,8 +21,14 @@
 
     </div>
 
-    <div id="add_item_{{ item.id }}_btn" class="align-self-start btn btn-warning m-3">
-      {% fa5_icon 'plus' color='white' %}
+    <div class="align-self-start m-3">
+
+      <button id="item_{{ item.id }}_btn" class="add-item btn btn-warning"
+              type="button" title="add to order"
+              data-item_id="{{ item.id }}" data-name="{{ item.name }}">
+        {% fa5_icon 'plus' color='white' %}
+      </button>
+
     </div>
   </div>
 </div>
