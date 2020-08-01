@@ -46,72 +46,40 @@
     </h5>
   </div>
 
-  <div id="menu_section_nav" class="mb-4">
-    <ul class="list-inline px-2 py-4" style="white-space: nowrap; overflow: auto;">
-      {% for menu_section in shop.menu.menu_sections.all %}
-        <li class="list-inline-item">
-          <a class="btn shadow border {% if forloop.first %}btn-warning{% else %}btn-light{% endif %}"
-             href="#menu_section_{{ menu_section.id }}">
-            {{ menu_section.name }}
-          </a>
-        </li>
+  <div id="menu">
+
+    <div id="menu_section_nav" class="mb-4">
+      <ul class="list-inline px-2 py-4" style="white-space: nowrap; overflow: auto;">
+        {% for menu_section in shop.menu.menu_sections.all %}
+          <li class="list-inline-item">
+            <a class="btn shadow border {% if forloop.first %}btn-warning{% else %}btn-light{% endif %}"
+               href="#menu_section_{{ menu_section.id }}">
+              {{ menu_section.name }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    {% for menu_section in shop.menu.menu_sections.all %}
+      <h4 id="menu_section_{{ menu_section.id }}" class="font-weight-bold mt-4">
+        {{ menu_section.name }}
+      </h4>
+
+      {% for item in menu_section.items.all %}
+        {% include 'inclusions/menu/menu_item.html' with item=item %}
       {% endfor %}
-    </ul>
-  </div>
-
-  {% for menu_section in shop.menu.menu_sections.all %}
-    <h4 id="menu_section_{{ menu_section.id }}" class="font-weight-bold mt-4">
-      {{ menu_section.name }}
-    </h4>
-
-    {% for item in menu_section.items.all %}
-      {% include 'inclusions/menu/menu_item.html' with item=item %}
     {% endfor %}
-  {% endfor %}
 
-  <div class="" style="height: 5rem;">
-    <!-- empty space for scroll behind fixed-bottom div -->
+    <div class="" style="height: 5rem;">
+      <!-- empty space for scroll behind fixed-bottom div -->
+    </div>
   </div>
 
-  {% include 'inclusions/menu/cart_modal.html' with modal_id="cart_modal" %}
-
-  <div class="container fixed-bottom pt-3 border border-top bg-light">
-
-    <div class="d-flex flex-row justify-content-between align-items-center"
-         data-toggle="modal" data-target="#cart_modal">
-
-      <div class="font-weight-light">
-        <span id="cart_total_price_amount">
-          999
-        </span>
-        <sup id="cart_total_price_currency" class="font-weight-light">
-          &#xE3F;
-        </sup>
-        total
-      </div>
-
-      <div class="item-name font-weight-bold">
-        <span id="cart_items_count">5</span>
-        items
-      </div>
-
-      <button id="cart_edit_btn" class="btn btn-warning align-self-start ml-4"
-              type="button" title="edit order">
-        {% fa5_icon 'edit' color='white' %}
-      </button>
-    </div>
-
-    <div class="my-3" style="">
-      <button id="checkout" class="btn btn-warning" type="button" style="width: 100%;">
-        PLACE ORDER
-      </button>
-    </div>
-
-  </div>
-
+  {% include 'inclusions/menu/menu_cart.html' %}
 
 {% endblock content %}
 
 {% block footer %}
-  <!-- nothing -->
+  <!-- force empty footer -->
 {% endblock footer %}

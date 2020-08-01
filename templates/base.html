@@ -73,23 +73,17 @@
 <body class="" style="touch-action: manipulation;">
 
   {% block header %}
-
-  <header class="header">
-
-    {% if DEBUG %}
-      <div class="mt-2 mb-5" style="padding: 0 25% 0 25%;">
-        <div class="card card-link-list text-center">
-          <div class="card-body">
-            Skibi is in TEST Mode.
-            Please submit bugs to
-            <a href="http://github.com/Prakti/TPub">TPub Repository</a>
+    <header class="header">
+      {% if DEBUG %}
+        <div class="mt-2 mb-5" style="padding: 0 25% 0 25%;">
+          <div class="card card-link-list text-center">
+            <div class="card-body">
+              Pop is in TEST Mode.
+            </div>
           </div>
         </div>
-      </div>
-    {% endif %}
-
-  </header>
-
+      {% endif %}
+    </header>
   {% endblock header %}
 
   <main role="main" class="container" style="">

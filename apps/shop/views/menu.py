@@ -91,8 +91,8 @@ class MenuView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopVi
                                                        completed_at=None)
 
         cart_item_list = json.loads(request.POST.get('cart'))
-        if not cart_item_list or not isinstance(cart_item_list, list):
-            return JsonResponse({'error': "sorry, I can only take a list"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        try: isinstance(cart_item_list, list)
+        except: return JsonResponse({'error': "sorry, I can only take a list"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
         order.draft_cart = {
             'cart_item_list': cart_item_list,

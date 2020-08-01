@@ -1,6 +1,6 @@
 {% load fontawesome_5 %}
 
-<div class="rounded-lg shadow border border-light my-3"
+<div id="item_{{ item.id }}" class="rounded-lg shadow border border-light my-3"
      data-toggle="modal" data-target="#item_{{ item.id }}_modal">
   <div class="d-flex flex-row justify-content-between">
 
@@ -22,9 +22,11 @@
 
     <div class="align-self-start m-3">
 
-      <button id="item_{{ item.id }}_btn" class="btn btn-warning"
-              type="button" title="{{ item.name }}">
+      <button class="btn btn-warning btn-add-to-cart" type="button">
         {% fa5_icon 'plus' color='white' %}
+      </button>
+      <button class="btn btn-warning btn-quantity font-weight-bold" type="button" style="display: none">
+        <span class="item-quantity">1</span>x
       </button>
 
     </div>
@@ -32,7 +34,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal modal-menu-item" id="item_{{ item.id }}_modal" tabindex="-1" role="dialog" data-item_id="{{ item.id }}">
+<div id="item_{{ item.id }}_modal" class="modal modal-menu-item" tabindex="-1" role="dialog" data-item_id="{{ item.id }}">
   <div class="modal-dialog modal-dialog-centered" style="align-items: flex-end;">
     <div class="modal-content">
 
@@ -59,7 +61,7 @@
 
           <div class="input-group pb-3" style="width: auto; margin: 0 auto;">
             <span class="input-group-btn">
-              <button type="button" class="btn btn-warning btn-quantity" data-operator="subtract" data-element_id="item_{{ item.id }}_quantity">
+              <button type="button" class="btn btn-warning btn-change-quantity" data-operator="subtract" data-element_id="item_{{ item.id }}_quantity">
                 {% fa5_icon 'minus' color='white' %}
               </button>
             </span>
@@ -70,7 +72,7 @@
                    data-item_id="{{ item.id }}" data-item_name="{{ item.name }}" data-cart_index_string="i{{ item.id }}">
 
             <span class="input-group-btn">
-              <button type="button" class="btn btn-warning btn-quantity" data-operator="add" data-element_id="item_{{ item.id }}_quantity">
+              <button type="button" class="btn btn-warning btn-change-quantity" data-operator="add" data-element_id="item_{{ item.id }}_quantity">
                 {% fa5_icon 'plus' color='white' %}
               </button>
             </span>
@@ -85,7 +87,7 @@
       </div>
 
       <div class="modal-footer bg-light">
-        <button type="button" class="btn btn-warning shadow" data-dismiss="modal" style="width: 100%;">
+        <button type="button" class="btn btn-warning shadow btn-save-item" data-dismiss="modal" style="width: 100%;">
           ADD TO ORDER
         </button>
 {#        <button type="button" class="btn btn-light shadow border" data-dismiss="modal" style="width: 100%;">#}
