@@ -1,4 +1,3 @@
-{% load static %}
 {% load fontawesome_5 %}
 
 <div class="rounded-lg shadow border border-light my-3"
@@ -24,9 +23,8 @@
 
     <div class="align-self-start m-3">
 
-      <button id="item_{{ item.id }}_btn" class="add-item btn btn-warning"
-              type="button" title="add to order"
-              data-item_id="{{ item.id }}" data-name="{{ item.name }}">
+      <button id="item_{{ item.id }}_btn" class="btn btn-warning"
+              type="button" title="{{ item.name }}">
         {% fa5_icon 'plus' color='white' %}
       </button>
 
@@ -35,8 +33,8 @@
 </div>
 
 <!-- Modal -->
-<div class="modal" id="item_{{ item.id }}_modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-dialog-centered">
+<div class="modal modal-menu-item" id="item_{{ item.id }}_modal" tabindex="-1" role="dialog" data-item_id="{{ item.id }}">
+  <div class="modal-dialog modal-dialog-centered" style="align-items: flex-end;">
     <div class="modal-content">
 
       {% if item.image %}
@@ -66,8 +64,12 @@
                 {% fa5_icon 'minus' color='white' %}
               </button>
             </span>
+
+{#            quantity input field holds all options data#}
             <input id="item_{{ item.id }}_quantity" type="text" class="form-control input-quantity border border-warning mx-3 rounded"
-                   value="1" min="1" max="100">
+                   value="1" min="1" max="999"
+                   data-item_id="{{ item.id }}" data-item_name="{{ item.name }}" data-cart_index_string="i{{ item.id }}">
+
             <span class="input-group-btn">
               <button type="button" class="btn btn-warning btn-quantity" data-operator="add" data-element_id="item_{{ item.id }}_quantity">
                 {% fa5_icon 'plus' color='white' %}
@@ -75,20 +77,21 @@
             </span>
           </div>
 
-
-          <textarea class="form-control" rows="1" placeholder="special request (eg. no garlic)"></textarea>
+          <textarea id="item_{{ item.id }}_quantity" class="form-control textarea-notes"
+                    rows="1" placeholder="special request (eg. no garlic)"
+                    data-item_id="{{ item.id }}" data-item_name="{{ item.name }}" data-cart_index_string="i{{ item.id }}"
+          ></textarea>
 
         </div>
-
       </div>
 
       <div class="modal-footer bg-light">
-        <button type="button" class="btn btn-warning shadow" style="width: 100%;">
+        <button type="button" class="btn btn-warning shadow" data-dismiss="modal" style="width: 100%;">
           ADD TO ORDER
         </button>
-        <button type="button" class="btn btn-light shadow border" data-dismiss="modal" style="width: 100%;">
-          BACK
-        </button>
+{#        <button type="button" class="btn btn-light shadow border" data-dismiss="modal" style="width: 100%;">#}
+{#          BACK#}
+{#        </button>#}
       </div>
 
     </div>

@@ -19,6 +19,18 @@
     const DEBUG = {% if debug %}true{% else %}false{% endif %};
     const CSRF_TOKEN = '{{ csrf_token }}';
     var SHOPPING_CART = {{ shopping_cart_json|safe }};
+
+    function get_cart_index_string(item_id, option_item_ids_array, addon_item_ids_array){
+      var index_string = "i"+item_id;
+      option_item_ids_array.sort((a,b) => a-b);
+      $.each(option_item_ids_array, function(option_item_id){
+        index_string = index_string + "+o" + option_item_id
+      });
+      addon_item_ids_array.sort((a,b) => a-b);
+      $.each(addon_item_ids_array, function(addon_item_id){
+        index_string = index_string + "+a" + addon_item_id
+      });
+    }
   </script>
   <script src="{{ STATIC_URL }}shop/menu.js?v=0"></script>
 {% endblock javascript %}
@@ -58,46 +70,37 @@
   {% endfor %}
 
   <div class="" style="height: 5rem;">
-    <!-- space for checkout button -->
+    <!-- empty space for scroll behind fixed-bottom div -->
   </div>
+
+  {% include 'inclusions/menu/cart_modal.html' with modal_id="cart_modal" %}
 
   <div class="container fixed-bottom pt-3 border border-top bg-light">
 
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-10">
+    <div class="d-flex" data-toggle="modal" data-target="#cart_modal">
 
-        <div style="display:none;">
-          <!-- template order item -->
-          <div id="order_item_template" class="order-item"
-               data-item_id="" data-quantity="" data-item_name="">
-            <div class="d-flex flex-row justify-content-between" >
+      <span>
+        Your Order
+      </span>
+      <span>
+        X items
+      </span>
+      <span>
+        999 B
+      </span>
 
-              <span class="item-name flex-fill">
-                item name
-              </span>
+      <button class="btn btn-warning" type="button">
+        {% fa5_icon 'edit' color='white' %}
+      </button>
 
-              <span class="item-quantity">1</span>x
-
-              <span class="item-remove text-muted ml-3" title="remove">
-                {% fa5_icon 'times-circle' %}
-              </span>
-
-            </div>
-          </div>
-        </div>
-
-        <div id="order_items" class="card px-4 py-3">
-          <!-- order items go here -->
-        </div>
-
-        <div class="my-3" style="">
-          <button id="checkout" class="btn btn-warning" type="button" style="width: 100%;">
-            PLACE ORDER
-          </button>
-        </div>
-
-      </div>
     </div>
+
+    <div class="my-3" style="">
+      <button id="checkout" class="btn btn-warning" type="button" style="width: 100%;">
+        PLACE ORDER
+      </button>
+    </div>
+
   </div>
 
 
