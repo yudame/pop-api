@@ -13,6 +13,7 @@ class OrderItem(Timestampable, Annotatable, models.Model):
     item = models.ForeignKey('shop.Item', null=True, on_delete=models.PROTECT, related_name='order_items')
 
     option_items = models.ManyToManyField('shop.Item', related_name='order_items_as_option')
+    # note: duplicates in options and addons are ok, represents quantity
     addon_items = models.ManyToManyField('shop.Item', related_name='order_items_as_addon')
 
     quantity = models.DecimalField(default=1, decimal_places=2, max_digits=8)
@@ -73,3 +74,10 @@ class OrderItem(Timestampable, Annotatable, models.Model):
         return Money(total_amount * self.quantity, self.item.price.currency)
 
     # MODEL FUNCTIONS
+    def get_cart_index_string(self):
+        index_string = f"i{self.item.id}"
+        for option_item in self.option_items.order_by('id'):
+            index_string += f"+o{option_item.id}"
+        for addon_item in self.addon_items.order_by('id'):
+            index_string += f"+a{addon_item.id}"
+        return index_string
