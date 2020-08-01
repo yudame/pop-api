@@ -77,22 +77,28 @@
 
   <div class="container fixed-bottom pt-3 border border-top bg-light">
 
-    <div class="d-flex" data-toggle="modal" data-target="#cart_modal">
+    <div class="d-flex flex-row justify-content-between align-items-center"
+         data-toggle="modal" data-target="#cart_modal">
 
-      <span>
-        Your Order
-      </span>
-      <span>
-        X items
-      </span>
-      <span>
-        999 B
-      </span>
+      <div class="font-weight-light">
+        <span id="cart_total_price_amount">
+          999
+        </span>
+        <sup id="cart_total_price_currency" class="font-weight-light">
+          &#xE3F;
+        </sup>
+        total
+      </div>
 
-      <button class="btn btn-warning" type="button">
+      <div class="item-name font-weight-bold">
+        <span id="cart_items_count">5</span>
+        items
+      </div>
+
+      <button id="cart_edit_btn" class="btn btn-warning align-self-start ml-4"
+              type="button" title="edit order">
         {% fa5_icon 'edit' color='white' %}
       </button>
-
     </div>
 
     <div class="my-3" style="">
