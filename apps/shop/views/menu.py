@@ -19,10 +19,10 @@ from apps.shop.views.shop import ShopViewMixin
 
 # todo: move to views/order.py
 @start_new_thread
-def async_update_order(order: Order, cart_item_list: list, send_order_summary=True) -> Order:
+def async_update_order(order: Order, cart_item_dict: dict, send_order_summary=True) -> Order:
     order_item_ids_processed = []
 
-    for cart_item in cart_item_list:
+    for cart_index_string, cart_item in cart_item_dict.items():
         if 'item_id' not in cart_item:
             raise Exception("missing item_id in cart item")
         if 'quantity' not in cart_item:
@@ -46,7 +46,7 @@ def async_update_order(order: Order, cart_item_list: list, send_order_summary=Tr
         order_item_ids_processed.append(order_item.id)
 
     order.order_items.exclude(id__in=order_item_ids_processed).delete()
-    order.draft_cart = {'cart_item_list': order.get_cart_list()}
+    order.draft_cart = {'cart_dict': order.get_cart_dict()}
     order.save()
     if send_order_summary:
         order.line_channel_membership.send_order_summary(order)
@@ -74,7 +74,7 @@ class MenuView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopVi
 
         self.context.update({
             "line_channel_membership": line_channel_membership,
-            "shopping_cart_json": json.dumps(order.draft_cart.get('cart_item_list', [])),
+            "shopping_cart_json": json.dumps(order.draft_cart.get('cart_item_dict', {})),
             "total_price_amount": order.items_total_price_amount,
         })
         return render(request, 'menu.html', self.context)
@@ -90,17 +90,17 @@ class MenuView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopVi
         order, o_created = Order.objects.get_or_create(line_channel_membership_id=line_channel_membership_id,
                                                        completed_at=None)
 
-        cart_item_list = json.loads(request.POST.get('cart'))
-        try: isinstance(cart_item_list, list)
-        except: return JsonResponse({'error': "sorry, I can only take a list"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        cart_item_dict = json.loads(request.POST.get('cart'))
+        try: isinstance(cart_item_dict, dict)
+        except: return JsonResponse({'error': "sorry, I can only take a dict"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
         order.draft_cart = {
-            'cart_item_list': cart_item_list,
+            'cart_item_dict': cart_item_dict,
         }
 
         if request.POST.get('checkout', "false").lower() == "true":
             logging.debug("ready for checkout!")
-            async_update_order(order, cart_item_list, send_order_summary=True)
+            async_update_order(order, cart_item_dict, send_order_summary=True)
         else:  # prevent race condition bc async function will also change order and save
             order.save()
 
