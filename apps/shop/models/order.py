@@ -73,9 +73,10 @@ class Order(Timestampable, Annotatable, models.Model):
 
     @property
     def items_total_price_amount(self):
-        return sum([
+        price_amount_sum = sum([
             order_item.price.amount for order_item in self.order_items.all()
         ])
+        return round(price_amount_sum, 2)
 
     @property
     def items_total_price(self):
@@ -95,10 +96,25 @@ class Order(Timestampable, Annotatable, models.Model):
         elif value is False and self.is_completed:
             self.completed_at = None
 
+    @property
+    def total_item_count(self):
+        return int(sum([
+            oi.quantity if (oi.quantity % 1 == 0) else 1
+            for oi in self.order_items.all()
+        ]))
+
+    @property
+    def is_ready_for_checkout(self):
+        return False if any([
+            self.is_completed,
+            self.total_item_count == 0,
+        ]) else True
+
     # MODEL FUNCTIONS
 
     def get_cart_dict(self):
         cart_dict = dict()
+        # note: only order items can have keys starting with "i"
         for order_item in self.order_items.all():
             key = order_item.get_cart_index_string()
             cart_dict[key] = {
@@ -109,9 +125,11 @@ class Order(Timestampable, Annotatable, models.Model):
                 'note': str(order_item.notes.first().text if order_item.notes.count() else ""),
                 'price_amount': str(order_item.price.amount)
             }
-            # todo: add promotions, discounts, fees
+        cart_dict["total_item_count"] = str(self.total_item_count),
+        cart_dict["total_price_amount"] = str(self.items_total_price_amount),
+        cart_dict["ready_for_checkout"] = self.is_ready_for_checkout,
+        # todo: add promotions, discounts, fees
         return cart_dict
-
 
     def __str__(self):
         return f"Order for {self.line_channel_membership}"
