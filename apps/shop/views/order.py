@@ -3,6 +3,7 @@ from decimal import Decimal
 from apps.common.utilities.multithreading import start_new_thread
 from apps.line_app.models import LineChannelMembership
 from apps.shop.models import Shop, Order, OrderItem
+from apps.shop.models.order import DRAFT
 
 
 class OrderException(Exception):
@@ -10,6 +11,9 @@ class OrderException(Exception):
 
 
 def update_order(order: Order, send_order_summary=False) -> Order:
+    if order.current_status is not DRAFT:
+        raise OrderException("order has already been placed and waiting to be fulfilled.")
+
     order_item_ids_processed = []
 
     for cart_index_string, cart_item in order.draft_cart.items():

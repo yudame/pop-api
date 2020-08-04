@@ -70,7 +70,6 @@ $("input.input-quantity").on('change', function() {
       'item_id': $(this).data('item_id'),
       'item_name': $(this).data('item_name'),
     };
-    alert('added new item to cart')
   }
   SHOPPING_CART[cart_index_string]['quantity'] = $(this).val();
 });
@@ -84,7 +83,6 @@ $("textarea.textarea-notes").on('change', function() {
       'name': $(this).data('item_name'),
       'quantity': 1,
     };
-    alert('added new item to cart')
   }
   SHOPPING_CART[cart_index_string]['note'] = $(this).val();
 });
@@ -116,22 +114,27 @@ function save_cart(checkout){
   })
   .done(function(data, textStatus, jqXHR){
 
-    if (checkout){
-      if(data.success == "order saved"){
+    if (data){
+
+      if (checkout && data.success == "order saved"){
         window.location.href = LINE_CHANNEL_URL;
-      } else {
-        alert("order incomplete");
       }
-    }else{
-      SHOPPING_CART = JSON.parse(data["shopping_cart_json"]);
+      if(data.warning) {
+        $("#checkout").attr("disabled", true);
+        alert(data.warning);
+      }else if (data.error){
+        confirm("Sorry, there is an error saving your order. Please call the shop or talk to your server")
+      }else if (data.success){
+        // do nothing, but ponder why a shopping_cart_json wasn't returned
+      }else{
+        SHOPPING_CART = JSON.parse(data["shopping_cart_json"]);
+      }
     }
 
   })
   .fail(function(jqXHR, textStatus, errorThrown){
-    if (checkout) {
-      if (confirm("hold on... error saving your order")){
-        save_cart(checkout);
-      }
+    if (confirm("Sorry, there is an error saving your order. If you continue to see this message, call the shop or talk to your server")) {
+      save_cart(checkout);
     }
   })
   .always(function(){
@@ -221,9 +224,11 @@ function rebuild_cart_UI(){
     new_cart_item.find(".item-quantity").text(cart_item_data['quantity']);
     new_cart_item.find(".item-name").text(cart_item_data['name']);
     new_cart_item.find(".item-price").text(cart_item_data['price_amount']);
-    if (cart_item_data['note'].length > 0) {
-      new_cart_item.find(".item-note").text(cart_item_data['note']);
-      new_cart_item.find(".item-note").parent().addClass("has-note");
+    if ('note' in cart_item_data) {
+      if (cart_item_data['note'].length > 0){
+        new_cart_item.find(".item-note").text(cart_item_data['note']);
+        new_cart_item.find(".item-note").parent().addClass("has-note");
+      }
     }
 
     new_cart_item.find(".btn-item-modal").on('click', function(){
