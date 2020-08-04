@@ -15,6 +15,7 @@ from apps.shop.models import Shop, Order, OrderItem
 from apps.shop.views.login_mixins import LineRichMenuLoginMixin, OTPLoginMixin
 from apps.shop.views.order import async_update_order, update_order, OrderException
 from apps.shop.views.shop import ShopViewMixin
+from apps.shop.models.order import DRAFT, PLACED, SHOP_CONFIRMED
 
 
 class MenuView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopViewMixin, View):
@@ -33,6 +34,9 @@ class MenuView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopVi
         request.session['line_channel_membership_id'] = line_channel_membership.id
         order, o_created = Order.objects.get_or_create(line_channel_membership=line_channel_membership,
                                                        completed_at=None)
+        if o_created:
+            order.set_status(DRAFT, next=PLACED)
+            order.save()
         request.session['order_id'] = order.id
 
         self.context.update({
@@ -53,6 +57,10 @@ class MenuView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopVi
         order, o_created = Order.objects.get_or_create(line_channel_membership_id=line_channel_membership_id,
                                                        completed_at=None)
 
+        if order.current_status is not DRAFT:
+            return JsonResponse({'warning': "Order has already been placed and waiting to be fulfilled."},
+                                status=status.HTTP_206_PARTIAL_CONTENT)
+
         shopping_cart = json.loads(request.POST.get('shopping_cart'))
         if isinstance(shopping_cart, dict):
             order.draft_cart = shopping_cart
@@ -61,12 +69,15 @@ class MenuView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopVi
 
         if request.POST.get('checkout', "false").lower() == "true":
             logging.debug("ready for checkout!")
-            async_update_order(order, send_order_summary=True)  # includes saving the order
+            order.set_status(PLACED, next=SHOP_CONFIRMED)
+            order.save()
+            async_update_order(order, send_order_summary=True)
             return JsonResponse({'success': "order saved"}, status=status.HTTP_202_ACCEPTED)
 
         else:
             try:
                 order = update_order(order)  # includes saving the order
+
             except OrderException as e:
                 return JsonResponse({"error": str(e)}, status=status.HTTP_202_ACCEPTED)
 

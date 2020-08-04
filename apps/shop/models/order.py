@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from djmoney.money import Money
@@ -5,28 +7,30 @@ from simple_history.models import HistoricalRecords
 from djmoney.models.fields import MoneyField
 from apps.common.behaviors import Timestampable, Annotatable
 
+DRAFT, PLACED, CUSTOMER_CANCELLED, SHOP_REJECTED, SHOP_CONFIRMED, SHOP_COMPLETE, EXPIRED = range(7)
 
-# STATUS_CHOICES = [
-#     ('', 'no status'),
-#     (DRAFT, 'draft'),
-#     (PLACED, 'order placed'),
-#     (CUSTOMER_CANCELLED, 'customer cancelled'),
-#     (DELIVERY_REJECTED, 'delivery rejected'),
-#     (DELIVERY_CONFIRMED, 'delivery confirmed'),
-#     (SHOP_REJECTED, 'shop rejected'),
-#     (SHOP_CONFIRMED, 'shop confirmed'),
-#     (SHOP_COMPLETE, 'shop complete'),
-#     (DELIVERY_START, 'delivery start'),
-#     (DELIVERY_COMPLETE, 'delivery complete'),
-#     (AUTO_FINALIZED, 'finalized (auto)'),
-#     (CUSTOMER_FINALIZED, 'finalized (customer comfirmed)'),
-#     (CUSTOMER_RATED, 'customer rating'),
-#     (CUSTOMER_COMPLAINT, 'customer complaint'),
-#     (SYSTEM_REJECTED_ERROR, 'system rejected (error)'),
-#     (SYSTEM_REJECTED_FRAUD, 'system rejected (fraud)'),
-#     (PROCESSING, 'processing... (locked)'),
-# ]
-from settings import AUTH_USER_MODEL
+STATUS_CHOICES = [
+    (None, 'no status'),
+    (DRAFT, 'draft'),
+    (PLACED, 'order placed'),
+    (CUSTOMER_CANCELLED, 'customer cancelled'),
+    (SHOP_REJECTED, 'shop rejected'),
+    (SHOP_CONFIRMED, 'shop confirmed'),
+    (SHOP_COMPLETE, 'shop complete'),
+    (EXPIRED, 'expired or abandoned'),
+
+    # (DELIVERY_REJECTED, 'delivery rejected'),
+    # (DELIVERY_CONFIRMED, 'delivery confirmed'),
+    # (DELIVERY_START, 'delivery start'),
+    # (DELIVERY_COMPLETE, 'delivery complete'),
+    # (AUTO_FINALIZED, 'finalized (auto)'),
+    # (CUSTOMER_FINALIZED, 'finalized (customer comfirmed)'),
+    # (CUSTOMER_RATED, 'customer rating'),
+    # (CUSTOMER_COMPLAINT, 'customer complaint'),
+    # (SYSTEM_REJECTED_ERROR, 'system rejected (error)'),
+    # (SYSTEM_REJECTED_FRAUD, 'system rejected (fraud)'),
+    # (PROCESSING, 'processing... (locked)'),
+]
 
 
 class Order(Timestampable, Annotatable, models.Model):
@@ -61,13 +65,14 @@ class Order(Timestampable, Annotatable, models.Model):
     # delivery_at = models.DateTimeField(null=True, blank=True)
     # address (locatable)
 
-    # # PROCESS
-    # previous_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default='')  # for context of where it came from
-    # current_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=DRAFT)  # know current state
-    # next_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=PLACED)  # move the order towards a goal
+    # PROCESS
+    previous_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=None, null=True, blank=True)  # for context of where it came from
+    current_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=DRAFT, null=True, blank=True)  # know current state
+    next_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=PLACED, null=True, blank=True)  # move the order towards a goal
+
     status_log = JSONField(default=dict, blank=True, null=True)
     draft_cart = JSONField(default=dict, blank=True, null=True)
-    completed_at = models.DateTimeField(null=True, blank=True)  # please do not set dates in the future!
+    completed_at = models.DateTimeField(null=True, blank=True)  # at end of lifecycle, see status history for how/why
 
     # MODEL PROPERTIES
 
@@ -130,6 +135,19 @@ class Order(Timestampable, Annotatable, models.Model):
         cart_dict["ready_for_checkout"] = self.is_ready_for_checkout,
         # todo: add promotions, discounts, fees
         return cart_dict
+
+    def set_status(self, new_status, next='', override_datetime: datetime=datetime.now()):
+        if not (new_status in dict(STATUS_CHOICES) and next in dict(STATUS_CHOICES)):
+            raise Exception("invalid status provided")
+        if self.current_status != new_status:
+            self.previous_status = self.current_status
+        self.current_status = new_status
+        self.next_status = next
+        if isinstance(override_datetime, datetime):
+            self.status_log.update({
+                str(override_datetime): f"{self.previous_status}->{self.current_status}->{self.next_status}"
+            })
+
 
     def __str__(self):
         return f"Order for {self.line_channel_membership}"
