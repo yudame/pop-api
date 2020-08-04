@@ -39,7 +39,7 @@ class OTPLoginMixin(AccessMixin):
         username, otp = request.GET.get('username'), request.GET.get('otp')
         if username and otp:
             user = User.objects.filter(username=username).first()
-            if user and otp == user.get_otp():
+            if user and otp == user.get_otp(num_digits=len(otp)):
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             elif not request.user.is_authenticated:
                 # in the case that an invalid username and otp were provided AND the user was not already logged in

@@ -17,3 +17,32 @@ class Pushover(ABC):
     def send_text(self, text_message: str, title: str="Pop"):
         logging.debug(f"sending text: {text_message}")
         self.client.send_message(text_message, title=title)
+
+    def send_urgent_order_to_shop(self, order, confirm_order_url, cancel_order_url=""):
+        message = "%0A".join([
+            f"Order for {order.line_channel_membership.line_user_profile.name} (order #{order.id})",
+            " ",
+        ])
+
+        for order_item in order.order_items.filter(quantity__gt=0):
+            message += "%0A".join([
+                " ",
+                f"Item: {order_item.item.name}"
+                f"Qty: {order_item.quantity}" 
+                f"Note: {order_item.notes.first().text if order_item.notes.exists() else ''}"
+            ])
+
+        message += "%0A".join([
+            f"""<a href="{confirm_order_url}">CONFIRM NOW :)</a>""",
+            " ",
+            f"""<a href="{cancel_order_url}">CANCEL ORDER :(</a>"""
+        ])
+
+        self.client.send_message(
+            message=message, html=1,
+            title=f"NEW ORDER {order.id}",
+            url=confirm_order_url,
+            url_title="Confirm Order",
+            sound="persistent",
+            priority=2, retry=30, expire=(30*4)+25,
+        )

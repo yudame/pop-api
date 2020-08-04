@@ -35,9 +35,6 @@ STATUS_CHOICES = [
 
 class Order(Timestampable, Annotatable, models.Model):
 
-    # customer = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="orders")
-    # shop = models.ForeignKey('shop.Shop', on_delete=models.PROTECT, related_name='orders')
-
     line_channel_membership = models.ForeignKey('line_app.LineChannelMembership', null=True,
                                                 on_delete=models.SET_NULL, related_name='orders')
 
@@ -75,6 +72,10 @@ class Order(Timestampable, Annotatable, models.Model):
     completed_at = models.DateTimeField(null=True, blank=True)  # at end of lifecycle, see status history for how/why
 
     # MODEL PROPERTIES
+
+    @property
+    def shop(self):
+        return self.line_channel_membership.line_channel.shop
 
     @property
     def items_total_price_amount(self):
