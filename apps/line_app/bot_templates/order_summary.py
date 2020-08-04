@@ -19,7 +19,7 @@ class OrderSummaryMessage(AbstractLineMessage):
             "contents": [
               {
                 "type": "text",
-                "text": (f"{order_item.quantity:.0f}x  " if order_item.quantity > 1 else "") + f"{order_item.item.name}",
+                "text": f"{order_item.item.name}" + (f"  {order_item.quantity:.0f}x" if order_item.quantity > 1 else ""),
                 "size": "sm",
                 "color": "#202020",
                 "flex": 0
@@ -32,7 +32,7 @@ class OrderSummaryMessage(AbstractLineMessage):
                 "align": "end"
               }
             ]
-          } for order_item in self.context['order'].order_items.all()]
+          } for order_item in self.context['order'].order_items.filter(quantity__gt=0)]
 
         return {
   "type": "bubble",
@@ -42,14 +42,6 @@ class OrderSummaryMessage(AbstractLineMessage):
     "contents": [
       {
         "type": "text",
-        "text": "pending order",
-        "weight": "bold",
-        "color": "#1DB446",
-        "size": "sm",
-        "style": "italic"
-      },
-      {
-        "type": "text",
         "text": f"{self.context['shop'].name}",
         "weight": "bold",
         "size": "lg",
@@ -57,7 +49,7 @@ class OrderSummaryMessage(AbstractLineMessage):
       },
       {
         "type": "text",
-        "text": f"{self.context['shop'].address}",
+        "text": f"table order",
         "size": "xs",
         "color": "#aaaaaa",
         "wrap": True
@@ -106,22 +98,22 @@ class OrderSummaryMessage(AbstractLineMessage):
           }
         ],
         "margin": "sm"
-      },
-      {
-        "type": "box",
-        "layout": "horizontal",
-        "margin": "xxl",
-        "contents": [
-          {
-            "type": "button",
-            "action": {
-              "type": "postback",
-              "label": "Place Order",
-              "data": f"submit_order_{self.context['order'].id}"
-            },
-            "style": "primary"
-          }
-        ]
+      # },
+      # {
+      #   "type": "box",
+      #   "layout": "horizontal",
+      #   "margin": "xxl",
+      #   "contents": [
+      #     {
+      #       "type": "button",
+      #       "action": {
+      #         "type": "postback",
+      #         "label": "Place Order",
+      #         "data": f"submit_order_{self.context['order'].id}"
+      #       },
+      #       "style": "primary"
+      #     }
+      #   ]
       }
     ]
   },
