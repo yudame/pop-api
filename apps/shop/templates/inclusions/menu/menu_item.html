@@ -20,13 +20,13 @@
       </div>
     </div>
 
-    <div class="align-self-start m-3">
+    <div class="item-add-to-cart align-self-start m-3">
 
-      <button class="btn btn-warning btn-add-to-cart" type="button">
+      <button class="btn btn-warning btn-add" type="button">
         {% fa5_icon 'plus' color='white' %}
       </button>
       <button class="btn btn-warning btn-quantity font-weight-bold" type="button" style="display: none">
-        <span class="item-quantity">1</span>x
+        <span class="item-quantity">0</span>x
       </button>
 
     </div>
@@ -87,7 +87,7 @@
       </div>
 
       <div class="modal-footer bg-light">
-        <button type="button" class="btn btn-warning shadow btn-save-item" data-dismiss="modal" style="width: 100%;">
+        <button type="button" class="btn btn-warning shadow btn-save-item" style="width: 100%;"> {# data-dismiss="modal" #}
           ADD TO ORDER
         </button>
 {#        <button type="button" class="btn btn-light shadow border" data-dismiss="modal" style="width: 100%;">#}
