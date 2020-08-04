@@ -71,7 +71,10 @@ class OrderItem(Timestampable, Annotatable, models.Model):
                         or item_addon_group_membership.item.price.amount
                 )
 
-        return Money(total_amount * self.quantity, self.item.price.currency)
+        return Money(
+            round(total_amount * self.quantity, 2),  # finally round off to nearest 2 decimal places
+            self.item.price.currency
+        )
 
     # MODEL FUNCTIONS
     def get_cart_index_string(self):

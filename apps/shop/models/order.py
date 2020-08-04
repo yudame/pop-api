@@ -123,10 +123,10 @@ class Order(Timestampable, Annotatable, models.Model):
                 'name': str(order_item.item.name),
                 'quantity': int(order_item.quantity),
                 'note': str(order_item.notes.first().text if order_item.notes.count() else ""),
-                'price_amount': str(order_item.price.amount)
+                'price_amount': str(int(round(order_item.price.amount, 0)))
             }
         cart_dict["total_item_count"] = str(self.total_item_count),
-        cart_dict["total_price_amount"] = str(self.items_total_price_amount),
+        cart_dict["total_price_amount"] = str(int(round(self.items_total_price_amount, 2))),
         cart_dict["ready_for_checkout"] = self.is_ready_for_checkout,
         # todo: add promotions, discounts, fees
         return cart_dict
