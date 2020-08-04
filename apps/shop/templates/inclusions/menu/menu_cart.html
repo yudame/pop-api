@@ -3,75 +3,73 @@
 
 <div id="cart_max" class="container fixed-bottom py-3 border border-warning bg-light d-flex flex-column" style="min-height: 50%">
 
-{#  <div class="">#}
+  <h3 class="font-weight-bold">
+    Your Order
+  </h3>
 
-    <h3 class="font-weight-bold">
-      Your Order
-    </h3>
 
-    <!-- cart item template - keep hidden -->
-    <div style="display:none;">
-      <!-- template order item -->
-      <div id="cart_item_template" class="order-item my-2"
-           data-cart_index_string="" data-order_item_id =""
-           data-item_id="" data-quantity="" data-item_name="">
+  <!-- cart item template - keep hidden -->
+  <div style="display:none;">
+    <!-- template order item -->
+    <div id="cart_item_template" class="order-item my-2"
+         data-cart_index_string="" data-order_item_id =""
+         data-item_id="" data-quantity="" data-item_name="">
 
-        <div class="d-flex flex-row justify-content-between align-items-center">
+      <div class="d-flex flex-row justify-content-between align-items-center">
 
-          <button class="btn btn-warning btn-item-modal mr-3" type="button" style="width: 2.7em;"
-                  data-toggle="modal" data-target="#item_<item_id>_modal">
-            <span class="font-weight-bold" style="text-decoration: underline;">
-              <span class="item-quantity">1</span>x
-            </span>
-          </button>
-
-          <span class="font-weight-bold flex-fill">
-            <span class="item-name">Item Name Here</span>
-            <br>
-            <small class="item-note has-custom-css"></small>
+        <button class="btn btn-warning btn-item-modal mr-3" type="button" style="width: 2.7em;"
+                data-toggle="modal" data-target="#item_<item_id>_modal">
+          <span class="font-weight-bold" style="text-decoration: underline;">
+            <span class="item-quantity">1</span>x
           </span>
+        </button>
 
-          <span class="item-price font-weight-light">
-            ...
-          </span>
-          <sup id="cart_total_price_currency" class="font-weight-light">
-            &#xE3F;
-          </sup>
+        <span class="font-weight-bold flex-fill">
+          <span class="item-name">Item Name Here</span>
+          <br>
+          <small class="item-note has-custom-css"></small>
+        </span>
 
-        </div>
+        <span class="item-price font-weight-light">
+          ...
+        </span>
+        <sup id="cart_total_price_currency" class="font-weight-light">
+          &#xE3F;
+        </sup>
+
       </div>
     </div>
-    <!-- cart item template - keep hidden -->
+  </div>
+  <!-- cart item template - keep hidden -->
 
 
-    <div id="cart_max_summary" class="d-flex flex-column align-bottom mt-2 mb-auto">
-      <!-- cart order items cloned from template and appended here -->
+  <div id="cart_max_summary" class="d-flex flex-column align-bottom mt-2 mb-auto">
+    <!-- cart order items cloned from template and appended here -->
+  </div>
+
+
+  <div class="d-flex flex-row justify-content-end align-items-center my-3">
+
+    <div class="font-weight-light mr-auto self-stretch">
+      Total
     </div>
 
+    <span id="cart_max_total_price_amount" class="item-price font-weight-light">
+      ...
+    </span>
+    <sup id="cart_total_price_currency" class="font-weight-light">
+      &#xE3F;
+    </sup>
 
-    <div class="d-flex flex-row justify-content-end align-items-center my-3">
+  </div>
 
-      <div class="font-weight-light mr-auto self-stretch">
-        Total
-      </div>
-
-      <span id="cart_max_total_price_amount" class="item-price font-weight-light">
-        ...
-      </span>
-      <sup id="cart_total_price_currency" class="font-weight-light">
-        &#xE3F;
-      </sup>
-
-    </div>
-
-    <button id="checkout" type="button" class="btn btn-warning shadow p-3" style="width: 100%;">
-      <span class="font-weight-bold">
-        PLACE ORDER
-      </span>
-    </button>
-
-{#  </div>#}
+  <button id="checkout" type="button" class="btn btn-warning shadow p-3" style="width: 100%;">
+    <span class="font-weight-bold">
+      PLACE ORDER
+    </span>
+  </button>
 </div>
+
 
 <div id="cart_min" class="container fixed-bottom py-3 border border-warning bg-light">
 
