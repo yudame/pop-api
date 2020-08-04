@@ -224,6 +224,7 @@ function rebuild_cart_UI(){
     }
 
     new_cart_item.find(".btn-item-modal").on('click', function(){
+      $("#menu").removeClass("opacity-30");
       $("#item_"+cart_item_data['item_id']+"_modal").modal('toggle');
     });
     new_cart_item.appendTo("#cart_max_summary");
