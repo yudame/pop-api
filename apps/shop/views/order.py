@@ -28,12 +28,22 @@ def update_order(order: Order, send_order_summary=False) -> Order:
             if cart_item['order_item_id']:
                 order_item = OrderItem.objects.filter(id=cart_item['order_item_id']).first()
 
-        if not order_item:
-            order_item = OrderItem.objects.create(order=order)
+        if all([
+            not order_item,
+            cart_item.get('item_id'),
+            cart_item.get('quantity'),
+        ]):
+            order_item = OrderItem.objects.create(order=order, item_id=cart_item['item_id'])
 
-        if cart_item.get('item_id') and cart_item.get('quantity'):
-            order_item.item_id = cart_item['item_id']
-            order_item.quantity = Decimal(cart_item['quantity'])
+        order_item.quantity = Decimal(cart_item['quantity'])
+
+        if len(cart_item.get('note', "")):
+            note = order_item.notes.first()
+            if note:
+                note.text = cart_item['note']
+                note.save()
+            else:
+                order_item.add_note(cart_item['note'])
 
         order_item.save()
         order_item_ids_processed.append(order_item.id)

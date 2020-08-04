@@ -1,7 +1,7 @@
 {% load fontawesome_5 %}
 
 
-<div id="cart-max" class="container fixed-bottom py-3 border border-top bg-light d-flex flex-column" style="min-height: 50%">
+<div id="cart_max" class="container fixed-bottom py-3 border border-top bg-light d-flex flex-column" style="min-height: 50%">
 
 {#  <div class="">#}
 
@@ -13,7 +13,9 @@
     <div style="display:none;">
       <!-- template order item -->
       <div id="cart_item_template" class="order-item my-2"
+           data-cart_index_string="" data-order_item_id =""
            data-item_id="" data-quantity="" data-item_name="">
+
         <div class="d-flex flex-row justify-content-between align-items-center">
 
           <button class="btn btn-warning btn-item-modal mr-3" type="button" style="width: 2.7em;"
@@ -23,8 +25,10 @@
             </span>
           </button>
 
-          <span class="item-name font-weight-bold line-clamp-1 flex-fill">
-            Item Name Here
+          <span class="font-weight-bold flex-fill">
+            <span class="item-name">Item Name Here</span>
+            <br>
+            <small class="item-note has-custom-css"></small>
           </span>
 
           <span class="item-price font-weight-light">
@@ -69,7 +73,7 @@
 {#  </div>#}
 </div>
 
-<div id="cart-min" class="container fixed-bottom py-3 border border-top bg-light">
+<div id="cart_min" class="container fixed-bottom py-3 border border-top bg-light">
 
   <button id="checkout" class="btn btn-warning p-3" type="button" style="width: 100%;">
     <div class="d-flex flex-row justify-content-between align-items-center">
@@ -77,7 +81,7 @@
       <div class="mr-4">&nbsp;</div>
 
       <div class="item-name font-weight-bold">
-        <span id="cart_min_total_items_count">0</span>
+        <span id="cart_min_total_item_count">0</span>
         items
       </div>
 

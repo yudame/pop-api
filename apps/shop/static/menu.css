@@ -18,3 +18,15 @@ input.input-quantity{
     text-align: center;
     font-weight: bold;
 }
+
+.has-note{
+    margin-bottom: -5px;
+}
+
+.has-note .item-note{
+    position: relative;
+    top: -0.3em;
+    display: inline-block;
+    line-height: 1em;
+    padding-right: 2em;
+}
