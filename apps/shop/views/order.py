@@ -51,7 +51,10 @@ def update_order(order: Order, send_order_summary=False) -> Order:
     order.order_items.exclude(id__in=order_item_ids_processed).delete()
     order.save()
     if send_order_summary:
-        order.line_channel_membership.send_order_summary(order)
+        if order.is_ready_for_checkout:
+            order.line_channel_membership.send_order_summary(order)
+        else:
+            pass  # todo: prompt users to open menu again to complete order
 
     return order
 
