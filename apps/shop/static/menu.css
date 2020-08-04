@@ -19,6 +19,10 @@ input.input-quantity{
     font-weight: bold;
 }
 
+.opacity-30{
+    opacity: 0.3;
+}
+
 .has-note{
     margin-bottom: -5px;
 }

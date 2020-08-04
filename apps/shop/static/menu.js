@@ -9,6 +9,7 @@ $(document).ready(function(){
   });
 
   $("#cart_min").hide();
+  $("#menu").removeClass("opacity-30");
   $("#cart_max").removeClass('d-flex');
   $("#cart_max").hide();
   if (SHOPPING_CART.ready_for_checkout[0]){
@@ -29,9 +30,11 @@ $(document).ready(function(){
 $("#cart_min button").on("click", function(){
   $("#cart_min").hide();
   $("#cart_max").show();
+  $("#menu").addClass("opacity-30");
   $("#cart_max").addClass('d-flex');
 });
 $("#menu").on("click", function(){
+  $("#menu").removeClass("opacity-30");
   $("#cart_max").removeClass('d-flex');
   $("#cart_max").hide();
   if (SHOPPING_CART.ready_for_checkout[0]){
