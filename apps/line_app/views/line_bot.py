@@ -66,8 +66,6 @@ class LineBot(ABC):
             if 'submit_order' in str(event.postback.data):
                 p = Pushover()
                 p.send_text("New order placed.  {{ link and details here }}")
-            # self.api.reply_message(event.reply_token, TextSendMessage(text=self.line_channel.welcome_text))
-
 
         @self.handler.default()
         def default_handler(event):

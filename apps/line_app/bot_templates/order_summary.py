@@ -42,6 +42,14 @@ class OrderSummaryMessage(AbstractLineMessage):
     "contents": [
       {
         "type": "text",
+        "text": "sent. getting confirmation..",
+        "weight": "bold",
+        "color": "#1DB446",
+        "size": "sm",
+        "style": "italic"
+      },
+      {
+        "type": "text",
         "text": f"{self.context['shop'].name}",
         "weight": "bold",
         "size": "lg",
