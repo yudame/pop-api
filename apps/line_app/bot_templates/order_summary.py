@@ -9,7 +9,7 @@ class OrderSummaryMessage(AbstractLineMessage):
     ]
 
     def render_alt_text(self) -> str:
-        return "ready to pay"
+        return "Your Order"
 
     def render_flex_dict(self) -> dict:
 

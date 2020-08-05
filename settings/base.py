@@ -45,6 +45,7 @@ else:
     CORS_ORIGIN_WHITELIST = [
         'https://pop-*.herokuapp.com',
         'https://*.yuda.me',
+        'https://popmenu.link',
         'https://*.popmenu.link',
         'https://s3.amazonaws.com',
         # 'http://localhost',
