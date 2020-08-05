@@ -3,27 +3,47 @@
 {% load fontawesome_5 %}
 
 {% for menu_section in menu.menu_sections.all %}
-  <div class="card p-4 my-4">
-  <h3 class="my-2">
+
+
+  <h3 class="my-4">
     {{ menu_section.name }}
   </h3>
 
   {% for item in menu_section.items.all %}
-    <div class="my-2">
-      <ul class="list-inline mb-1">
-        <li class="list-inline-item">
-          {{ item.name }}
-        </li>
-      </ul>
-      <ul class="list-inline">
-        <li class="list-inline-item">
-          {{ item.description }}
-        </li>
-        <li class="list-inline-item text-italic text-gray-600">
-          {{ item.price.amount|floatformat:"-2" }}
-        </li>
-      </ul>
+    <div class="row">
+      <div class="col-2">
+
+      </div>
+      <div class="col-10">
+        <h5>
+          <input type="text" value="{{ item.name }}" disabled>
+        </h5>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-2">
+
+      </div>
+      <div class="col-10">
+        <p>
+          {{ item.price.currency }}
+          <input type="number" value="{{ item.price.amount|floatformat:"-2" }}" disabled>
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-2">
+
+      </div>
+      <div class="col-10">
+        <p>
+          <textarea disabled
+          >{{ item.description }}</textarea>
+        </p>
+      </div>
     </div>
   {% endfor %}
-  </div>
+
 {% endfor %}

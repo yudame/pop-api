@@ -28,7 +28,12 @@
 
   <p class="lead">
 
-    {% if shop.customer_line_channel.direct_link_url %}
+    {% if user.is_staff or user == shop.owner %}
+      <a class="btn btn-lg btn-outline-dark my-3" href="{% url 'shop:dashboard' shop_slug=shop.slug %}">
+        <i class="fas fa-user-ninja display-4" style="color: black;"></i>
+        Boss Login
+      </a>
+    {% elif shop.customer_line_channel.direct_link_url %}
       <a class="btn btn-lg my-3" href="{{ shop.customer_line_channel.direct_link_url }}">
         <i class="fab fa-line display-4" style="color: green;"></i>
         Add on LINE
