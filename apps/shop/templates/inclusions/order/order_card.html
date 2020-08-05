@@ -1,0 +1,61 @@
+
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">
+       {{ order.total_item_count }} items for {{ order.line_channel_membership.line_profile.name|default:"-anon-" }}
+    </h5>
+    <h6 class="card-subtitle mb-2 text-muted">
+      #{{ order.id }}
+      <span class="badge badge-primary">
+        {{ order.get_current_status_display }}
+      </span>
+    </h6>
+    <p class="card-text">
+      {% for order_item in order.order_items.all %}
+        {% if order_item.quantity > 0 %}
+          <div class="row">
+            <div class="col-auto">
+              {{ order_item.item.name }}
+            </div>
+            <div class="col-auto">
+              {{ order_item.quantity }}x
+            </div>
+            <div class="col-auto">
+              {{ order_item.total_price_amount }}
+            </div>
+          </div>
+          {% if order_item.option_items.count %}
+            <div class="row">
+              <div class="col-auto">
+                Options
+                {% for item in order_item.option_items.all %}
+                  {{ item.name }}
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+          {% if order_item.addon_items.count %}
+            <div class="row">
+              <div class="col-auto">
+                {% for item in order_item.addon_items.all %}
+                  {{ item.name }}
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+          <div class="row">
+            <div class="col-auto">
+              <i>{{ order_item.notes.first.text }}</i>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </p>
+    <a href="#" class="card-link text-success">
+      Set {{ order.get_next_status_display|title }}
+    </a>
+    <a href="#" class="card-link text-danger">
+      Report Problem
+    </a>
+  </div>
+</div>

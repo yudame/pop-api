@@ -56,6 +56,10 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
         line_channel, lc_created = LineChannel.objects.get_or_create(shop=self, channel_type=CUSTOMER_CHANNEL)
         return line_channel
 
+    @property
+    def orders(self):
+        from apps.shop.models import Order
+        return Order.objects.filter(line_channel_membership__line_channel__shop_id=self.id)
 
     # MODEL FUNCTIONS
     def __str__(self):

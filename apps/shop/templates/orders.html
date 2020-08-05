@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+{% load fontawesome_5 %}
+
+{% block tab_title %}
+  Orders | {{ shop.name }}
+{% endblock tab_title %}
+
+{% block css %}
+{% endblock css %}
+
+{% block javascript %}
+{% endblock javascript %}
+
+{% block content %}{% load humanize %}
+
+
+<div id="placed_orders" class="py-5 my-5">
+  <h3>
+    Pending Orders
+  </h3>
+  {% for order in placed_orders %}
+    {% include "inclusions/order/order_card.html" with order=order %}
+  {% endfor %}
+</div>
+
+<div id="confirmed_orders" class="py-5 my-5">
+  <h3>
+    Confirmed Orders
+  </h3>
+  {% for order in confirmed_orders %}
+    {% include "inclusions/order/order_card.html" with order=order %}
+  {% endfor %}
+</div>
+
+<div id="completed_orders" class="py-5 my-5">
+  <h3>
+    Completed Orders
+  </h3>
+  {% for order in completed_orders %}
+    {% include "inclusions/order/order_card.html" with order=order %}
+  {% endfor %}
+</div>
+
+{% endblock %}

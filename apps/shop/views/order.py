@@ -1,5 +1,6 @@
 from decimal import Decimal
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.http import urlencode
@@ -93,11 +94,23 @@ def pursue_shop_confirmation(order: Order):
     p.send_urgent_order_to_shop(order, confirm_order_url=confirm_order_url)
 
 
+class OrdersView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopViewMixin, View):
+    def get(self, request, *args, **kwargs):
+        self.context.update({
+            'placed_orders': self.shop.orders.filter(current_status=PLACED, next_status=SHOP_CONFIRMED),
+            'confirmed_orders': self.shop.orders.filter(current_status=SHOP_CONFIRMED, next_status=SHOP_COMPLETE),
+            'completed_orders': self.shop.orders.filter(Q(current_status=SHOP_COMPLETE) | Q(previous_status=SHOP_COMPLETE)),
+        })
+        return render(request, 'orders.html', self.context)
+
+
 class OrderView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopViewMixin, View):
 
     def get(self, request, order_id, *args, **kwargs):
         order = get_object_or_404(Order, id=order_id)
-        self.context[order] = order
+        # if order not in self.shop.orders.all():
+        #     return HttpResponseNotFound()  # 404
+        self.context['order'] = order
         return render(request, 'order.html', self.context)
 
 

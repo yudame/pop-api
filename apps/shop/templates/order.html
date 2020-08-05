@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% load fontawesome_5 %}
+
+{% block tab_title %}
+  Orders | {{ shop.name }}
+{% endblock tab_title %}
+
+{% block css %}
+{% endblock css %}
+
+{% block javascript %}
+{% endblock javascript %}
+
+{% block content %}{% load humanize %}
+
+<h3 class="mt-5">
+  <a class="btn btn-outline-dark" href="{% url 'shop:orders' %}">
+    {% fa5_icon 'arrow-left' %}
+    Back to ALL ORDERS
+  </a>
+</h3>
+
+<div id="" class="py-5 my-5">
+  {% include "inclusions/order/order_card.html" with order=order %}
+</div>
+
+{% endblock %}
