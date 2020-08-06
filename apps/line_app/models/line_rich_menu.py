@@ -57,14 +57,14 @@ class LineRichMenu(models.Model):
                     bounds=RichMenuBounds(x=300+33+15, y=8, width=300, height=300),
                     action=URIAction(
                         label='Order',
-                        uri=f'https://{HOSTNAME}{self.line_channel.shop.menu.get_absolute_url()}?{urlencode(login_kwargs)}'
+                        uri=f'https://{HOSTNAME}{self.shop.menu.get_absolute_url()}?{urlencode(login_kwargs)}'
                     )
                 ),
                 RichMenuArea(
                     bounds=RichMenuBounds(x=600 + 67 + 15, y=8, width=300, height=300),
                     action=URIAction(
                         label='Preferences',
-                        uri=f'https://{HOSTNAME}{self.shop.get_absolute_url()}'
+                        uri=f'https://{HOSTNAME}{self.shop.get_absolute_url()}?{urlencode(login_kwargs)}'
                     )
                 ),
             ]
@@ -130,7 +130,7 @@ class LineRichMenu(models.Model):
 
 
 @receiver(pre_delete, sender=LineRichMenu)
-def delete_repo(sender, instance, **kwargs):
+def delete_richmenu(sender, instance, **kwargs):
     line_channel_bot = instance.line_channel.get_bot()
     from linebot.exceptions import LineBotApiError
     try:
