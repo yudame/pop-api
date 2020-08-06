@@ -117,16 +117,33 @@ class LineChannelMembership(Timestampable, models.Model):
         else:
             return "🆗👍"
 
-    def send_order_summary(self, order):
-        from apps.line_app.views.order_summary import OrderSummary
 
+    def send_order_status(self, order):
+        from apps.line_app.views.order_summary import OrderSummary
+        from apps.shop.models.order import DRAFT, PLACED, SHOP_CONFIRMED, SHOP_COMPLETE, SHOP_REJECTED
         # assert(order in self.orders.all())
 
-        order_summary = OrderSummary(order)
-        self.line_channel.get_bot().api.push_message(
-            self.line_user_profile.line_user_id,
-            order_summary.render_bot_message()
-        )
+        if order.current_status == PLACED:
+            order_summary = OrderSummary(order)
+            self.line_channel.get_bot().api.push_message(
+                self.line_user_profile.line_user_id,
+                order_summary.render_bot_message()
+            )
+        elif order.current_status == SHOP_CONFIRMED:
+            self.line_channel.get_bot().send_text_message(
+                self.line_user_profile,
+                f"Your server just confirmed your order. It's going to the kitchen now!"
+            )
+        elif order.current_status == SHOP_COMPLETE:
+            self.line_channel.get_bot().send_text_message(
+                self.line_user_profile,
+                f"The kitchen just marked your order complete."
+            )
+        elif order.current_status == SHOP_REJECTED:
+            self.line_channel.get_bot().send_text_message(
+                self.line_user_profile,
+                f"Order {order.id} has been cancelled. Check with your server if you need help."
+            )
 
     @start_new_thread
     def run_async_rich_menu_check(self):

@@ -138,13 +138,13 @@ class Order(Timestampable, Annotatable, models.Model):
         # todo: add promotions, discounts, fees
         return cart_dict
 
-    def set_status(self, new_status, next='', override_datetime: datetime=datetime.now()):
-        if not (new_status in dict(STATUS_CHOICES) and next in dict(STATUS_CHOICES)):
+    def set_status(self, new_status, next=None, override_datetime: datetime=datetime.now()):
+        if new_status not in dict(STATUS_CHOICES) or (next and next not in dict(STATUS_CHOICES)):
             raise Exception("invalid status provided")
         if self.current_status != new_status:
             self.previous_status = self.current_status
         self.current_status = new_status
-        self.next_status = next
+        self.next_status = next or None
         if isinstance(override_datetime, datetime):
             self.status_log.update({
                 str(override_datetime): f"{self.previous_status}->{self.current_status}->{self.next_status}"
