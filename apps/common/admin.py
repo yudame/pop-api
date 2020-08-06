@@ -16,7 +16,17 @@ class MyModelAdmin(admin.ModelAdmin, CSSAdminMixin):
 
 @admin.register(Image)
 class ImageAdmin(MyModelAdmin):
-    pass
+    list_display = (
+        'id',
+        'created_at',
+        'url',
+    )
+    list_filter = (
+        'created_at',
+        'modified_at',
+    )
+    date_hierarchy = 'created_at'
+
 
 @admin.register(Address)
 class AddressAdmin(MyModelAdmin):
