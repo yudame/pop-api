@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.urls import reverse
 from djmoney.money import Money
 from simple_history.models import HistoricalRecords
 from djmoney.models.fields import MoneyField
@@ -149,6 +150,8 @@ class Order(Timestampable, Annotatable, models.Model):
                 str(override_datetime): f"{self.previous_status}->{self.current_status}->{self.next_status}"
             })
 
+    def get_absolute_url(self):
+        return reverse('shop:order', kwargs={'order_id': self.id})
 
     def __str__(self):
         return f"Order for {self.line_channel_membership}"
