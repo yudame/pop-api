@@ -51,11 +51,13 @@
         {% endif %}
       {% endfor %}
     </p>
-    <a href="#" class="card-link text-success">
+    <a class="card-link text-success"
+       href="{% url 'shop:order_set_status' order_id=order.id status=order.next_status %}">
       Set {{ order.get_next_status_display|title }}
     </a>
-    <a href="#" class="card-link text-danger">
-      Report Problem
+    <a class="card-link text-danger ml-5"
+       href="{% url 'shop:order_set_status' order_id=order.id status='SHOP_REJECTED' %}">
+      Cancel Order
     </a>
   </div>
 </div>

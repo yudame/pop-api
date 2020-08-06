@@ -8,7 +8,7 @@ from django.views.generic import View
 from apps.shop.views.login_mixins import LineRichMenuLoginMixin, OTPLoginMixin
 from apps.common.utilities.multithreading import start_new_thread
 from apps.shop.models import Order, OrderItem
-from apps.shop.models.order import DRAFT, PLACED, SHOP_CONFIRMED, SHOP_COMPLETE
+from apps.shop.models.order import DRAFT, PLACED, CUSTOMER_CANCELLED, SHOP_REJECTED, SHOP_CONFIRMED, SHOP_COMPLETE, EXPIRED
 from apps.shop.views.shop import ShopViewMixin
 from settings import HOSTNAME
 
@@ -64,7 +64,7 @@ def update_order(order: Order, send_order_summary=False) -> Order:
 
     if send_order_summary and order.is_ready_for_checkout:
         # send order summary to customer
-        order.line_channel_membership.send_order_summary(order)
+        order.line_channel_membership.send_order_status(order)
 
     if order.current_status is PLACED and order.next_status is SHOP_CONFIRMED:
         pursue_shop_confirmation(order)
@@ -116,11 +116,30 @@ class OrderView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopV
         return render(request, 'order.html', self.context)
 
 
-class ConfirmOrderView(OTPLoginMixin, LoginRequiredMixin, ShopViewMixin, View):
+class SetStatusOrderView(OTPLoginMixin, LoginRequiredMixin, ShopViewMixin, View):
 
-    def get(self, request, order_id, *args, **kwargs):
+    def get(self, request, order_id, status, *args, **kwargs):
         order = get_object_or_404(Order, id=order_id)
-        order.set_status(SHOP_CONFIRMED, next=SHOP_COMPLETE)
-        order.line_channel_membership.send_order_confirmation(order)
+
+        try:
+            status = int(status)
+        except ValueError:
+            if status == "CUSTOMER_CANCELLED":
+                status = CUSTOMER_CANCELLED
+            elif status == "SHOP_REJECTED":
+                status = SHOP_REJECTED
+            else:
+                return None
+
+        if order.next_status == SHOP_CONFIRMED and status == SHOP_CONFIRMED:
+            order.set_status(SHOP_CONFIRMED, next=SHOP_COMPLETE)
+
+        elif order.current_status == SHOP_CONFIRMED and status == SHOP_COMPLETE:
+            order.set_status(SHOP_COMPLETE)
+
+        elif status == SHOP_REJECTED:
+            order.set_status(SHOP_REJECTED)
+
+        order.line_channel_membership.send_order_status(order)  # to customer
         order.save()
-        redirect('shop:order', order_id=order.id)
+        return redirect('shop:order', order_id=order.id)

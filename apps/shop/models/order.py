@@ -18,6 +18,7 @@ STATUS_CHOICES = [
     (SHOP_REJECTED, 'shop rejected'),
     (SHOP_CONFIRMED, 'shop confirmed'),
     (SHOP_COMPLETE, 'shop complete'),
+    # (SHOP_CANCELLED, 'shop cancelled'),
     (EXPIRED, 'expired or abandoned'),
 
     # (DELIVERY_REJECTED, 'delivery rejected'),
@@ -35,7 +36,6 @@ STATUS_CHOICES = [
 
 
 class Order(Timestampable, Annotatable, models.Model):
-
     line_channel_membership = models.ForeignKey('line_app.LineChannelMembership', null=True,
                                                 on_delete=models.SET_NULL, related_name='orders')
 
@@ -64,9 +64,12 @@ class Order(Timestampable, Annotatable, models.Model):
     # address (locatable)
 
     # PROCESS
-    previous_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=None, null=True, blank=True)  # for context of where it came from
-    current_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=DRAFT, null=True, blank=True)  # know current state
-    next_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=PLACED, null=True, blank=True)  # move the order towards a goal
+    previous_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=None, null=True,
+                                                       blank=True)  # for context of where it came from
+    current_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=DRAFT, null=True,
+                                                      blank=True)  # know current state
+    next_status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=PLACED, null=True,
+                                                   blank=True)  # move the order towards a goal
 
     status_log = JSONField(default=dict, blank=True, null=True)
     draft_cart = JSONField(default=dict, blank=True, null=True)
@@ -88,7 +91,6 @@ class Order(Timestampable, Annotatable, models.Model):
     @property
     def items_total_price(self):
         return Money(self.items_total_price_amount, self.order_items.first().price.currency)
-
 
     @property
     def is_completed(self) -> bool:
@@ -138,7 +140,7 @@ class Order(Timestampable, Annotatable, models.Model):
         # todo: add promotions, discounts, fees
         return cart_dict
 
-    def set_status(self, new_status, next=None, override_datetime: datetime=datetime.now()):
+    def set_status(self, new_status, next=None, override_datetime: datetime = datetime.now()):
         if new_status not in dict(STATUS_CHOICES) or (next and next not in dict(STATUS_CHOICES)):
             raise Exception("invalid status provided")
         if self.current_status != new_status:
@@ -149,6 +151,10 @@ class Order(Timestampable, Annotatable, models.Model):
             self.status_log.update({
                 str(override_datetime): f"{self.previous_status}->{self.current_status}->{self.next_status}"
             })
+        if self.current_status in [
+            CUSTOMER_CANCELLED, SHOP_REJECTED, SHOP_COMPLETE, EXPIRED
+        ] or (self.current_status is None and self.previous_status is not None):
+            self.is_completed = True
 
     def get_absolute_url(self):
         return reverse('shop:order', kwargs={'order_id': self.id})

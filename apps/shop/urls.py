@@ -10,7 +10,7 @@ urlpatterns = [
 
     path('orders/', order.OrdersView.as_view(), name='orders'),
     path('orders/<order_id>/', order.OrderView.as_view(), name='order'),
-    path('orders/<order_id>/confirm/', order.ConfirmOrderView.as_view(), name='confirm_order'),
+    path('orders/<order_id>/set_status/<status>', order.SetStatusOrderView.as_view(), name='order_set_status'),
 
     path('<slug:shop_slug>/menu/', menu.MenuView.as_view(), name='menu'),
 
