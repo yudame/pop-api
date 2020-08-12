@@ -15,27 +15,29 @@
          data-cart_index_string="" data-order_item_id =""
          data-item_id="" data-quantity="" data-item_name="">
 
-      <div class="d-flex flex-row justify-content-between align-items-center">
+      <div class="d-flex flex-row justify-content-between align-items-start">
 
-        <button class="btn btn-warning btn-item-modal mr-3" type="button" style="width: 2.7em;"
-                data-toggle="modal" data-target="#item_<item_id>_modal">
+        <button class="btn btn-warning mr-3" type="button" style="width: 2.7em;">
           <span class="font-weight-bold" style="text-decoration: underline;">
             <span class="item-quantity">1</span>x
           </span>
         </button>
 
-        <span class="font-weight-bold flex-fill">
-          <span class="item-name">Item Name Here</span>
+        <span class="item-description flex-fill">
+          <span class="item-name font-weight-bold">Item Name Here</span>
           <br>
-          <small class="item-note has-custom-css"></small>
+          <div class="item-note has-custom-css">
+            <small class="item-note-text"></small>
+            <small class="text-primary">Edit</small>
+          </div>
         </span>
 
         <span class="item-price font-weight-light">
           ...
         </span>
-        <sup id="cart_total_price_currency" class="font-weight-light">
-          &#xE3F;
-        </sup>
+{#        <sup id="cart_total_price_currency" class="font-weight-light">#}
+{#          &#xE3F;#}
+{#        </sup>#}
 
       </div>
     </div>

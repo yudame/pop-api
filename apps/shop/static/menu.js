@@ -240,12 +240,12 @@ function rebuild_cart_UI(){
     new_cart_item.find(".item-price").text(cart_item_data['price_amount']);
     if ('note' in cart_item_data) {
       if (cart_item_data['note'].length > 0){
-        new_cart_item.find(".item-note").text(cart_item_data['note']);
-        new_cart_item.find(".item-note").parent().addClass("has-note");
+        new_cart_item.find(".item-note-text").html(cart_item_data['note']+"<br>");
+        new_cart_item.find(".item-note").addClass("has-note");
       }
     }
 
-    new_cart_item.find(".btn-item-modal").on('click', function(){
+    new_cart_item.on('click', function(){
       $("#menu").removeClass("opacity-30");
       $("#item_"+cart_item_data['item_id']+"_modal").modal('toggle');
     });

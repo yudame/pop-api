@@ -23,11 +23,11 @@ input.input-quantity{
     opacity: 0.3;
 }
 
-.has-note{
+.item-description{
     margin-bottom: -5px;
 }
 
-.has-note .item-note{
+.item-description .item-note{
     position: relative;
     top: -0.3em;
     display: inline-block;
