@@ -169,3 +169,4 @@ Pipfile
 static/vendor/**/docs/
 *.dump
 settings/local.py
+.run/Pop.run.xml
