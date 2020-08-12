@@ -37,9 +37,7 @@ $("#menu").on("click", function(){
   $("#menu").removeClass("opacity-30");
   $("#cart_max").removeClass('d-flex');
   $("#cart_max").hide();
-  if (SHOPPING_CART.ready_for_checkout[0]){
-    $("#cart_min").show();
-  }
+  $("#cart_min").show();
 });
 
 
@@ -52,15 +50,24 @@ $("button.btn-change-quantity").on('click', function() {
     }
   }
   if (document.getElementById($(this).data('element_id')).value == 0){
-    $(this).closest('.modal-content').find('button.btn-save-item').removeClass('btn-warning').addClass('btn-danger').html("REMOVE");
+    $(this).closest('.modal-content')
+        .find('button.btn-save-item')
+        .removeClass('btn-warning')
+        .addClass('btn-danger')
+        .html("REMOVE");
   }else{
-    $(".modal-menu-item button.btn-save-item").removeClass('btn-danger').addClass('btn-warning').html("SAVE");
+    $(".modal-menu-item button.btn-save-item")
+        .removeClass('btn-danger')
+        .addClass('btn-warning').html("SAVE");
   }
   $("#"+$(this).data('element_id')).trigger('change');
 });
 
 $(".btn-save-item").on('click', function(){
-  $(this).closest('.modal-menu-item').find("input.input-quantity").trigger('change').closest('.modal-menu-item').modal('toggle');
+  $(this).closest('.modal-menu-item')
+      .find("input.input-quantity")
+      .trigger('change')
+      .closest('.modal-menu-item').modal('toggle');
 });
 
 $("input.input-quantity").on('change', function() {
@@ -95,7 +102,8 @@ $('.modal-menu-item').on('hidden.bs.modal', function () {
 });
 
 
-function save_cart(checkout){
+function save_cart(checkout){ // save cart to backend
+  console.log('save_cart..')
   checkout = checkout || false;
 
   $.ajax({
@@ -113,21 +121,25 @@ function save_cart(checkout){
     dataType: "json"
   })
   .done(function(data, textStatus, jqXHR){
-
+    console.log("server confirmed status "+ textStatus)
     if (data){
 
       if (checkout && data.success == "order saved"){
         window.location.href = LINE_CHANNEL_URL;
       }
+      if(data.shopping_cart_json){
+        SHOPPING_CART = JSON.parse(data["shopping_cart_json"]);
+        console.log(JSON.parse(data["shopping_cart_json"]));
+      } else if (data.success){
+        // do nothing, but ponder why a shopping_cart_json wasn't returned
+        console.log("success, BUT shopping_cart_json wasn't returned")
+      }
+
       if(data.warning) {
         $("#checkout").attr("disabled", true);
         alert(data.warning);
-      }else if (data.error){
+      } else if (data.error){
         confirm("Sorry, there is an error saving your order. Please call the shop or talk to your server")
-      }else if (data.success){
-        // do nothing, but ponder why a shopping_cart_json wasn't returned
-      }else{
-        SHOPPING_CART = JSON.parse(data["shopping_cart_json"]);
       }
     }
 
@@ -138,13 +150,14 @@ function save_cart(checkout){
     }
   })
   .always(function(){
+    console.log("running .always() after ajax")
     rebuild_cart_UI();
   });
 }
 
 
-function rebuild_menu_UI(){
-  // clear UI fields then re-populate
+function rebuild_menu_UI(){ // clear UI fields then re-populate
+  console.log('rebuild_menu_UI..')
 
   // Reset all Menu Items
   $("div.item-add-to-cart button.btn-quantity").hide();
@@ -185,6 +198,7 @@ function rebuild_menu_UI(){
 
 
 function rebuild_cart_UI(){
+  console.log('rebuild_cart_UI..')
   // clear UI fields then re-populate
 
   // Cart-Min Elements
