@@ -17,7 +17,7 @@ class User(AbstractUser, Timestampable, Locatable):
     REQUIRED_FIELDS.remove('email')
     phone_number = models.CharField(max_length=15, default="", blank=True)
 
-    pushover_key = models.CharField(max_length=30, default="", blank=True)
+    pushover_user_key = models.CharField(max_length=30, default="", blank=True)
     pushover_device_name = models.CharField(max_length=25, default="", blank=True)
 
     # SERVICE SETTINGS

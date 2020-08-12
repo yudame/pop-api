@@ -2,7 +2,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from apps.shop.models import Shop
-from apps.shop.views.setup_forms import ShopFormA, ShopFormB, ShopFormC, LineChannelFormA, LineChannelFormB, LineChannelFormC
+from apps.shop.views.setup_forms import ShopFormA, ShopFormB, ShopFormC, \
+    LineChannelFormA, LineChannelFormB, LineChannelFormC, \
+    PushoverForm
 from apps.shop.views.shop import ShopViewMixin
 
 
@@ -20,7 +22,11 @@ class ShopOwnerRequiredMixin(UserPassesTestMixin):
 
 class SetupView(LoginRequiredMixin, ShopViewMixin, ShopOwnerRequiredMixin, View):
     def dispatch(self, request, shop_id, *args, **kwargs):
-        self.shop_setup_forms = [ShopFormA, ShopFormB, ShopFormC, LineChannelFormA, LineChannelFormB, LineChannelFormC]
+        self.shop_setup_forms = [
+            ShopFormA, ShopFormB, ShopFormC,
+            LineChannelFormA, LineChannelFormB, LineChannelFormC,
+            PushoverForm,
+        ]
         request.session['shop_setup_form_index'] = request.session.get('shop_setup_form_index', 0)
         self.current_form = self.shop_setup_forms[request.session['shop_setup_form_index']]
         return super().dispatch(request, shop_id, *args, **kwargs)

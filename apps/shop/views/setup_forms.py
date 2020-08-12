@@ -144,3 +144,18 @@ class LineChannelFormC(BootstrapModelForm):
                     LINE Account Manager - Gain Friends
                 </a>.
             '''
+
+class PushoverForm(BootstrapModelForm):
+    class Meta:
+        model = Shop
+        fields = [
+            'pushover_user_key', 'pushover_device_name',
+        ]
+        labels = {
+            'pushover_user_key': _('User Key in Pushover App Settings'),
+            'pushover_device_name': _('Device Name in Pushover App Settings'),
+        }
+        icons = {
+            'pushover_user_key': Icon('key'),
+            'pushover_device_name': Icon('tablet-alt'),
+        }
