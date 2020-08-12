@@ -23,6 +23,9 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
                                       related_name='shop_as_icon',
                                       help_text='version of the logo that fits in a small square')
 
+    pushover_user_identifier = models.CharField(max_length=30, default="", blank=True)
+    pushover_device_name = models.CharField(max_length=25, default="", blank=True)
+
     # SOCIAL ACCOUNTS
     facebook_href = models.URLField(default="", blank=True)
     instagram_href = models.URLField(default="", blank=True)
