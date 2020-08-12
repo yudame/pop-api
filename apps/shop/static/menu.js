@@ -29,9 +29,13 @@ $(document).ready(function(){
 
 $("#cart_min button").on("click", function(){
   $("#cart_min").hide();
+  $("button#checkout").attr('disabled', true);
   $("#cart_max").show();
   $("#menu").addClass("opacity-30");
   $("#cart_max").addClass('d-flex');
+  setTimeout(function(){
+      $("button#checkout").attr('disabled', false);
+  }, 500); // half second
 });
 $("#menu").on("click", function(){
   $("#menu").removeClass("opacity-30");
