@@ -10,15 +10,15 @@ init(PUSHOVER_API_TOKEN)
 
 class Pushover(ABC):
 
-    def __init__(self):
-        self.client = Client(PUSHOVER_USER_KEY)
+    def __init__(self, pushover_user_key=PUSHOVER_USER_KEY, pushover_device_name=""):
+        self.client = Client(user_key=pushover_user_key, device=pushover_device_name)
 
     @start_new_thread
     def send_text(self, text_message: str, title: str="Pop"):
         logging.debug(f"sending text: {text_message}")
         self.client.send_message(text_message, title=title)
 
-    def send_urgent_order_to_shop(self, order, confirm_order_url, view_order_url):
+    def send_urgent_order(self, order, confirm_order_url, view_order_url):
         message = "\r\n".join([
             f"Order for {order.line_channel_membership.line_user_profile.name} (order #{order.id})",
             " ",

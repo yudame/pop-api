@@ -60,12 +60,9 @@ class LineBot(ABC):
         def handle_follow(event):
             self.api.reply_message(event.reply_token, TextSendMessage(text=self.line_channel.welcome_text))
 
-        @self.handler.add(PostbackEvent)
-        def handle_postback(event):
-            from apps.communication.views.pushover import Pushover
-            if 'submit_order' in str(event.postback.data):
-                p = Pushover()
-                p.send_text("New order placed.  {{ link and details here }}")
+        # @self.handler.add(PostbackEvent)
+        # def handle_postback(event):
+        #     pass
 
         @self.handler.default()
         def default_handler(event):

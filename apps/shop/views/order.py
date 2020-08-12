@@ -80,7 +80,7 @@ def async_update_order(order: Order, send_order_summary=False):
 
 def pursue_shop_confirmation(order: Order):
 
-    confirm_order_route = reverse('shop:confirm_order', kwargs={'order_id':order.id})
+    confirm_order_route = reverse('shop:order_set_status', kwargs={'order_id': order.id, 'status': SHOP_CONFIRMED})
     view_order_route = reverse('shop:order', kwargs={'order_id':order.id})
     login_kwargs = {
         'username': order.shop.owner.username,
@@ -92,8 +92,8 @@ def pursue_shop_confirmation(order: Order):
 
     # if order.shop.has_pushover:
     from apps.communication.views.pushover import Pushover
-    p = Pushover()
-    p.send_urgent_order_to_shop(order, confirm_order_url=confirm_order_url, view_order_url=view_order_url)
+    p = Pushover(order.shop.pushover_user_key, order.shop.pushover_device_name)
+    p.send_urgent_order(order, confirm_order_url=confirm_order_url, view_order_url=view_order_url)
 
 
 class OrdersView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopViewMixin, View):
