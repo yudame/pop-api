@@ -84,3 +84,10 @@ class OrderItem(Timestampable, Annotatable, models.Model):
         for addon_item in self.addon_items.order_by('id'):
             index_string += f"+a{addon_item.id}"
         return index_string
+
+    def get_quantity_display(self):
+        return f'{self.quantity:.0f}' if (self.quantity % 1 == 0) else f'{self.quantity:.2f}'
+
+    def get_price_amount_display(self):
+        price_amount = self.price.amount
+        return f'{price_amount:.0f}' if (price_amount % 1 == 0) else f'{price_amount:.2f}'

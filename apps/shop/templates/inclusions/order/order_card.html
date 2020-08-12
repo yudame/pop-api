@@ -1,29 +1,44 @@
+{% load fontawesome_5 %}
 
-<div class="card">
+
+<div class="card my-4">
   <div class="card-body">
+
     <h5 class="card-title">
-       {{ order.total_item_count }} items for {{ order.line_channel_membership.line_profile.name|default:"-anon-" }}
+      <div class="row">
+        <div class="col-auto">
+          {{ order.total_item_count }} items for {{ order.line_channel_membership.line_profile.name|default:"-anon-" }}
+        </div>
+        <div class="col-auto ml-auto text-muted">
+          #{{ order.id }}
+        </div>
+        <div class="col-auto">
+          <span class="badge badge-secondary">
+            {{ order.get_current_status_display }}
+          </span>
+        </div>
+      </div>
     </h5>
-    <h6 class="card-subtitle mb-2 text-muted">
-      #{{ order.id }}
-      <span class="badge badge-primary">
-        {{ order.get_current_status_display }}
-      </span>
-    </h6>
-    <p class="card-text">
+
+    <hr>
+
+    <div class="card-text">
       {% for order_item in order.order_items.all %}
         {% if order_item.quantity > 0 %}
-          <div class="row">
+
+          <div class="row mt-2">
             <div class="col-auto">
+              {{ order_item.get_quantity_display }}x
+            </div>
+            <div class="col-auto font-weight-bold">
               {{ order_item.item.name }}
             </div>
-            <div class="col-auto">
-              {{ order_item.quantity }}x
-            </div>
-            <div class="col-auto">
-              {{ order_item.total_price_amount }}
+            <div class="col-auto ml-auto">
+              {{ order_item.get_price_amount_display }}
+              <sup class="font-weight-light">&#xE3F;</sup>
             </div>
           </div>
+
           {% if order_item.option_items.count %}
             <div class="row">
               <div class="col-auto">
@@ -34,6 +49,7 @@
               </div>
             </div>
           {% endif %}
+
           {% if order_item.addon_items.count %}
             <div class="row">
               <div class="col-auto">
@@ -43,14 +59,31 @@
               </div>
             </div>
           {% endif %}
+
           <div class="row">
             <div class="col-auto">
               <i>{{ order_item.notes.first.text }}</i>
             </div>
           </div>
+
         {% endif %}
       {% endfor %}
-    </p>
+      <hr>
+      <div class="row">
+        <div class="col-auto">
+          {% fa5_icon "calculator" %}
+        </div>
+        <div class="col-auto">
+          SubTotal
+        </div>
+        <div class="col-auto ml-auto">
+          {{ order.get_items_total_price_amount_display }}
+          <sup class="font-weight-light">&#xE3F;</sup>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
     <a class="card-link text-success"
        href="{% url 'shop:order_set_status' order_id=order.id status=order.next_status %}">
       Set {{ order.get_next_status_display|title }}
