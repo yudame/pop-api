@@ -37,6 +37,15 @@
 
 {% block content %}{% load humanize %}
 
+  {% if user.is_staff or user == shop.owner %}
+    <div class="my-3">
+      <a class="btn btn btn-outline-dark" href="{% url 'shop:dashboard' shop_slug=shop.slug %}">
+        {% fa5_icon 'user-ninja' %}
+        ADMIN DASHBOARD
+      </a>
+    </div>
+  {% endif %}
+
   <div class="jumbotron bg-transparent py-4 my-0">
     <h1 class="display-4">
       {{ shop.tagline|default:"food is life." }}

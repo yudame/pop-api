@@ -71,6 +71,13 @@
       <div class="tab-content" id="tabcontent2">
         <div class="tab-pane fade active show" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
 
+          <div class="my-5">
+            <a class="btn btn-lg btn-outline-dark" href="{% url 'shop:menu' shop_slug=shop.slug %}">
+              {% fa5_icon 'book-open' %}
+              LIVE MENU
+            </a>
+          </div>
+
           {% include "inclusions/menu/menu_editor.html" with menu=shop.menu %}
 
           <h5>Sample Text for spacing</h5>
