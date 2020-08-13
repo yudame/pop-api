@@ -5,7 +5,7 @@
   <div class="d-flex flex-row justify-content-between">
 
     {% if item.image %}
-      <img class="fluid-image rounded-lg" src="http://www.placecage.com/140/140" alt="{{ item.name }} photo">
+      <img class="fluid-image rounded-lg" src="{{ item.image.url|default:item.image.thumbnail_url }}" height="140" width="140" alt="{{ item.name }} photo">
     {% endif %}
 
     <div class="d-flex flex-column p-3 mr-auto">
@@ -37,12 +37,7 @@
 <div id="item_{{ item.id }}_modal" class="modal modal-menu-item" tabindex="-1" role="dialog" data-item_id="{{ item.id }}">
   <div class="modal-dialog modal-dialog-centered" style="align-items: flex-end;">
     <div class="modal-content">
-
-      {% if item.image %}
-          <img class="fluid-image" src="http://www.placecage.com/140/140" alt="{{ item.name }} photo">
-      {% else %}
-        <div class="modal-header border-bottom-0 p-1"></div>
-      {% endif %}
+      <div class="modal-header border-bottom-0 p-1"></div>
 
       <div class="modal-body bg-white">
 

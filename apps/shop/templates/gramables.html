@@ -54,9 +54,13 @@
   <h3>
     Used Gramables
   </h3>
-  {% for image in used_gramables %}
-    {% include "inclusions/gramable_card.html" with image=image %}
-  {% endfor %}
+  <div class="row">
+    {% for image in used_gramables %}
+      <div class="col-md-4 col-6 my-2">
+        {% include "inclusions/gramable_card.html" with image=image %}
+      </div>
+    {% endfor %}
+  </div>
 </div>
 
 {% endblock %}

@@ -13,6 +13,7 @@ urlpatterns = [
     path('orders/<order_id>/set_status/<status>', order.SetStatusOrderView.as_view(), name='order_set_status'),
 
     path('gramables/', gramable.GramablesView.as_view(), name='gramables'),
+    path('gramable/<image_id>', gramable.GramableView.as_view(), name='gramable'),
 
 
     path('<slug:shop_slug>/menu/', menu.MenuView.as_view(), name='menu'),
