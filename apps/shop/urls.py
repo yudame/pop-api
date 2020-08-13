@@ -1,6 +1,6 @@
 from django.urls import path
 
-from apps.shop.views import dashboard, setup, shop, menu, order
+from apps.shop.views import dashboard, setup, shop, menu, order, gramable
 
 app_name = 'shop'
 
@@ -11,6 +11,9 @@ urlpatterns = [
     path('orders/', order.OrdersView.as_view(), name='orders'),
     path('orders/<order_id>/', order.OrderView.as_view(), name='order'),
     path('orders/<order_id>/set_status/<status>', order.SetStatusOrderView.as_view(), name='order_set_status'),
+
+    path('gramables/', gramable.GramablesView.as_view(), name='gramables'),
+
 
     path('<slug:shop_slug>/menu/', menu.MenuView.as_view(), name='menu'),
 

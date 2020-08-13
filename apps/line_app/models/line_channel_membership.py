@@ -96,9 +96,9 @@ class LineChannelMembership(Timestampable, models.Model):
                 for chunk in message_content.iter_content():
                     fd.write(chunk)
 
-            empty_grammables = self.line_channel.shop.gramables.filter(url="", original_url="")
-            if empty_grammables.exists():
-                image = empty_grammables.first()
+            empty_gramables = self.line_channel.shop.gramables.filter(url="", original_url="")
+            if empty_gramables.exists():
+                image = empty_gramables.first()
             else:
                 image = Image.objects.create()
                 self.line_channel.shop.gramables.add(image)

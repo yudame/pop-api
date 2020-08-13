@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+{% load fontawesome_5 %}
+
+{% block tab_title %}
+  Gramables | {{ shop.name }}
+{% endblock tab_title %}
+
+{% block css %}
+  <style>
+    .image{
+        position:relative;
+        overflow:hidden;
+        padding-bottom:100%;
+    }
+    .image img{
+          position: absolute;
+          max-width: 100%;
+          max-height: 100%;
+          top: 50%;
+          left: 50%;
+          transform: translateX(-50%) translateY(-50%);
+    }
+  </style>
+{% endblock css %}
+
+{% block javascript %}
+{% endblock javascript %}
+
+{% block content %}{% load humanize %}
+
+<div class="my-5">
+  <a class="btn btn-lg btn-outline-dark" href="{% url 'shop:dashboard' shop_slug=shop.slug %}">
+    {% fa5_icon 'chevron-left' %}
+    DASHBOARD
+  </a>
+</div>
+
+<div id="new_gramables" class="py-5 my-5">
+  <h3>
+    New Gramables
+  </h3>
+
+  <div class="row">
+    {% for image in new_gramables %}
+      <div class="col-md-4 col-6 my-2">
+        {% include "inclusions/gramable_card.html" with image=image %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div id="used_gramables" class="py-5 my-5">
+  <h3>
+    Used Gramables
+  </h3>
+  {% for image in used_gramables %}
+    {% include "inclusions/gramable_card.html" with image=image %}
+  {% endfor %}
+</div>
+
+{% endblock %}

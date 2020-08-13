@@ -113,19 +113,21 @@
         </div>
         <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
 
-          <hr>
-          <a class="text-dark font-weight-bold mr-3"
-             href="{% url 'shop:setup' shop_id=shop.id %}">
-            <span class="mr-1">
+          <div class="my-5">
+            <a href="{% url 'shop:setup' shop_id=shop.id %}" class="btn btn-lg btn-outline-dark">
               {% fa5_icon 'cog' %}
-            </span>
-              Setup Shop and Line Account
-          </a>
+              ACCOUNT SETUP
+            </a>
+          </div>
+
+          <div class="my-5">
+            <a class="btn btn-lg btn-outline-dark" href="{% url 'shop:gramables' %}">
+              {% fa5_icon 'images' %}
+              GRAMABLES: All image uploads
+            </a>
+          </div>
+
           <hr>
-
-
-
-          {% include "inclusions/media_library.html" with shop=shop %}
 
           <h5>Sample Text for spacing</h5>
           <p>Day handsome addition horrible sensible goodness two contempt. Evening for married his account removal. Estimable me disposing of be moonlight cordially curiosity.</p>
