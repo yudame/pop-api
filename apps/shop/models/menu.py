@@ -4,13 +4,6 @@ from fontawesome_5.fields import IconField
 from simple_history.models import HistoricalRecords
 from apps.common.behaviors import Timestampable
 
-BREAKFAST, LUNCH, DINNER, BRUNCH = 'bf', 'ln', 'dn', 'br'
-PERIOD_CHOICES = [
-    (BREAKFAST, 'breakfast'),
-    (LUNCH, 'lunch'),
-    (DINNER, 'dinner'),
-    (BRUNCH, 'brunch'),
-]
 
 class Menu(Timestampable, models.Model):
     """
@@ -25,17 +18,6 @@ class Menu(Timestampable, models.Model):
 
     # cuisines - ('thai', 'western', 'italian', 'indian', 'international', 'mediterranean', 'burgers', 'pizza', )
     # https: // en.wikipedia.org / wiki / List_of_cuisines
-
-    # SETTINGS
-    breakfast_open_time = models.TimeField(null=True, blank=True)
-    breakfast_close_time = models.TimeField(null=True, blank=True)
-    brunch_open_time = models.TimeField(null=True, blank=True)
-    brunch_close_time = models.TimeField(null=True, blank=True)
-    lunch_open_time = models.TimeField(null=True, blank=True)
-    lunch_close_time = models.TimeField(null=True, blank=True)
-    dinner_open_time = models.TimeField(null=True, blank=True)
-    dinner_close_time = models.TimeField(null=True, blank=True)
-
 
     # HISTORY MANAGER
     # history = HistoricalRecords()

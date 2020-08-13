@@ -1,9 +1,6 @@
 from django.db import models
-from simple_history.models import HistoricalRecords
 from djmoney.models.fields import MoneyField
-from django.contrib.postgres.fields import ArrayField
 from apps.common.behaviors import Timestampable, Publishable, Expirable, Annotatable
-from apps.shop.models.menu import PERIOD_CHOICES
 
 
 class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
@@ -57,10 +54,7 @@ class Item(Timestampable, Publishable, Expirable, Annotatable, models.Model):
         help_text='standalone order price')
     # promotion - Promotion model has item, promo_price, Publishable, Expirable
 
-    unavailable_periods = ArrayField(
-        models.CharField(choices=PERIOD_CHOICES, max_length=4), default=list, blank=True,
-        help_text='list of period choices when unavailable (eg. [\'bf\',\'ln\'] for breakfast, lunch)')
-
+    limited_schedules = models.ManyToManyField('shop.Schedule', blank=True)
 
     # HISTORY MANAGER
     # history = HistoricalRecords()

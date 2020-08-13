@@ -51,14 +51,6 @@ class MenuAdmin(MyModelAdmin):
         'modified_at',
         'header_text',
         'footer_text',
-        'breakfast_open_time',
-        'breakfast_close_time',
-        'brunch_open_time',
-        'brunch_close_time',
-        'lunch_open_time',
-        'lunch_close_time',
-        'dinner_open_time',
-        'dinner_close_time',
     )
     list_filter = ('created_at', 'modified_at', 'shop')
     date_hierarchy = 'created_at'
@@ -116,7 +108,6 @@ class ItemAdmin(MyModelAdmin):
         'display_on_menu_position',
         # 'price_currency',
         'price',
-        'unavailable_periods',
     )
     list_filter = (
         # 'valid_at',
