@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.text import slugify
@@ -56,8 +56,7 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
     @property
     def customer_line_channel(self):
         from apps.line_app.models.line_channel import LineChannel, CUSTOMER_CHANNEL
-        line_channel, lc_created = LineChannel.objects.get_or_create(shop=self, channel_type=CUSTOMER_CHANNEL)
-        return line_channel
+        return LineChannel.objects.filter(shop=self, channel_type=CUSTOMER_CHANNEL).first()
 
     @property
     def orders(self):
@@ -89,3 +88,12 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
 def pre_save_slug(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.reset_slug()
+
+@receiver(post_save, sender=Shop)
+def post_save_related_models(sender, instance, *args, **kwargs):
+    from apps.line_app.models.line_channel import LineChannel, CUSTOMER_CHANNEL
+    line_channel, lc_created = LineChannel.objects.get_or_create(shop=instance, channel_type=CUSTOMER_CHANNEL)
+    from apps.shop.models import Menu, Schedule
+    menu, m_created = Menu.objects.get_or_create(shop=instance)
+    if not Schedule.objects.filter(menu=menu).exists():
+        schedule = Schedule.objects.create(menu=menu, available_weekdays=list(range(7)))
