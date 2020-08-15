@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from fontawesome_5 import Icon
 
 from apps.line_app.models import LineChannel
-from apps.shop.models import Shop
+from apps.shop.models import Shop, Schedule
 from settings import HOSTNAME
 
 
@@ -47,7 +47,6 @@ class ShopFormB(BootstrapModelForm):
         labels = {
             'unstructured_text_address': _('Full Address'),
         }
-
 
 class ShopFormC(BootstrapModelForm):
     class Meta:
@@ -159,3 +158,10 @@ class PushoverForm(BootstrapModelForm):
             'pushover_user_key': Icon('key'),
             'pushover_device_name': Icon('tablet-alt'),
         }
+
+class ScheduleForm(BootstrapModelForm):
+    class Meta:
+        model = Schedule
+        fields = [
+            'name', 'start_time', 'end_time', 'available_weekdays',
+        ]
