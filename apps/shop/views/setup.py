@@ -1,7 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
-from apps.shop.models import Shop
 from apps.shop.views.setup_forms import ShopFormA, ShopFormB, ShopFormC, \
     LineChannelFormA, LineChannelFormB, LineChannelFormC, \
     PushoverForm
@@ -33,12 +32,14 @@ class SetupView(LoginRequiredMixin, ShopViewMixin, ShopOwnerRequiredMixin, View)
 
 
     def get(self, request, *args, **kwargs):
-        print(self.current_form)
+        if 'LineChannel' in self.current_form.__name__:
+            shop_setup_form = self.current_form(instance=self.shop.customer_line_channel)
+        else:
+            shop_setup_form = self.current_form(instance=self.shop)
+
         context = {
             'shop': self.shop,
-            'shop_setup_form': self.current_form(
-                instance=self.shop.customer_line_channel if 'LineChannel' in self.current_form.__name__ else self.shop
-            )
+            'shop_setup_form': shop_setup_form
         }
         return render(request, 'setup.html', context)
 
