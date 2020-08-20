@@ -33,7 +33,7 @@ class MenuView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopVi
             return redirect('shop:shop', shop_slug=self.shop.slug)
         request.session['line_channel_membership_id'] = line_channel_membership.id
         order, o_created = Order.objects.get_or_create(line_channel_membership=line_channel_membership,
-                                                       completed_at=None)
+                                                       completed_at=None, current_status=DRAFT)
         if o_created:
             order.set_status(DRAFT, next=PLACED)
             order.save()
@@ -55,7 +55,7 @@ class MenuView(LineRichMenuLoginMixin, OTPLoginMixin, LoginRequiredMixin, ShopVi
             return JsonResponse({'error': "line_channel_membership_id"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
         order, o_created = Order.objects.get_or_create(line_channel_membership_id=line_channel_membership_id,
-                                                       completed_at=None)
+                                                       completed_at=None, current_status=DRAFT)
 
         if order.current_status is not DRAFT:
             return JsonResponse({'warning': "Order has already been placed and waiting to be fulfilled."},
