@@ -7,6 +7,7 @@ from settings import PUSHOVER_API_TOKEN, PUSHOVER_USER_KEY
 
 init(PUSHOVER_API_TOKEN)
 
+(DO_NOT_DISTURB, STANDARD, PRIORITY, URGENT) = (-1,0,1,2)
 
 class Pushover(ABC):
 
@@ -19,17 +20,24 @@ class Pushover(ABC):
         self.client.send_message(text_message, title=title)
 
     def send_urgent_order(self, order, confirm_order_url, view_order_url):
+
+        # todo: change priority based on shop open/close schedule
+        priority = URGENT
+        from datetime import datetime
+        if datetime.now() > datetime(2020,8,20,14):
+            priority = DO_NOT_DISTURB
+
         message = "\r\n".join([
             f"Order for {order.line_channel_membership.line_user_profile.name} (order #{order.id})",
             " ",
         ])
 
         for order_item in order.order_items.filter(quantity__gt=0):
-            message += "\r\n".join([
-                " ",
-                f"Item: {order_item.item.name}"
-                f"Qty: {order_item.quantity}" 
-                f"Note: {order_item.notes.first().text if order_item.notes.exists() else ''}"
+            message += " ".join([
+                "       ",
+                f"Item: {order_item.item.name}",
+                f"Qty: {order_item.get_quantity_display()}x",
+                f"Note: {order_item.notes.first().text}" if order_item.notes.exists() else "",
             ])
 
         message += "\r\n".join([
@@ -44,5 +52,5 @@ class Pushover(ABC):
             url=confirm_order_url,
             url_title="Confirm Order",
             sound="persistent",
-            priority=2, retry=30, expire=(30*4)+25,
+            priority=priority, retry=30, expire=(30*4)+25,
         )
