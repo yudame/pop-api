@@ -24,7 +24,7 @@ class Pushover(ABC):
         # todo: change priority based on shop open/close schedule
         priority = URGENT
         from datetime import datetime
-        if datetime.now() > datetime(2020,8,20,14):
+        if datetime.now() > datetime(2020,8,22,14):
             priority = DO_NOT_DISTURB
 
         message = "\r\n".join([
