@@ -1,5 +1,9 @@
+from datetime import datetime, timedelta
+
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.utils import timezone
+
 from apps.common.behaviors import Timestampable
 
 # from datetime import datetime, timedelta
@@ -11,6 +15,7 @@ from apps.common.behaviors import Timestampable
 WEEKDAY_CHOICES = [
     (0, 'Monday'), (1, 'Tuesday'), (2, 'Wednesday'), (3, 'Thursday'), (4, 'Friday'), (5, 'Saturday'), (6, 'Sunday')
 ]
+
 
 class Schedule(Timestampable, models.Model):
     """
@@ -28,3 +33,29 @@ class Schedule(Timestampable, models.Model):
         models.IntegerField(choices=WEEKDAY_CHOICES),
         default=list, blank=True, help_text='list of weekdays when schedule applies'
     )
+
+    # MODEL PROPERTIES
+    @property
+    def shop(self):
+        return self.menu.shop
+
+    @property
+    def is_on_now(self) -> bool:
+        if not all([
+            self.menu.shop.timezone,
+            self.start_time, self.end_time,
+            len(self.available_weekdays)
+        ]):
+            return False
+        shop_datetime = datetime.now() + self.shop.timezone.utcoffset(datetime.now())
+        if shop_datetime.weekday() in self.available_weekdays:
+            if self.start_time <= shop_datetime.time() <= self.end_time:
+                return True
+        return False
+
+    @property
+    def time_until_next_on(self) -> timedelta:
+        # todo: write this method
+        return timedelta(minutes=5)
+
+    # MODEL FUNCTIONS

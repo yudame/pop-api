@@ -20,12 +20,7 @@ class Pushover(ABC):
         self.client.send_message(text_message, title=title)
 
     def send_urgent_order(self, order, confirm_order_url, view_order_url):
-
-        # todo: change priority based on shop open/close schedule
-        priority = URGENT
-        from datetime import datetime
-        if datetime.now() > datetime(2020,8,22,14):
-            priority = DO_NOT_DISTURB
+        priority = URGENT if order.shop.is_open else DO_NOT_DISTURB
 
         message = "\r\n".join([
             f"Order for {order.line_channel_membership.line_user_profile.name} (order #{order.id})",

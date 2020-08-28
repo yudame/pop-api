@@ -1,3 +1,6 @@
+from datetime import timedelta
+
+import pytz
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
@@ -63,6 +66,18 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
         from apps.shop.models import Order
         return Order.objects.filter(line_channel_membership__line_channel__shop_id=self.id)
 
+    @property
+    def is_open(self) -> bool:
+        return any([
+            schedule.is_on_now for schedule in self.menu.schedules.all()
+        ])
+
+    @property
+    def time_until_next_open(self) -> timedelta:
+        return min([
+            schedule.time_until_next_on for schedule in self.menu.schedules.all()
+        ])
+
     # MODEL FUNCTIONS
     def setup_related_models(self):
         from apps.line_app.models.line_channel import LineChannel, CUSTOMER_CHANNEL
@@ -71,6 +86,9 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
         menu, m_created = Menu.objects.get_or_create(shop=self)
         if not Schedule.objects.filter(menu=menu).exists():
             schedule = Schedule.objects.create(menu=menu, available_weekdays=list(range(7)))
+            if not self.timezone:
+                self.timezone = pytz.timezone('Asia/Bangkok')
+                self.save()
 
     def __str__(self):
         return self.name or f"Shop {self.id}"
