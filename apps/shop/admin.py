@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from apps.common.admin import MyModelAdmin
-from apps.shop.models import Shop, Menu, MenuCategory, MenuSection, Item
+from apps.shop.models import Shop, Menu, MenuCategory, MenuSection, Item, Schedule
 from apps.shop.models import AddonGroup, ItemAddonGroups, ItemAddonGroupMemberships
 
 
@@ -38,6 +38,19 @@ class ShopAdmin(MyModelAdmin):
         'owner',
         'is_ghost_location',
     )
+    search_fields = ('name',)
+    date_hierarchy = 'created_at'
+
+@admin.register(Schedule)
+class ScheduleAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'menu',
+        'start_time',
+        'end_time',
+        'available_weekdays',
+    )
+    list_filter = ('menu',)
     search_fields = ('name',)
     date_hierarchy = 'created_at'
 
