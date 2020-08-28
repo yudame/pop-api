@@ -64,6 +64,14 @@ class Shop(Timestampable, Locatable, Contactable, Translatable, Permalinkable, m
         return Order.objects.filter(line_channel_membership__line_channel__shop_id=self.id)
 
     # MODEL FUNCTIONS
+    def setup_related_models(self):
+        from apps.line_app.models.line_channel import LineChannel, CUSTOMER_CHANNEL
+        line_channel, lc_created = LineChannel.objects.get_or_create(shop=self, channel_type=CUSTOMER_CHANNEL)
+        from apps.shop.models import Menu, Schedule
+        menu, m_created = Menu.objects.get_or_create(shop=self)
+        if not Schedule.objects.filter(menu=menu).exists():
+            schedule = Schedule.objects.create(menu=menu, available_weekdays=list(range(7)))
+
     def __str__(self):
         return self.name or f"Shop {self.id}"
 
@@ -90,10 +98,7 @@ def pre_save_slug(sender, instance, *args, **kwargs):
         instance.reset_slug()
 
 @receiver(post_save, sender=Shop)
-def post_save_related_models(sender, instance, *args, **kwargs):
-    from apps.line_app.models.line_channel import LineChannel, CUSTOMER_CHANNEL
-    line_channel, lc_created = LineChannel.objects.get_or_create(shop=instance, channel_type=CUSTOMER_CHANNEL)
-    from apps.shop.models import Menu, Schedule
-    menu, m_created = Menu.objects.get_or_create(shop=instance)
-    if not Schedule.objects.filter(menu=menu).exists():
-        schedule = Schedule.objects.create(menu=menu, available_weekdays=list(range(7)))
+def post_save_related_models(sender, instance, created, *args, **kwargs):
+    if created:
+        instance.setup_related_models()
+
