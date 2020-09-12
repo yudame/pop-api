@@ -2,13 +2,16 @@ from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
-
+from apps.api.urls import api_router
 from settings import DEBUG
 
 urlpatterns = [
 
     # static page
     path('', TemplateView.as_view(template_name='home.html'), name="home"),
+
+    # API
+    path('api/', include('apps.api.urls', namespace='api')),
 
     # route prefix for urlpatterns in apps/dashboard/urls.py
     # path('dashboard/', include('apps.dashboard.urls', namespace='dashboard')),
