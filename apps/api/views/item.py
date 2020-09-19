@@ -19,7 +19,7 @@ class ItemViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
-    # filterset_fields = ('shop', 'menu_category', )
+    filterset_fields = ('menu', 'menu_section', )
     authentication_classes = [authentication.BasicAuthentication, ]
     # permission_classes = [WildWest | permissions.IsAuthenticated]
 

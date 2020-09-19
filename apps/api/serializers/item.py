@@ -8,6 +8,7 @@ class ItemSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
     description = serializers.CharField()
+    # menu_section_id = serializers.IntegerField()
 
 
 from typing import Dict, Any
