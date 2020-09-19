@@ -1,28 +1,27 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters, authentication, permissions
 
-from apps.api.serializers.item import ItemSerializer
-from apps.shop.models import Item
+from apps.api.serializers.menu import MenuSerializer
+from apps.shop.models import Menu
 
-class ItemViewSet(viewsets.ModelViewSet):
+class MenuViewSet(viewsets.ReadOnlyModelViewSet):
     """
     LIST endpoints:
 
-    - `/items/` returns all items.
+    - `/menus/` returns all menus.
 
     GET endpoint:
 
-    - `/items/123/` returns item object where item_id=123
+    - `/menus/123/` returns item object where item_id=123
 
     """
 
-    queryset = Item.objects.all()
-    serializer_class = ItemSerializer
+    queryset = Menu.objects.all()
+    serializer_class = MenuSerializer
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
-    filterset_fields = ('menu', 'menu_section', )
+    # filterset_fields = ('shop', )
     authentication_classes = [authentication.BasicAuthentication, ]
     # permission_classes = [WildWest | permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Item.objects.all()
-
+        return Menu.objects.all()
