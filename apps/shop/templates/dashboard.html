@@ -9,9 +9,16 @@
 {% block css %}
 {% endblock css %}
 
+{% block head_javascript %}
+  {{ serialized_menu|json_script:"serialized_menu" }}
+  <script>const serialized_menu = JSON.parse(document.getElementById('serialized_menu').textContent);</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+{% endblock head_javascript %}
 
 {% block javascript %}
-
+  <script src="{{ STATIC_URL }}shop/dashboard/edit_menu.js?v=0"></script>
 {% endblock javascript %}
 
 {% block content %}{% load humanize %}
@@ -37,7 +44,7 @@
     </div>
   </div>
 
-  <div class="row my-3">
+  <div id="app" class="row my-3">
     <div class="col-auto">
 
       <!-- Tab Nav -->

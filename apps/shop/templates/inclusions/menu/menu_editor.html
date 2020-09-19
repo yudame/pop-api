@@ -2,8 +2,83 @@
 {% load humanize %}
 {% load fontawesome_5 %}
 
-{% for menu_section in menu.menu_sections.all %}
+<div id="menu_editor">
 
+{#  <menu_section_editor inline-template>#}
+{#    <h3 class="my-4">#}
+{#      {{ menu_section.name }}#}
+{#    </h3>#}
+{#  </menu_section_editor>#}
+
+{#  <item_editor inline-template>#}
+{#    <p>#}
+{#      {{ item.name }}#}
+{#      {{ item.price.currency }}{{ item.price.amount|floatformat:"-2" }}#}
+{#    </p>#}
+{#  </item_editor>#}
+
+{% verbatim %}
+  <div class="row">
+    <div class="col-auto" v-for="(item, index) in items">
+      <div class="card">
+        <div class="card-section">
+          <p> {{ item.id }} </p>
+        </div>
+        <div class="card-divider">
+          <p>{{ item.name }}</p>
+        </div>
+        <div class="card-section">
+          <p> {{ item.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endverbatim %}
+
+</div>
+
+<script>
+
+Vue.component('menu_editor', {
+  data() {
+    return {
+      item_editors: [],
+    }
+  },
+  methods: {
+    addItemEditor(item_editor) {
+      this.item_editors.push(item_editor);
+    },
+    removeItemEditor(item_editor) {
+      this.item_editors.pop(item_editor);
+    },
+    countItemEditors() {
+      return this.item_editors.length;
+    }
+  },
+
+});
+
+
+const items_url = "/api/items/?menu={{ shop.menu.id }}"
+
+const vm = new Vue({
+  el: '#menu_editor',
+  data: {
+    items: []
+  },
+  mounted() {
+    axios.get(items_url).then(response => {
+      this.items = response.data
+    })
+  }
+});
+
+</script>
+
+
+<div id="old_editor">
+{% for menu_section in menu.menu_sections.all %}
 
   <h3 class="my-4">
     {{ menu_section.name }}
@@ -47,3 +122,5 @@
   {% endfor %}
 
 {% endfor %}
+
+</div>
