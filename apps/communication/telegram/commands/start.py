@@ -23,17 +23,17 @@ def start(message: Message, context):
             tbm.save()
 
             return "\n".join([
-                "Welcome to Bemmerse Media Bot!",
-                "You are now connected to your Bemmerse account.",
+                "Welcome to _company_ Media Bot!",
+                "You are now connected to your _company_ account.",
                 "try /help for a list of commands and examples.",
                 "Also, you can just start uploading photos and videos now.",
             ])
 
     return "\n".join([
-        "Welcome to Bemmerse Media Bot!",
+        "Welcome to _company_ Media Bot!",
         "In order to upload and manage your media files, please go to",
-        "https://app.bemmerse.com/dashboard/",
-        "and find the Telegram button connect your Bemmerse account",
+        "_site_link_",
+        "and find the Telegram button connect your _company_ account",
     ])
 
 start.help_text = "get started"

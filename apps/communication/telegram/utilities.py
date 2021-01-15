@@ -27,8 +27,8 @@ def handle_telegram_message(update: Update, context: CallbackContext):
     else:
         update.message.reply_text("\n".join([
             "Sorry. In order to save your data,",
-            "please first connect your Bemmerse account at",
-            "https://app.bemmerse.com/dashboard/",
+            "please first connect your _company_ account at",
+            "_site_link_",
         ]))
 
 def send_photo(user):
