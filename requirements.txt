@@ -51,7 +51,7 @@ toolz==0.10.0
 waitress==1.4.3
 
 #filters for django-markup
-bleach==3.1.4
+bleach==3.3.0
 bleach-whitelist==0.0.10
 html5lib==1.0.1
 markdown==3.1
