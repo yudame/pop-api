@@ -27,7 +27,7 @@ django-user-agents==0.4.0
 django-widget-tweaks==1.4.8
 djangorestframework==3.11.2
 drf-jwt==1.16.1
-ipython==7.14.0
+ipython==7.16.3
 line-bot-sdk
 measurement==3.2.0
 # psycopg2
