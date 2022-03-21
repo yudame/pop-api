@@ -48,7 +48,7 @@ simplejson==3.17.0
 social-auth-app-django==3.1.0
 six
 toolz==0.10.0
-waitress==1.4.3
+waitress==2.1.1
 
 #filters for django-markup
 bleach==3.3.0
